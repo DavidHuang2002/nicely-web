@@ -1,26 +1,43 @@
+"use client";
+
 import { motion } from "framer-motion";
-import Link from "next/link";
-
-import { MessageIcon } from "./icons";
-import { LogoPython } from "@/app/icons";
-
+import { HeartIcon, NotebookIcon, SparklesIcon } from "./icons";
+import { TherapyOption } from "./therapy-option";
 export const Overview = () => {
   return (
     <motion.div
       key="overview"
-      className="max-w-3xl mx-auto md:mt-20"
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ delay: 0.5 }}
+      className="max-w-4xl mx-auto md:mt-20 px-4"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
     >
-      <div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center max-w-xl">
-        <p className="flex flex-row justify-center gap-4 items-center">
-          <LogoPython size={32} />
-          <span>+</span>
-          <MessageIcon size={32} />
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold mb-4">Your AI Therapy Companion</h1>
+        <p className="text-muted-foreground text-lg">
+          Continue your healing journey between sessions
         </p>
-        <p>Hello, I am your personal assistant. How can I help you today?</p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        <TherapyOption
+          title="Untangle Emotions"
+          description="Work through complex feelings with an AI companion trained in therapeutic techniques"
+          icon={<SparklesIcon size={24} />}
+          href="/chat/emotions"
+        />
+        <TherapyOption
+          title="Daily Self-Care"
+          description="Build healthy habits and maintain your well-being with personalized guidance"
+          icon={<HeartIcon size={24} />}
+          href="/chat/self-care"
+        />
+        <TherapyOption
+          title="Session Notes"
+          description="Reflect on your therapy sessions and track your progress over time"
+          icon={<NotebookIcon size={24} />}
+          href="/chat/notes"
+        />
       </div>
     </motion.div>
   );
