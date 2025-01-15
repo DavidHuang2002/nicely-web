@@ -3,11 +3,12 @@
 import type { Message } from "ai";
 import { motion } from "framer-motion";
 
-import { SparklesIcon } from "./icons";
-import { Markdown } from "./markdown";
-import { PreviewAttachment } from "./preview-attachment";
+import { Markdown } from "../markdown";
+import { PreviewAttachment } from "../preview-attachment";
 import { cn } from "@/lib/utils";
-import { Weather } from "./weather";
+import { Weather } from "../weather";
+import { TherapistAvatar } from "./therapist-avatar";
+import { UserAvatar } from "./user-avatar";
 
 export const PreviewMessage = ({
   message,
@@ -25,21 +26,36 @@ export const PreviewMessage = ({
     >
       <div
         className={cn(
-          "group-data-[role=user]/message:bg-primary group-data-[role=user]/message:text-primary-foreground flex gap-4 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl",
+          "flex gap-4",
+          message.role === "user" ? "flex-row-reverse" : "flex-row"
         )}
       >
-        {message.role === "assistant" && (
-          <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-            <SparklesIcon size={14} />
-          </div>
+        {message.role === "assistant" ? (
+          <TherapistAvatar size={40} />
+        ) : (
+          <UserAvatar size={40} />
         )}
 
-        <div className="flex flex-col gap-2 w-full">
-          {message.content && (
-            <div className="flex flex-col gap-4">
-              <Markdown>{message.content as string}</Markdown>
-            </div>
+        <div
+          className={cn(
+            "flex flex-col gap-2 max-w-[80%]",
+            message.role === "user" ? "items-end" : "items-start"
           )}
+        >
+          <div
+            className={cn(
+              "rounded-2xl px-4 py-2",
+              message.role === "user"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted"
+            )}
+          >
+            {message.content && (
+              <div className="flex flex-col gap-4">
+                <Markdown>{message.content as string}</Markdown>
+              </div>
+            )}
+          </div>
 
           {message.toolInvocations && message.toolInvocations.length > 0 && (
             <div className="flex flex-col gap-4">
@@ -90,30 +106,17 @@ export const PreviewMessage = ({
 };
 
 export const ThinkingMessage = () => {
-  const role = "assistant";
-
   return (
     <motion.div
-      className="w-full mx-auto max-w-3xl px-4 group/message "
+      className="w-full mx-auto max-w-3xl px-4 group/message"
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
-      data-role={role}
     >
-      <div
-        className={cn(
-          "flex gap-4 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl",
-          {
-            "group-data-[role=user]/message:bg-muted": true,
-          },
-        )}
-      >
-        <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-          <SparklesIcon size={14} />
-        </div>
-
-        <div className="flex flex-col gap-2 w-full">
-          <div className="flex flex-col gap-4 text-muted-foreground">
-            Thinking...
+      <div className="flex gap-4">
+        <TherapistAvatar size={40} />
+        <div className="flex flex-col gap-2">
+          <div className="bg-muted rounded-2xl px-4 py-2">
+            <div className="text-muted-foreground">Thinking...</div>
           </div>
         </div>
       </div>
