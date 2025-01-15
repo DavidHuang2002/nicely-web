@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { SignInButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-
+import { Chat } from "@/components/chat";
 export default async function LandingPage() {
   const { userId } = await auth();
 
