@@ -1,13 +1,9 @@
 import json
 from pydantic import BaseModel
 from typing import List, Optional, Any
-from .attachment import ClientAttachment
 from openai.types.chat.chat_completion_message_param import ChatCompletionMessageParam
+from ..models.chat import ClientMessage
 
-class ClientMessage(BaseModel):
-    role: str
-    content: str
-    experimental_attachments: Optional[List[ClientAttachment]] = None
 
 def convert_to_openai_messages(messages: List[ClientMessage]) -> List[ChatCompletionMessageParam]:
     openai_messages = []
