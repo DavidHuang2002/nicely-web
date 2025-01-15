@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { SignInButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
+export default async function LandingPage() {
+  const { userId } = await auth();
 
-export default function LandingPage() {
+  if (userId) {
+    redirect("/home");
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4">
       <h1 className="text-5xl font-bold mb-6">AI Therapy Companion</h1>
