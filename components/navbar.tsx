@@ -3,10 +3,14 @@
 import { Button } from "./ui/button";
 import { GitIcon, VercelIcon } from "./icons";
 import Link from "next/link";
+import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 export const Navbar = () => {
   return (
-    <div className="h-[52px] p-2 flex flex-row gap-2 justify-between">
+    <div className="h-[52px] py-2 px-4 flex flex-row gap-2 justify-between">
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
       {/* <Link href="https://github.com/vercel-labs/ai-sdk-preview-python-streaming">
         <Button variant="outline">
           <GitIcon /> View Source Code
