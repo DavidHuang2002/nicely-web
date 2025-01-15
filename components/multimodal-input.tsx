@@ -43,6 +43,7 @@ export function MultimodalInput({
   append,
   handleSubmit,
   className,
+  isOnboardingStart = false,
 }: {
   chatId: string;
   input: string;
@@ -53,15 +54,16 @@ export function MultimodalInput({
   setMessages: Dispatch<SetStateAction<Array<Message>>>;
   append: (
     message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
   handleSubmit: (
     event?: {
       preventDefault?: () => void;
     },
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => void;
   className?: string;
+  isOnboardingStart?: boolean;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
@@ -75,13 +77,15 @@ export function MultimodalInput({
   const adjustHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`;
+      textareaRef.current.style.height = `${
+        textareaRef.current.scrollHeight + 2
+      }px`;
     }
   };
 
   const [localStorageInput, setLocalStorageInput] = useLocalStorage(
     "input",
-    "",
+    ""
   );
 
   useEffect(() => {
@@ -114,9 +118,27 @@ export function MultimodalInput({
     }
   }, [handleSubmit, setLocalStorageInput, width]);
 
+  if (isOnboardingStart) {
+    setInput("Let&apos;s get started!");
+
+    return (
+      <div className="flex justify-center w-full">
+        <Button
+          className="px-8"
+          onClick={(event) => {
+            event.preventDefault();
+            submitForm();
+          }}
+        >
+          Let&apos;s get started!
+        </Button>
+      </div>
+    );
+  }
+  
+
   return (
     <div className="relative w-full flex flex-col gap-4">
-
       <Textarea
         ref={textareaRef}
         placeholder="Send a message..."
@@ -124,7 +146,7 @@ export function MultimodalInput({
         onChange={handleInput}
         className={cn(
           "min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-xl !text-base bg-muted",
-          className,
+          className
         )}
         rows={3}
         autoFocus

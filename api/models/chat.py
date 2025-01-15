@@ -7,3 +7,6 @@ class ClientMessage(BaseModel):
     role: str
     content: str
     experimental_attachments: Optional[List[ClientAttachment]] = None
+
+class ChatRequest(BaseModel):
+    messages: List[ClientMessage]

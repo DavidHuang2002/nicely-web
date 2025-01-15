@@ -8,8 +8,12 @@ import { toast } from "sonner";
 
 export function Chat({
   initialMessages = [],
+  apiRoute = "/api/chat",
+  isOnboarding = false,
 }: {
   initialMessages?: Array<Message>;
+  apiRoute?: string;
+  isOnboarding?: boolean;
 }) {
   const chatId = "001";
 
@@ -23,6 +27,7 @@ export function Chat({
     isLoading,
     stop,
   } = useChat({
+    api: apiRoute,
     maxSteps: 4,
     initialMessages,
     onError: (error) => {
@@ -76,6 +81,9 @@ export function Chat({
           messages={messages}
           setMessages={setMessages}
           append={append}
+          isOnboardingStart={
+            messages.length === 1 && isOnboarding
+          }
         />
       </form>
     </div>

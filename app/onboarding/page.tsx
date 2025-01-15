@@ -1,5 +1,5 @@
 "use client";
-import { Chat } from "@/components/chat";
+import OnboardingChat from "@/components/chat/onboarding";
 import type { Message } from "ai";
 
 const onboardingMessages: Message[] = [
@@ -12,5 +12,5 @@ const onboardingMessages: Message[] = [
 ];
 
 export default function Page() {
-  return <Chat initialMessages={onboardingMessages} />;
+  return <OnboardingChat />;
 }
