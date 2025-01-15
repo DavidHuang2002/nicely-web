@@ -24,7 +24,7 @@ export const Overview = () => {
           title="Untangle Emotions"
           description="Work through complex feelings with an AI companion trained in therapeutic techniques"
           icon={<SparklesIcon size={24} />}
-          href="/chat/emotions"
+          href="/untangle"
         />
         <TherapyOption
           title="Daily Self-Care"
