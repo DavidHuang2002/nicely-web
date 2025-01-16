@@ -33,7 +33,7 @@ export function OnboardingModal() {
                 />
               </div>
               <h2 className="text-2xl font-semibold">
-                Welcome, I'm Nic, your therapy companion!
+                Welcome, I&apos;m Nic, your therapy companion!
               </h2>
 
               <AnimatePresence mode="wait">
@@ -45,7 +45,7 @@ export function OnboardingModal() {
                     exit={{ opacity: 0 }}
                     className="text-muted-foreground"
                   >
-                    I'm here to help you reflect, process, and stay on track
+                    I&apos;m here to help you reflect, process, and stay on track
                     between therapy sessions. Think of me as your guide for
                     revisiting insights and clarity from therapy whenever you
                     need it.
@@ -58,7 +58,7 @@ export function OnboardingModal() {
                     exit={{ opacity: 0 }}
                     className="text-muted-foreground"
                   >
-                    Let's set things up so I can best help you. No rush—just
+                    Let&apos;s set things up so I can best help you. No rush—just
                     answer as much as you feel comfortable. It should take no
                     more than 5 minutes.
                   </motion.p>
@@ -66,7 +66,7 @@ export function OnboardingModal() {
               </AnimatePresence>
 
               <Button onClick={step === 0 ? () => setStep(1) : handleComplete}>
-                {step === 0 ? "Sounds Great" : "Let's Do It"}
+                {step === 0 ? "Sounds Great" : "Let&apos;s Do It"}
               </Button>
             </div>
           </motion.div>
