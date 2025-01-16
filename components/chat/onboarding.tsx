@@ -21,8 +21,8 @@ const onboardingMessages: Message[] = [
 export default function OnboardingChat() {
   return <Chat 
     initialMessages={onboardingMessages}
-    // apiRoute="/api/onboarding"
-    // isOnboarding={true}
+    apiRoute="/api/onboarding"
+    isOnboarding={true}
     />;
 }
 
