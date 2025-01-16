@@ -2,7 +2,7 @@ from fastapi import APIRouter, Query, Request, Depends
 from fastapi.responses import StreamingResponse
 from ..models.chat import ChatRequest
 from ..utils.prompt import convert_to_openai_messages
-from ..chat.stream import stream_text
+from ..chat.stream import handle_chat_stream
 from ..middleware.auth import verify_auth
 import logging
 
@@ -20,6 +20,6 @@ async def handle_chat_data(
     messages = chat_request.messages
     openai_messages = convert_to_openai_messages(messages)
 
-    response = StreamingResponse(stream_text(openai_messages, protocol))
+    response = StreamingResponse(handle_chat_stream(openai_messages, protocol))
     response.headers['x-vercel-ai-data-stream'] = 'v1'
     return response 

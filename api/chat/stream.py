@@ -1,5 +1,5 @@
 import json
-from typing import List
+from typing import List, Generator
 from openai.types.chat.chat_completion_message_param import ChatCompletionMessageParam
 from openai import OpenAI
 import os
@@ -8,13 +8,15 @@ client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
-def stream_text(messages: List[ChatCompletionMessageParam], protocol: str = 'data'):
+def generate_text(messages: List[ChatCompletionMessageParam]) -> Generator[str, None, None]:
     stream = client.chat.completions.create(
         messages=messages,
         model="gpt-4",
         stream=True,
     )
+    return stream
 
+def stream_responses(stream: Generator) -> Generator[str, None, None]:
     for chunk in stream:
         for choice in chunk.choices:
             if choice.finish_reason == "stop":
@@ -32,3 +34,7 @@ def stream_text(messages: List[ChatCompletionMessageParam], protocol: str = 'dat
                 prompt=prompt_tokens,
                 completion=completion_tokens
             )
+
+def handle_chat_stream(messages: List[ChatCompletionMessageParam], protocol: str = 'data') -> Generator[str, None, None]:
+    stream = generate_text(messages)
+    return stream_responses(stream)
