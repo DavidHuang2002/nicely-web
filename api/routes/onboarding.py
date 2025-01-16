@@ -16,7 +16,7 @@ async def handle_onboarding_chat(
     request: Request,
     chat_request: ChatRequest,
     protocol: str = Query('data'),
-    auth_state = Depends(verify_auth)
+    # auth_state = Depends(verify_auth)
 ):
     logger.debug(f"Received onboarding request with protocol: {protocol}")
     logger.debug(f"Chat request messages: {chat_request.messages}")
@@ -25,17 +25,17 @@ async def handle_onboarding_chat(
         logger.debug(f"Processing onboarding for user: {request.state.user_id}")
         
         # Check if user exists, if not create one
-        user_service = UserService()
-        user = await user_service.get_user_by_clerk_id(request.state.user_id)
+        # user_service = UserService()
+        # user = await user_service.get_user_by_clerk_id(request.state.user_id)
         
-        if not user:
-            # Create new user
-            user_create = UserCreate(
-                clerk_id=request.state.user_id,
-                onboarding_completed=False
-            )
-            user = await user_service.create_user(user_create)
-            logger.debug(f"Created new user: {user.id}")
+        # if not user:
+        #     # Create new user
+        #     user_create = UserCreate(
+        #         clerk_id=request.state.user_id,
+        #         onboarding_completed=False
+        #     )
+        #     user = await user_service.create_user(user_create)
+        #     logger.debug(f"Created new user: {user.id}")
         
         onboarding_chat = OnboardingChat()
         response_stream = onboarding_chat.handle_onboarding(chat_request.messages)
