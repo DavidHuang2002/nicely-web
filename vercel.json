@@ -1,6 +1,12 @@
 {
   "functions": {
-    "api/**": {
+    "backend/index.py": {
+      "excludeFiles": "{.next,.git,node_modules}/**"
+    },
+    "backend/routes/chat.py": {
+      "excludeFiles": "{.next,.git,node_modules}/**"
+    },
+    "backend/routes/onboarding.py": {
       "excludeFiles": "{.next,.git,node_modules}/**"
     }
   }
