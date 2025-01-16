@@ -3,7 +3,7 @@ anyio==4.4.0
 certifi==2024.7.4
 cffi==1.17.1
 charset-normalizer==3.4.0
-clerk-backend-api==1.6.0
+clerk-backend-api
 click==8.1.7
 cryptography==43.0.3
 deprecation==2.1.0
