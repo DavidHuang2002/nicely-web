@@ -66,7 +66,7 @@ export function OnboardingModal() {
               </AnimatePresence>
 
               <Button onClick={step === 0 ? () => setStep(1) : handleComplete}>
-                {step === 0 ? "Sounds Great" : "Let&apos;s Do It"}
+                {step === 0 ? "Sounds Great" : "Let's Do It"}
               </Button>
             </div>
           </motion.div>
