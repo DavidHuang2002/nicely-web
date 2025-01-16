@@ -14,9 +14,9 @@ async def handle_chat_data(
     request: Request,
     chat_request: ChatRequest,
     protocol: str = Query('data'),
-    auth_state = Depends(verify_auth)
+    # auth_state = Depends(verify_auth)
 ):
-    logger.debug(f"Request authenticated for user: {request.state.user_id}")
+    # logger.debug(f"Request authenticated for user: {request.state.user_id}")
     messages = chat_request.messages
     openai_messages = convert_to_openai_messages(messages)
 
