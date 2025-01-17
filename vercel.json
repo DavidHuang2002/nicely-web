@@ -1,7 +1,8 @@
 {
-  "functions": {
-    "api/**": {
-      "excludeFiles": "{.next,.git,node_modules}/**"
+  "functions": [
+    {
+      "src": "api/**",
+      "use": "@vercel/python"
     }
-  }
+  ]
 }

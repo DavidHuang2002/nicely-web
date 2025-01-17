@@ -12,3 +12,8 @@ logger = logging.getLogger(__name__)
 app.include_router(chat.router, prefix="/api", tags=["chat"])
 app.include_router(onboarding.router, prefix="/api", tags=["onboarding"])
 # app.include_router(user.router, prefix="/api", tags=["user"])
+
+# a simple health check endpoint
+@app.get("/health")
+def health():
+    return {"status": "ok"}
