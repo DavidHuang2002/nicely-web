@@ -20,9 +20,25 @@ async def handle_onboarding_chat(
 ):
     logger.debug(f"Received onboarding request with protocol: {protocol}")
     logger.debug(f"Chat request messages: {chat_request.messages}")
+    # log all request headers
+    logger.debug(f"Request headers: {request.headers}")
+    # log all request body
+    logger.debug(f"Request body: {await request.body()}")
+    # log all request state
+    logger.debug(f"Request state: {vars(request.state)}")
+    # log all request cookies
+    logger.debug(f"Request cookies: {request.cookies}")
+    # log all request query params
+    logger.debug(f"Request query params: {request.query_params}")
+    # log all request path params
+    logger.debug(f"Request path params: {request.path_params}")
+    # log all request form data
+    logger.debug(f"Request form data: {await request.form()}")
+    # log all request json
+    logger.debug(f"Request json: {await request.json()}")
 
     try:
-        logger.debug(f"Processing onboarding for user: {request.state.user_id}")
+        # logger.debug(f"Processing onboarding for user: {request.state.user_id}")
         
         # Check if user exists, if not create one
         # user_service = UserService()

@@ -3,5 +3,6 @@
     "api/**": {
       "excludeFiles": "{.next,.git,node_modules}/**"
     }
-  }
+  },
+  "buildCommand": "pip install setuptools && pip install -r requirements.txt && next build"
 }
