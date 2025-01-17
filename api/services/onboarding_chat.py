@@ -1,7 +1,9 @@
 from typing import List, AsyncGenerator
 from ..models.chat import ClientMessage
 from ..utils.prompt import convert_to_openai_messages
-from ..chat.stream import generate_text, stream_responses
+from ..chat.stream import stream_responses
+from ..services.llm import generate_response_stream
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -41,4 +43,4 @@ class OnboardingChat:
         all_messages = [system_prompt] + convert_to_openai_messages(messages)
         
         # Generate and stream responses
-        return generate_text(all_messages)
+        return generate_response_stream(all_messages)

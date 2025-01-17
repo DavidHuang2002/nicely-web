@@ -1,23 +1,10 @@
 import json
 from typing import List, Generator
 from openai.types.chat.chat_completion_message_param import ChatCompletionMessageParam
-from openai import OpenAI
-import os
 import logging
-
-client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-)
+from ..services.llm import generate_response_stream
 
 logger = logging.getLogger(__name__)
-
-def generate_text(messages: List[ChatCompletionMessageParam]) -> Generator[str, None, None]:
-    stream = client.chat.completions.create(
-        messages=messages,
-        model="gpt-4",
-        stream=True,
-    )
-    return stream
 
 def stream_responses(stream: Generator) -> Generator[str, None, None]:
     for chunk in stream:
@@ -40,5 +27,5 @@ def stream_responses(stream: Generator) -> Generator[str, None, None]:
 
 def handle_chat_stream(messages: List[ChatCompletionMessageParam], protocol: str = 'data') -> Generator[str, None, None]:
     logger.debug(f"Handling chat stream with messages: {messages}")
-    stream = generate_text(messages)
+    stream = generate_response_stream(messages)
     return stream_responses(stream)
