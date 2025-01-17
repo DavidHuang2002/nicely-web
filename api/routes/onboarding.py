@@ -22,7 +22,7 @@ async def handle_onboarding_chat(
     logger.debug(f"Chat request messages: {chat_request.messages}")
 
     try:
-        logger.debug(f"Processing onboarding for user: {request.state.user_id}")
+        # logger.debug(f"Processing onboarding for user: {request.state.user_id}")
         
         # Check if user exists, if not create one
         # user_service = UserService()
