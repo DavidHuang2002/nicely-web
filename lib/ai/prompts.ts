@@ -20,6 +20,8 @@ Review the conversation and create a memory reflection following these rules:
 
 2. **Four Categories**  
    - Each item must have a "type" among: "goal", "struggle", "insight", or "next_step".  
+   - the insight is for insight regarding the user's cognitive, emotional, behavioral patterns, relationships dynamics, etc.
+   - the next_step for any takeaways from therapy or actions user want to take
    - Choose the category that best represents the point’s function in therapy.
 
 3. **Context Tags**  
