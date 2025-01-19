@@ -13,13 +13,17 @@ import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 
 export const PreviewMessage = ({
   message,
+  chatId,
+  isLoading,
 }: {
   chatId: string;
   message: Message;
   isLoading: boolean;
 }) => {
-  // do not display tool invocations for the user
-  if (message.toolInvocations ) {
+  // Only hide messages that are pure tool invocations with no content
+  const shouldHideMessage = message.toolInvocations && !message.content;
+
+  if (shouldHideMessage) {
     return null;
   }
 
@@ -62,7 +66,7 @@ export const PreviewMessage = ({
               </div>
             )}
           </div>
-{/* 
+
           {message.toolInvocations && message.toolInvocations.length > 0 && (
             <div className="flex flex-col gap-4">
               {message.toolInvocations.map((toolInvocation) => {
@@ -70,7 +74,6 @@ export const PreviewMessage = ({
 
                 if (state === "result") {
                   const { result } = toolInvocation;
-
                   return (
                     <div key={toolCallId}>
                       {toolName === "get_current_weather" ? (
@@ -81,6 +84,7 @@ export const PreviewMessage = ({
                     </div>
                   );
                 }
+
                 return (
                   <div
                     key={toolCallId}
@@ -93,7 +97,7 @@ export const PreviewMessage = ({
                 );
               })}
             </div>
-          )} */}
+          )}
 
           {message.experimental_attachments && (
             <div className="flex flex-row gap-2">

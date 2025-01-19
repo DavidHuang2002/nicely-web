@@ -30,7 +30,7 @@ const systemPrompt = `
      - Learnings and action steps
      - Unaddressed topics
 
-  After each step, reflect a summary of the user's response back to them to confirm before moving on to the next step.
+  After each step, reflect your understanding of the user's response back to them and ask any clarifying questions if you have any (but not too many). If not, move on to the next step.
 
   After the user confirmed the last step, thank them and call the completeOnboarding tool to finish the process.
 `;

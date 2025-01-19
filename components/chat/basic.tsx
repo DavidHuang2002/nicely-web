@@ -93,7 +93,11 @@ export function Chat({
 
         {isLoading &&
           messages.length > 0 &&
-          messages[messages.length - 1].role === "user" && <ThinkingMessage />}
+          // because we are not displaying tool invocations, so we also want to display thinking
+          // for the message after it
+          (messages[messages.length - 1].role === "user"
+           || messages[messages.length - 1].toolInvocations
+          ) && <ThinkingMessage />}
 
         <div
           ref={messagesEndRef}
