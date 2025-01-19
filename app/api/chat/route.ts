@@ -1,4 +1,5 @@
 import { openai } from "@ai-sdk/openai";
+import { currentUser } from "@clerk/nextjs/server";
 import { streamText } from "ai";
 
 // Allow streaming responses up to 30 seconds
@@ -14,6 +15,10 @@ export async function POST(req: Request) {
     if no relevant information is found in the tool calls, respond, "Sorry, I don't know."`,
     messages,
   });
+  
+  // get current user
+  const user = await currentUser();
+  console.log("current user", user);
 
   return result.toDataStreamResponse();
 }

@@ -1,3 +1,4 @@
+import { createMessage } from "@/lib/utils";
 import { Chat } from "./basic";
 import type { Message } from "ai";
 
@@ -9,19 +10,13 @@ Here’s how it works:
 
 No pressure—just share what feels comfortable. Let me know when you’re ready, and we’ll take it one step at a time. You’ve got this! 💛`;
 
-const onboardingMessages: Message[] = [
-  {
-    id: "1",
-    role: "assistant",
-    content: onboardingOpenner,
-  },
-]; 
 
+const onboardingOpennerMessage: Message = createMessage(onboardingOpenner, "assistant");
 
 export default function OnboardingChat() {
   return <Chat 
-    initialMessages={onboardingMessages}
-    apiRoute="/api/onboarding"
+    initialMessages={[onboardingOpennerMessage]}
+    apiRoute="/api/chat/onboarding"
     isOnboarding={true}
     />;
 }

@@ -9,7 +9,7 @@ export default function Page() {
 
   useEffect(() => {
     // Check if user has completed onboarding
-    const hasCompletedOnboarding = localStorage.getItem("onboardingComplete");
+    const hasCompletedOnboarding = false;
     if (!hasCompletedOnboarding) {
       setShowOnboarding(true);
     }

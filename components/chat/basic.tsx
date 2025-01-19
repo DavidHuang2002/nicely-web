@@ -5,6 +5,24 @@ import { MultimodalInput } from "@/components/multimodal-input";
 import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
 import { Message, useChat } from "ai/react";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
+import { createMessage } from "@/lib/utils";
+import { onboardingFinishedMessageContent } from "@/lib/llm/prompts";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+const onboardingFinishedMessage: Message = createMessage(
+  onboardingFinishedMessageContent,
+  "assistant"
+);
+
+const chatCompletedToolIsCalled = (message: Message) => {
+  return message.toolInvocations?.some(
+    (tool) => tool.toolName === COMPLETE_ONBOARDING_TOOL_NAME
+  );
+};
 
 export function Chat({
   initialMessages = [],
@@ -16,6 +34,8 @@ export function Chat({
   isOnboarding?: boolean;
 }) {
   const chatId = "001";
+  const [isCompleted, setIsCompleted] = useState(false);
+  const router = useRouter();
 
   const {
     messages,
@@ -30,6 +50,17 @@ export function Chat({
     api: apiRoute,
     maxSteps: 4,
     initialMessages,
+    onFinish: (message) => {
+      console.log("message", message);
+      if (chatCompletedToolIsCalled(message)) {
+        // remove the tool call message
+        setMessages((prev) => prev.slice(0, -1));
+
+        // add the onboarding finished message
+        setIsCompleted(true);
+        setMessages((prev) => [...prev, onboardingFinishedMessage]);
+      }
+    },
     onError: (error) => {
       if (error.message.includes("Too many requests")) {
         toast.error(
@@ -71,20 +102,28 @@ export function Chat({
       </div>
 
       <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
-        <MultimodalInput
-          chatId={chatId}
-          input={input}
-          setInput={setInput}
-          handleSubmit={handleSubmit}
-          isLoading={isLoading}
-          stop={stop}
-          messages={messages}
-          setMessages={setMessages}
-          append={append}
-          isOnboardingStart={
-            messages.length === 1 && isOnboarding
-          }
-        />
+        {isCompleted ? (
+          <Button
+            type="button"
+            className="w-full"
+            onClick={() => router.push("/home")}
+          >
+            Go to home
+          </Button>
+        ) : (
+          <MultimodalInput
+            chatId={chatId}
+            input={input}
+            setInput={setInput}
+            handleSubmit={handleSubmit}
+            isLoading={isLoading}
+            stop={stop}
+            messages={messages}
+            setMessages={setMessages}
+            append={append}
+            isOnboardingStart={messages.length === 1 && isOnboarding}
+          />
+        )}
       </form>
     </div>
   );

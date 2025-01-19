@@ -13,6 +13,7 @@
     "@ai-sdk/ui-utils": "^0.0.20",
     "@clerk/nextjs": "^6.9.10",
     "@radix-ui/react-slot": "^1.1.0",
+    "@supabase/supabase-js": "^2.47.16",
     "@types/node": "20.2.4",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.2.4",
@@ -41,6 +42,7 @@
     "tailwindcss-animate": "^1.0.7",
     "types": "link:next-themes/dist/types",
     "typescript": "5.0.4",
-    "usehooks-ts": "^3.1.0"
+    "usehooks-ts": "^3.1.0",
+    "zod": "^3.24.1"
   }
 }

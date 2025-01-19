@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { Weather } from "../weather";
 import { TherapistAvatar } from "./therapist-avatar";
 import { UserAvatar } from "./user-avatar";
+import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 
 export const PreviewMessage = ({
   message,
