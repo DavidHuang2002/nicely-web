@@ -1,9 +1,10 @@
 import { streamText, tool } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { currentUser, User } from "@clerk/nextjs/server";
-import { addUserIfNotExists, getUser, updateUser } from "@/lib/supabase";
+import { addUserIfNotExists, getUser, updateUser } from "@/lib/database/supabase";
 import { z } from "zod";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
+import { extractAndStoreInsights } from "@/lib/ai/RAG";
 
 const systemPrompt = `
   You are a compassionate, friendly, and fun therapy companion helping with onboarding. 
@@ -35,7 +36,9 @@ const systemPrompt = `
 `;
 
 const testPrompt = `
-  simply say hello and then call the completeOnboarding tool to finish the process.
+  ask about an recent user's experience
+  then repeat it back to the user for confirmation
+  at last, call the completeOnboarding tool to finish the process.
 `;
 
 const handleOnboardingFinished = (user: User) => {
@@ -66,6 +69,7 @@ export async function POST(req: Request) {
         parameters: z.object({}),
         execute: async () => {
           handleOnboardingFinished(user);
+          await extractAndStoreInsights(messages);
           return { completed: true };
         },
       }),

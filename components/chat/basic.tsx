@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 import { createMessage } from "@/lib/utils";
-import { onboardingFinishedMessageContent } from "@/lib/llm/prompts";
+import { onboardingFinishedMessageContent } from "@/lib/ai/prompts";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 

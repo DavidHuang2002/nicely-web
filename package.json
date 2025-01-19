@@ -12,6 +12,7 @@
     "@ai-sdk/openai": "^1.1.0",
     "@ai-sdk/ui-utils": "^0.0.20",
     "@clerk/nextjs": "^6.9.10",
+    "@qdrant/js-client-rest": "^1.13.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@supabase/supabase-js": "^2.47.16",
     "@types/node": "20.2.4",
