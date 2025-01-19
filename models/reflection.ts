@@ -41,6 +41,10 @@ export const ReflectionPointSchema = z.object({
     .min(1)
     .describe("Direct quote from the user's conversation"),
   importance: ImportanceLevel,
+  user_id: z
+    .string()
+    .uuid()
+    .describe("UUID of the user who owns this reflection"),
 });
 
 // Schema for an array of reflection points

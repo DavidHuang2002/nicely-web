@@ -30,7 +30,7 @@ export async function extractAndStoreInsights(
     // Process each reflection point
     for (const reflection of reflections) {
       // Generate embedding for the reflection summary
-      const { embedding } = await embedText(reflection.summary);
+      const embedding = await embedText(reflection.summary);
 
       // Store reflection and embedding in Qdrant
       await upsertReflection(reflection, embedding);
