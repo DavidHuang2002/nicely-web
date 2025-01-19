@@ -2,14 +2,12 @@ import { generateObject } from "ai";
 import { openai } from "@ai-sdk/openai";
 import {
   ReflectionPointSchema,
-  ReflectionPointsSchema,
   type ReflectionPoints,
 } from "../../models/reflection";
 import { embedText } from "./embeddings";
 import { upsertReflection } from "../database/qdrant";
 import { Message } from "ai";
-import { extractPersonalInfoPrompt, makeReflectionPrompt } from "./prompts";
-import { object, z } from "zod";
+import { makeReflectionPrompt } from "./prompts";
 import { convertMessagesToStr } from "./utils";
 
 export async function extractAndStoreInsights(

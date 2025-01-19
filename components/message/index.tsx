@@ -62,7 +62,7 @@ export const PreviewMessage = ({
               </div>
             )}
           </div>
-
+{/* 
           {message.toolInvocations && message.toolInvocations.length > 0 && (
             <div className="flex flex-col gap-4">
               {message.toolInvocations.map((toolInvocation) => {
@@ -93,7 +93,7 @@ export const PreviewMessage = ({
                 );
               })}
             </div>
-          )}
+          )} */}
 
           {message.experimental_attachments && (
             <div className="flex flex-row gap-2">
