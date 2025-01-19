@@ -5,9 +5,9 @@ import { addUserIfNotExists, getUser, updateUser } from "@/lib/database/supabase
 import { z } from "zod";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 import { extractAndStoreInsights } from "@/lib/ai/RAG";
+import { therapistPrompt } from "@/lib/ai/prompts";
 
-const systemPrompt = `
-  You are a compassionate, friendly, and fun therapy companion helping with onboarding. 
+const taskPrompt =  `Your current task is helping with onboarding. 
   Guide the user through the following steps:
   
   1. Gather basic information:
@@ -35,6 +35,13 @@ const systemPrompt = `
   After the user confirmed the last step, thank them and call the completeOnboarding tool to finish the process.
 `;
 
+const onboardingPrompt = `
+  ${taskPrompt}
+
+  Regarding your role in the process:
+  ${therapistPrompt}
+`;
+
 const testPrompt = `
   ask about an recent user's experience
   then repeat it back to the user for confirmation
@@ -60,7 +67,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: openai("gpt-4o"),
-    system: systemPrompt,
+    system: onboardingPrompt,
     messages,
     tools: {
       [COMPLETE_ONBOARDING_TOOL_NAME]: tool({
@@ -69,7 +76,7 @@ export async function POST(req: Request) {
         parameters: z.object({}),
         execute: async () => {
           handleOnboardingFinished(user);
-          await extractAndStoreInsights(messages);
+          await extractAndStoreInsights(messages, user.id);
           return { completed: true };
         },
       }),
