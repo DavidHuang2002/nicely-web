@@ -3,9 +3,10 @@ import { openai } from "@ai-sdk/openai";
 import {
   GeneratedReflectionPointSchema,
   GeneratedReflectionPointsSchema,
+  StoredReflectionPoint,
   type GeneratedReflectionPoints,
 } from "../../models/reflection";
-import { embedText } from "./embeddings";
+import { embedReflection, embedText } from "./embeddings";
 import { upsertReflection } from "../database/qdrant";
 import { Message } from "ai";
 import { makeReflectionPrompt } from "./prompts";
@@ -30,14 +31,14 @@ export async function extractAndStoreInsights(
 
     // Process each reflection point
     for (const reflection of reflections) {
-      const storedReflection = {
+      const storedReflection: StoredReflectionPoint = {
         ...reflection,
         user_id: userId,
         timestamp: Date.now(),
       };
 
       // Generate embedding for the reflection summary
-      const embedding = await embedText(storedReflection.summary);
+      const embedding = await embedReflection(storedReflection);
 
       // Store reflection and embedding in Qdrant
       await upsertReflection(storedReflection, embedding);
