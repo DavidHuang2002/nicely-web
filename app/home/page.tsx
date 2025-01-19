@@ -8,11 +8,14 @@ export default function Page() {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    // Check if user has completed onboarding
-    const hasCompletedOnboarding = false;
-    if (!hasCompletedOnboarding) {
-      setShowOnboarding(true);
-    }
+    // get onboarding status from server
+    fetch("/api/chat/onboarding")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.onboardingCompleted) {
+          setShowOnboarding(true);
+        }
+      });
   }, []);
 
   return (

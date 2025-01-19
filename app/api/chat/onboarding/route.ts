@@ -1,7 +1,7 @@
 import { streamText, tool } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { currentUser } from "@clerk/nextjs/server";
-import { addUserIfNotExists } from "@/lib/supabase";
+import { currentUser, User } from "@clerk/nextjs/server";
+import { addUserIfNotExists, getUser, updateUser } from "@/lib/supabase";
 import { z } from "zod";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 
@@ -38,6 +38,10 @@ const testPrompt = `
   simply say hello and then call the completeOnboarding tool to finish the process.
 `;
 
+const handleOnboardingFinished = (user: User) => {
+  updateUser(user.id, { onboarding_completed: true });
+};
+
 // TODO: how to get text as we are streaming and detect if it starts with "[completed]"
 export async function POST(req: Request) {
   const { messages } = await req.json();
@@ -61,12 +65,33 @@ export async function POST(req: Request) {
         // @ts-ignore: seem like there is a bug in the types
         parameters: z.object({}),
         execute: async () => {
-          console.log("onboarding completed");
+          handleOnboardingFinished(user);
           return { completed: true };
         },
       }),
     },
   });
 
+  console.log("onboarding completed");
+
   return result.toDataStreamResponse();
 }
+
+// TODO: this is a test endpoint to check if the onboarding is completed
+export async function GET(req: Request) {
+  const clerkUser = await currentUser();
+  if (!clerkUser) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  let onboardingCompleted = false; 
+  const user = await getUser(clerkUser.id);
+  if (user) {
+    onboardingCompleted = user.onboarding_completed;
+  }
+
+  return new Response(JSON.stringify({
+    onboardingCompleted,
+  }));
+}
+
