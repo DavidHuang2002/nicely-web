@@ -28,7 +28,7 @@ const ContextTags = z
   );
 
 // Main ReflectionPoint schema
-export const ReflectionPointSchema = z.object({
+export const GeneratedReflectionPointSchema = z.object({
   type: ReflectionTypeEnum,
   context_tags: ContextTags,
   summary: z
@@ -41,23 +41,42 @@ export const ReflectionPointSchema = z.object({
     .min(1)
     .describe("Direct quote from the user's conversation"),
   importance: ImportanceLevel,
-  user_id: z
-    .string()
-    .uuid()
-    .describe("UUID of the user who owns this reflection"),
+  // user_id: z
+  //   .string()
+  //   .uuid()
+  //   .describe("UUID of the user who owns this reflection"),
 });
 
+// the actual stored reflection point will have the user_id
+export const StoredReflectionPointSchema =
+  GeneratedReflectionPointSchema.extend({
+    user_id: z
+      .string()
+      .uuid()
+      .describe("UUID of the user who owns this reflection"),
+    timestamp: z.number().describe("Unix timestamp in milliseconds"),
+  });
+
 // Schema for an array of reflection points
-export const ReflectionPointsSchema = z.array(ReflectionPointSchema);
+export const GeneratedReflectionPointsSchema = z.array(
+  GeneratedReflectionPointSchema
+);
 
 // Type inference
-export type ReflectionPoint = z.infer<typeof ReflectionPointSchema>;
-export type ReflectionPoints = z.infer<typeof ReflectionPointsSchema>;
+export type GeneratedReflectionPoint = z.infer<
+  typeof GeneratedReflectionPointSchema
+>;
+export type GeneratedReflectionPoints = z.infer<
+  typeof GeneratedReflectionPointsSchema
+>;
+export type StoredReflectionPoint = z.infer<typeof StoredReflectionPointSchema>;
 
-export const validateReflections = (jsonString: string): ReflectionPoints => {
+export const validateReflections = (
+  jsonString: string
+): GeneratedReflectionPoints => {
   try {
     const parsed = JSON.parse(jsonString);
-    return ReflectionPointsSchema.parse(parsed);
+    return GeneratedReflectionPointsSchema.parse(parsed);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
       throw new Error(`Invalid reflection format: ${error.message}`);

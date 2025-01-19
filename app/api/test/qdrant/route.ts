@@ -3,7 +3,7 @@ import {
   upsertReflection,
 } from "@/lib/database/qdrant";
 import { embedText } from "@/lib/ai/embeddings";
-import { ReflectionPoint } from "@/models/reflection";
+import { GeneratedReflectionPoint, StoredReflectionPoint } from "@/models/reflection";
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     // await initializeCollection();
 
     // Sample reflection point
-    const sampleReflection: ReflectionPoint = {
+    const sampleReflection: GeneratedReflectionPoint = {
       type: "insight",
       summary:
         "Test insight about managing anxiety through breathing exercises",
@@ -19,14 +19,18 @@ export async function POST(req: Request) {
       original_quote:
         "I found that deep breathing really helps when I'm anxious",
       importance: 4,
-      user_id: "4eef9195-42e4-4a0f-b41e-5d0719fa655f",
     };
 
     // Generate embedding for the reflection summary
     const embedding  = await embedText(sampleReflection.summary);
 
     // Store in Qdrant
-    await upsertReflection(sampleReflection, embedding);
+    const storedReflection: StoredReflectionPoint = {
+      ...sampleReflection,
+      user_id: "4eef9195-42e4-4a0f-b41e-5d0719fa655f",
+      timestamp: Date.now(),
+    };
+    await upsertReflection(storedReflection, embedding);
 
     return new Response(
       JSON.stringify({

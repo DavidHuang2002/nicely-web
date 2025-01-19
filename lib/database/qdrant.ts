@@ -1,5 +1,5 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
-import { ReflectionPoint } from "../../models/reflection";
+import { StoredReflectionPoint } from "../../models/reflection";
 import {
   QDRANT_CONFIG,
   ADA_VECTOR_SIZE,
@@ -33,7 +33,7 @@ export const initializeCollectionIfNotExist = async (): Promise<void> => {
 };
 
 export const upsertReflection = async (
-  reflection: ReflectionPoint,
+  reflection: StoredReflectionPoint,
   embedding: number[]
 ): Promise<void> => {
   // init if not exists
