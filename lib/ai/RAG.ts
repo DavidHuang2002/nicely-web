@@ -8,7 +8,7 @@ import {
 import { embedText } from "./embeddings";
 import { upsertReflection } from "../database/qdrant";
 import { Message } from "ai";
-import { makeReflectionPrompt } from "./prompts";
+import { extractPersonalInfoPrompt, makeReflectionPrompt } from "./prompts";
 import { object, z } from "zod";
 import { convertMessagesToStr } from "./utils";
 

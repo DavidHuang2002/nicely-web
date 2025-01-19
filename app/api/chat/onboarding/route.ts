@@ -11,7 +11,7 @@ const systemPrompt = `
   Guide the user through the following steps:
   
   1. Gather basic information:
-     - Name
+     - What user would like to be called
      - Therapy frequency
   
   2. Discuss therapy goals:
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: openai("gpt-4o"),
-    system: testPrompt,
+    system: systemPrompt,
     messages,
     tools: {
       [COMPLETE_ONBOARDING_TOOL_NAME]: tool({
@@ -70,6 +70,19 @@ export async function POST(req: Request) {
         execute: async () => {
           handleOnboardingFinished(user);
           await extractAndStoreInsights(messages);
+          return { completed: true };
+        },
+      }),
+
+      "saveNameAndFrequency": tool({
+        description: "Save the user's name and therapy frequency",
+        parameters: z.object({
+          preferredName: z.string().describe("The user's preferred name"),
+          therapyFrequency: z.enum(["weekly", "biweekly", "monthly", "other"]).describe("The user's therapy frequency"),
+        }),   
+
+        execute: async ({ preferredName, therapyFrequency }) => {
+          await updateUser(user.id, { preferred_name: preferredName, therapy_frequency: therapyFrequency }); 
           return { completed: true };
         },
       }),

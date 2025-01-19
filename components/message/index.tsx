@@ -18,6 +18,11 @@ export const PreviewMessage = ({
   message: Message;
   isLoading: boolean;
 }) => {
+  // do not display tool invocations for the user
+  if (message.toolInvocations ) {
+    return null;
+  }
+
   return (
     <motion.div
       className="w-full mx-auto max-w-3xl px-4 group/message"
