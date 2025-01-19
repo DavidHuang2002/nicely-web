@@ -12,24 +12,8 @@ import {
 } from '@clerk/nextjs'
 
 export const metadata = {
-  title: "AI SDK Python Streaming Preview",
-  description:
-    "Use the Data Stream Protocol to stream chat completions from a Python endpoint (FastAPI) and display them using the useChat hook in your Next.js application.",
-  openGraph: {
-    images: [
-      {
-        url: "/og?title=AI SDK Python Streaming Preview",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: [
-      {
-        url: "/og?title=AI SDK Python Streaming Preview",
-      },
-    ],
-  },
+  title: "Nicely",
+  description: "Your therapy companion",
 };
 
 export default function RootLayout({
