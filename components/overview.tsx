@@ -31,12 +31,14 @@ export const Overview = () => {
           description="Build healthy habits and maintain your well-being with personalized guidance"
           icon={<HeartIcon size={24} />}
           href="/chat/self-care"
+          disabled={true}
         />
         <TherapyOption
           title="Session Notes"
           description="Reflect on your therapy sessions and track your progress over time"
           icon={<NotebookIcon size={24} />}
           href="/chat/notes"
+          disabled={true}
         />
       </div>
     </motion.div>
