@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 // using @ts-nocheck because the clerk components' type has some issues
