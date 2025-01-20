@@ -1,6 +1,8 @@
-import { Chat } from "@/components/chat/basic";
+import UntangleChat from "@/components/chat/untangle";
+
+
 
 export default function Page() {
-  return <Chat />;
+  return <UntangleChat />;
 }
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Define the reflection type enum
-const ReflectionTypeEnum = z.enum(["goal", "struggle", "insight", "next_step"]);
+export const ReflectionTypeEnum = z.enum(["goal", "struggle", "insight", "next_step"]);
 
 // Define the importance level with specific validation
 const ImportanceLevel = z

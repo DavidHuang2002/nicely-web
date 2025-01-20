@@ -5,12 +5,17 @@ import {
   GeneratedReflectionPointsSchema,
   StoredReflectionPoint,
   type GeneratedReflectionPoints,
+  ReflectionTypeEnum,
 } from "../../models/reflection";
 import { embedReflection, embedText } from "./embeddings";
 import { upsertReflection } from "../database/qdrant";
 import { Message } from "ai";
 import { makeReflectionPrompt } from "./prompts";
 import { convertMessagesToStr } from "./utils";
+import { z } from "zod";
+import { searchReflections } from "../database/qdrant";
+import { getUser } from "../database/supabase";
+import { therapistPrompt } from "./prompts";
 
 export async function extractAndStoreInsights(
   messages: Message[],
@@ -50,3 +55,68 @@ export async function extractAndStoreInsights(
     throw error;
   }
 }
+
+export const retrieveTopUserProfileReflections = async (
+  query: number[],
+  userId: string,
+  topN: number,
+  filterType: "all" | z.infer<typeof ReflectionTypeEnum>
+) => {
+  try {
+    const searchResults = await searchReflections(query, userId, topN, filterType);
+    
+    // Transform results to include only necessary information
+    return searchResults.map((result) => ({
+      reflection: result.payload as StoredReflectionPoint,
+      score: result.score,
+    }));
+  } catch (error) {
+    console.error("Error in retrieveTopUserProfileReflections:", error);
+    throw error;
+  }
+};
+export const makeUntangleSystemPrompt = async (
+  messages: Message[],
+  userId: string
+): Promise<string> => {
+  const lastMessage = messages[messages.length - 1];
+  const lastMessageContent = lastMessage.content;
+  const queryEmbedding = await embedText(lastMessageContent);
+
+  const topUserProfilePoints = await retrieveTopUserProfileReflections(
+    queryEmbedding,
+    userId,
+    5,
+    "all"
+  );
+
+  const topUserProfilePointsString = topUserProfilePoints
+    .map((point) => JSON.stringify(point))
+    .join("\n");
+
+  // const mostRecentUserGoal = await searchRecentGoalReflections(userId, 1);
+
+  // const mostRecentUserGoalString = mostRecentUserGoal.map((point) => JSON.stringify(point)).join("\n");
+
+  // get the user's basic information
+  const user = await getUser(userId);
+  const userBasicInformation = `
+   Preferred name: ${user?.preferred_name}
+   `;
+
+  const untangleTask =
+    "You goal to help user untangle their thoughts and feelings. Here are some of user's past thoughts and feelings:";
+  return `
+   Your role:
+   ${therapistPrompt}
+
+   Your task:
+   ${untangleTask}
+
+   User's past thoughts and feelings:
+   ${topUserProfilePointsString}
+
+   user's basic information:
+   ${userBasicInformation}
+   `;
+};
