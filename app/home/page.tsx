@@ -8,7 +8,7 @@ export default function Page() {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    // get onboarding status from server
+    // get onboarding status from server to check if user has completed onboarding
     fetch("/api/chat/onboarding")
       .then((res) => res.json())
       .then((data) => {
