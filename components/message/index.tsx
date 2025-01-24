@@ -4,7 +4,6 @@ import type { Message } from "ai";
 import { motion } from "framer-motion";
 
 import { Markdown } from "../markdown";
-import { PreviewAttachment } from "../preview-attachment";
 import { cn } from "@/lib/utils";
 import { Weather } from "../weather";
 import { TherapistAvatar } from "./therapist-avatar";
@@ -99,16 +98,6 @@ export const PreviewMessage = ({
             </div>
           )}
 
-          {message.experimental_attachments && (
-            <div className="flex flex-row gap-2">
-              {message.experimental_attachments.map((attachment) => (
-                <PreviewAttachment
-                  key={attachment.url}
-                  attachment={attachment}
-                />
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </motion.div>
