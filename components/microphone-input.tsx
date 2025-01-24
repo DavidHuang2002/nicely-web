@@ -63,6 +63,7 @@ export function MicrophoneInput({
   const recorderRef = useRef<any>(null);
   const [stream, setStream] = useState<MediaStream | undefined>();
   const [isTranscribing, setIsTranscribing] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const MAX_RECORDING_DURATION = 60; // Maximum recording duration in seconds
 
@@ -97,11 +98,20 @@ export function MicrophoneInput({
   }, []);
 
   const startRecordingTimer = () => {
-    setTimeout(() => {
-      pauseRecording();
-      toast.info(
-        "Maximum recording duration reached. You can continue by clicking resume."
-      );
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // Set new timer
+    timerRef.current = setTimeout(() => {
+      // check if recording is in progress
+      if (recorderRef.current) {
+        pauseRecording();
+        toast.info(
+          "Maximum recording duration reached. You can continue by clicking resume."
+        );
+      }
     }, MAX_RECORDING_DURATION * 1000);
   };
 
@@ -128,6 +138,12 @@ export function MicrophoneInput({
 
   const pauseRecording = async () => {
     if (!recorderRef.current) return;
+
+    // Clear recording timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
 
     try {
       const { blob } = await recorderRef.current.stop();
@@ -187,6 +203,12 @@ export function MicrophoneInput({
 
   const stopAndSend = async () => {
     if (!recorderRef.current) return;
+
+    // Clear recording timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
 
     try {
       if (isRecording) {
