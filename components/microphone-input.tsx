@@ -12,12 +12,11 @@ import {
   type SetStateAction,
 } from "react";
 import { toast } from "sonner";
-import { useWindowSize } from "usehooks-ts";
+import Recorder from "recorder-js";
 
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
-import { MicrophoneIcon, StopIcon } from "./icons"; // We'll add this icon
+import { MicrophoneIcon, StopIcon } from "./icons";
 
 export function MicrophoneInput({
   chatId,
@@ -52,18 +51,81 @@ export function MicrophoneInput({
 }) {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
+  const recorderRef = useRef<any>(null);
 
-  const startRecording = () => {
-    setIsRecording(true);
-    toast.info("Recording started...");
+  useEffect(() => {
+    const initializeRecorder = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        const audioContext = new (window.AudioContext ||
+          (window as any).webkitAudioContext)();
+        const recorder = new Recorder(audioContext);
+        await recorder.init(stream);
+        recorderRef.current = recorder;
+      } catch (error) {
+        console.error("Error initializing recorder:", error);
+        toast.error("Failed to access microphone");
+      }
+    };
+
+    initializeRecorder();
+
+    return () => {
+      if (recorderRef.current) {
+        recorderRef.current.stream
+          .getTracks()
+          .forEach((track: MediaStreamTrack) => track.stop());
+      }
+    };
+  }, []);
+
+  const startRecording = async () => {
+    if (!recorderRef.current) {
+      toast.error("Microphone not initialized");
+      return;
+    }
+
+    try {
+      await recorderRef.current.start();
+      setIsRecording(true);
+      toast.info("Recording started...");
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      toast.error("Failed to start recording");
+    }
   };
 
-  const stopRecording = () => {
-    setIsRecording(false);
-    setRecordingDuration(0);
-    const transcribedText = "This is a placeholder for transcribed text.";
-    setInput(input + (input ? " " : "") + transcribedText);
-    toast.success("Recording transcribed");
+  const stopRecording = async () => {
+    if (!recorderRef.current) return;
+
+    try {
+      const { blob } = await recorderRef.current.stop();
+      setIsRecording(false);
+      setRecordingDuration(0);
+
+      // Create form data with the audio blob
+      const formData = new FormData();
+      formData.append("audio", blob, "audio.wav");
+
+      // Send to transcription API
+      const response = await fetch("/api/transcribe", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Transcription failed");
+      }
+
+      const { text } = await response.json();
+      setInput(input + (input ? " " : "") + text);
+      toast.success("Recording transcribed");
+    } catch (error) {
+      console.error("Error stopping recording:", error);
+      toast.error("Failed to transcribe audio");
+    }
   };
 
   useEffect(() => {
