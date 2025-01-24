@@ -61,9 +61,8 @@ export function MicrophoneInput({
   const stopRecording = () => {
     setIsRecording(false);
     setRecordingDuration(0);
-    // Simulate transcription with placeholder text
     const transcribedText = "This is a placeholder for transcribed text.";
-    setInput((prev) => prev + (prev ? " " : "") + transcribedText);
+    setInput(input + (input ? " " : "") + transcribedText);
     toast.success("Recording transcribed");
   };
 
