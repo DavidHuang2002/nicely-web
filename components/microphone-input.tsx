@@ -171,11 +171,29 @@ export function MicrophoneInput({
         }
 
         const { text } = await response.json();
-        setInput(input + (input ? " " : "") + text);
+        const newInput = input + (input ? " " : "") + text;
+
+        // Update the input state for UI consistency
+        setInput(newInput);
+
+        // Use append to send the message
+        await append({
+          role: "user",
+          content: newInput,
+        });
+
+        toast.success("Message sent!");
+      } else if (input) {
+        // If we're not recording but have input (from previous transcription), just send it
+        await append({
+          role: "user",
+          content: input,
+        });
+        toast.success("Message sent!");
       }
 
-      handleSubmit();
-      toast.success("Message sent!");
+      // clear the input
+      setInput("");
     } catch (error) {
       console.error("Error stopping recording:", error);
       toast.error("Failed to transcribe audio");
