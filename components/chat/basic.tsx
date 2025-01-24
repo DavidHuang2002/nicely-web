@@ -116,6 +116,19 @@ export function Chat({
           >
             Go to home
           </Button>
+        ) : messages.length === 1 && isOnboarding ? (
+          <div className="flex justify-center w-full">
+            <Button
+              type="button"
+              className="px-8"
+              onClick={(event) => {
+                event.preventDefault();
+                append(createMessage("Let's get started!", "user"));
+              }}
+            >
+              Let&apos;s get started!
+            </Button>
+          </div>
         ) : (
           <CombinedInput
             chatId={chatId}
@@ -127,7 +140,6 @@ export function Chat({
             messages={messages}
             setMessages={setMessages}
             append={append}
-            isOnboardingStart={messages.length === 1 && isOnboarding}
           />
         )}
       </form>

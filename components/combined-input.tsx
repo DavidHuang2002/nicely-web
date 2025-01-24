@@ -17,7 +17,6 @@ export function CombinedInput({
   append,
   handleSubmit,
   className,
-  isOnboardingStart = false,
 }: {
   chatId: string;
   input: string;
@@ -37,7 +36,6 @@ export function CombinedInput({
     chatRequestOptions?: ChatRequestOptions
   ) => void;
   className?: string;
-  isOnboardingStart?: boolean;
 }) {
   const [inputMode, setInputMode] = useState<"microphone" | "keyboard">(
     "microphone"
@@ -103,7 +101,6 @@ export function CombinedInput({
               messages={messages}
               setMessages={setMessages}
               append={append}
-              isOnboardingStart={isOnboardingStart}
             />
           )}
         </div>

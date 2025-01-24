@@ -31,7 +31,6 @@ export function MultimodalInput({
   append,
   handleSubmit,
   className,
-  isOnboardingStart = false,
 }: {
   chatId: string;
   input: string;
@@ -51,7 +50,6 @@ export function MultimodalInput({
     chatRequestOptions?: ChatRequestOptions
   ) => void;
   className?: string;
-  isOnboardingStart?: boolean;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
@@ -105,24 +103,6 @@ export function MultimodalInput({
       textareaRef.current?.focus();
     }
   }, [handleSubmit, setLocalStorageInput, width]);
-
-  if (isOnboardingStart) {
-    setInput("Let&apos;s get started!");
-
-    return (
-      <div className="flex justify-center w-full">
-        <Button
-          className="px-8"
-          onClick={(event) => {
-            event.preventDefault();
-            submitForm();
-          }}
-        >
-          Let&apos;s get started!
-        </Button>
-      </div>
-    );
-  }
   
 
   return (
