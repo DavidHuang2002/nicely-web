@@ -16,7 +16,13 @@ import Recorder from "recorder-js";
 
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { MicrophoneIcon, StopIcon } from "./icons";
+import {
+  MicrophoneIcon,
+  StopIcon,
+  PauseIcon,
+  PlayIcon,
+  SendIcon,
+} from "./icons";
 
 export function MicrophoneInput({
   chatId,
@@ -50,6 +56,7 @@ export function MicrophoneInput({
   className?: string;
 }) {
   const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const recorderRef = useRef<any>(null);
 
@@ -90,6 +97,7 @@ export function MicrophoneInput({
     try {
       await recorderRef.current.start();
       setIsRecording(true);
+      setIsPaused(false);
       toast.info("Recording started...");
     } catch (error) {
       console.error("Error starting recording:", error);
@@ -97,19 +105,17 @@ export function MicrophoneInput({
     }
   };
 
-  const stopRecording = async () => {
+  const pauseRecording = async () => {
     if (!recorderRef.current) return;
 
     try {
       const { blob } = await recorderRef.current.stop();
       setIsRecording(false);
-      setRecordingDuration(0);
+      setIsPaused(true);
 
-      // Create form data with the audio blob
       const formData = new FormData();
       formData.append("audio", blob, "audio.wav");
 
-      // Send to transcription API
       const response = await fetch("/api/transcribe", {
         method: "POST",
         body: formData,
@@ -123,30 +129,72 @@ export function MicrophoneInput({
       setInput(input + (input ? " " : "") + text);
       toast.success("Recording transcribed");
     } catch (error) {
+      console.error("Error pausing recording:", error);
+      toast.error("Failed to pause recording");
+    }
+  };
+
+  const resumeRecording = async () => {
+    if (!recorderRef.current) return;
+
+    try {
+      await recorderRef.current.start();
+      setIsPaused(false);
+      setIsRecording(true);
+      toast.info("Recording resumed");
+    } catch (error) {
+      console.error("Error resuming recording:", error);
+      toast.error("Failed to resume recording");
+    }
+  };
+
+  const stopAndSend = async () => {
+    if (!recorderRef.current) return;
+
+    try {
+      if (isRecording) {
+        const { blob } = await recorderRef.current.stop();
+        setIsRecording(false);
+        setIsPaused(false);
+        setRecordingDuration(0);
+
+        const formData = new FormData();
+        formData.append("audio", blob, "audio.wav");
+
+        const response = await fetch("/api/transcribe", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Transcription failed");
+        }
+
+        const { text } = await response.json();
+        setInput(input + (input ? " " : "") + text);
+      }
+
+      handleSubmit();
+      toast.success("Message sent!");
+    } catch (error) {
       console.error("Error stopping recording:", error);
       toast.error("Failed to transcribe audio");
     }
   };
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isRecording) {
-      interval = setInterval(() => {
-        setRecordingDuration((prev) => prev + 1);
-      }, 1000);
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isRecording]);
-
   return (
-    <div className="relative">
+    <div className="relative flex gap-2 items-center">
       <Button
         type="button"
-        onClick={isRecording ? stopRecording : startRecording}
+        onClick={() => {
+          if (isRecording) {
+            pauseRecording();
+          } else if (isPaused) {
+            resumeRecording();
+          } else {
+            startRecording();
+          }
+        }}
         className={cn(
           "rounded-full p-6 h-fit transition-all duration-200",
           isRecording
@@ -158,12 +206,29 @@ export function MicrophoneInput({
           animate={isRecording ? { scale: [1, 1.2, 1] } : {}}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >
-          {isRecording ? <StopIcon size={24} /> : <MicrophoneIcon size={24} />}
+          {isRecording ? (
+            <PauseIcon size={24} />
+          ) : isPaused ? (
+            <PlayIcon size={24} />
+          ) : (
+            <MicrophoneIcon size={24} />
+          )}
         </motion.div>
       </Button>
-      {isRecording && (
+
+      {(isRecording || isPaused || input) && (
+        <Button
+          type="button"
+          onClick={stopAndSend}
+          className="rounded-full p-6 h-fit bg-primary hover:bg-primary/90"
+        >
+          <SendIcon size={24} />
+        </Button>
+      )}
+
+      {(isRecording || isPaused) && (
         <div className="absolute top-[-2rem] text-sm text-muted-foreground">
-          Recording: {recordingDuration}s
+          Recording: {recordingDuration}s {isPaused ? "(Paused)" : ""}
         </div>
       )}
     </div>
