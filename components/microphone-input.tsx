@@ -23,6 +23,7 @@ import {
   PlayIcon,
   SendIcon,
 } from "./icons";
+import { WaveformVisualizer } from "./waveform-visualizer";
 
 export function MicrophoneInput({
   chatId,
@@ -59,17 +60,19 @@ export function MicrophoneInput({
   const [isPaused, setIsPaused] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const recorderRef = useRef<any>(null);
+  const [stream, setStream] = useState<MediaStream | undefined>();
 
   useEffect(() => {
     const initializeRecorder = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+        const audioStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
+        setStream(audioStream);
         const audioContext = new (window.AudioContext ||
           (window as any).webkitAudioContext)();
         const recorder = new Recorder(audioContext);
-        await recorder.init(stream);
+        await recorder.init(audioStream);
         recorderRef.current = recorder;
       } catch (error) {
         console.error("Error initializing recorder:", error);
@@ -84,6 +87,7 @@ export function MicrophoneInput({
         recorderRef.current.stream
           .getTracks()
           .forEach((track: MediaStreamTrack) => track.stop());
+        setStream(undefined);
       }
     };
   }, []);
@@ -245,8 +249,8 @@ export function MicrophoneInput({
       )}
 
       {(isRecording || isPaused) && (
-        <div className="absolute top-[-2rem] text-sm text-muted-foreground">
-          Recording: {recordingDuration}s {isPaused ? "(Paused)" : ""}
+        <div className="absolute top-[-2rem] w-40">
+          <WaveformVisualizer isRecording={isRecording} stream={stream} />
         </div>
       )}
     </div>
