@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
+// @ts-ignore
 import RecordPlugin from "wavesurfer.js/dist/plugins/record.esm.js";
 
 interface WaveformVisualizerProps {
@@ -21,16 +22,15 @@ export function WaveformVisualizer({
     // Initialize WaveSurfer with smoother appearance
     wavesurferRef.current = WaveSurfer.create({
       container: waveformRef.current,
-      waveColor: "rgba(255, 255, 255, 0.5)", // Semi-transparent white
-      progressColor: "rgba(255, 255, 255, 0.8)", // More opaque white for progress
+      waveColor: "rgb(var(--primary))",
+      progressColor: "rgb(var(--primary))",
       cursorWidth: 0,
-      height: 40,
+      height: 32,
       normalize: true,
       interact: false,
-      barWidth: 2, // Thinner bars
-      barGap: 1, // Smaller gap between bars
-      barRadius: 3, // Rounded bars
-      barMinHeight: 1, // Minimum height for smoother appearance
+      barWidth: 2,
+      barGap: 1,
+      barRadius: 3,
     });
 
     // Initialize Record plugin with smoother waveform
@@ -40,7 +40,7 @@ export function WaveformVisualizer({
         scrollingWaveform: false,
         continuousWaveform: true,
         continuousWaveformDuration: 30,
-        sampleRate: 8000, // Lower sample rate for smoother appearance
+        sampleRate: 8000,
       })
     );
 
@@ -64,7 +64,7 @@ export function WaveformVisualizer({
   }, [isRecording]);
 
   return (
-    <div className="w-full h-10 bg-black/20 rounded-lg backdrop-blur-sm">
+    <div className="w-full h-8">
       <div ref={waveformRef} className="w-full" />
     </div>
   );

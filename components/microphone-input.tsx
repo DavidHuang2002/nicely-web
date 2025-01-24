@@ -206,39 +206,56 @@ export function MicrophoneInput({
 
   return (
     <div className="relative flex gap-2 items-center">
-      <Button
-        type="button"
-        onClick={() => {
-          if (isRecording) {
-            pauseRecording();
-          } else if (isPaused) {
-            resumeRecording();
-          } else {
-            startRecording();
-          }
-        }}
-        className={cn(
-          "rounded-full p-6 h-fit transition-all duration-200",
-          isRecording
-            ? "bg-destructive hover:bg-destructive/90"
-            : "bg-primary hover:bg-primary/90"
-        )}
-      >
-        <motion.div
-          animate={isRecording ? { scale: [1, 1.2, 1] } : {}}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
-          {isRecording ? (
-            <PauseIcon size={24} />
-          ) : isPaused ? (
-            <PlayIcon size={24} />
-          ) : (
-            <MicrophoneIcon size={24} />
-          )}
-        </motion.div>
-      </Button>
+      {isRecording || isPaused ? (
+        <div className="flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px]">
+          <Button
+            type="button"
+            onClick={() => {
+              if (isRecording) {
+                pauseRecording();
+              } else if (isPaused) {
+                resumeRecording();
+              }
+            }}
+            variant="ghost"
+            className="rounded-full p-2 h-fit hover:bg-primary/90"
+          >
+            <motion.div
+              animate={isRecording ? { scale: [1, 1.2, 1] } : {}}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              {isRecording ? (
+                <PauseIcon size={20} className="text-primary-foreground" />
+              ) : (
+                <PlayIcon size={20} className="text-primary-foreground" />
+              )}
+            </motion.div>
+          </Button>
 
-      {(isRecording || isPaused || input) && (
+          <div className="flex-1">
+            <WaveformVisualizer isRecording={isRecording} stream={stream} />
+          </div>
+
+          <Button
+            type="button"
+            onClick={stopAndSend}
+            variant="ghost"
+            className="rounded-full p-2 h-fit hover:bg-primary/90"
+          >
+            <SendIcon size={20} className="text-primary-foreground" />
+          </Button>
+        </div>
+      ) : (
+        <Button
+          type="button"
+          onClick={startRecording}
+          className="rounded-full p-6 h-fit bg-primary hover:bg-primary/90"
+        >
+          <MicrophoneIcon size={24} />
+        </Button>
+      )}
+
+      {!isRecording && !isPaused && input && (
         <Button
           type="button"
           onClick={stopAndSend}
@@ -246,12 +263,6 @@ export function MicrophoneInput({
         >
           <SendIcon size={24} />
         </Button>
-      )}
-
-      {(isRecording || isPaused) && (
-        <div className="absolute top-[-2rem] w-40">
-          <WaveformVisualizer isRecording={isRecording} stream={stream} />
-        </div>
       )}
     </div>
   );
