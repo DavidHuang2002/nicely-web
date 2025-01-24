@@ -1,6 +1,7 @@
 import { openai } from "@ai-sdk/openai";
-import OpenAI from "openai"
+import OpenAI from "openai";
 
+const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB in bytes
 const openAIClient = new OpenAI();
 
 export async function POST(req: Request) {
@@ -10,6 +11,20 @@ export async function POST(req: Request) {
 
     if (!audio) {
       return new Response("No file provided", { status: 400 });
+    }
+
+    // Check file size
+    if (audio.size > MAX_FILE_SIZE) {
+      return new Response(
+        JSON.stringify({
+          error: "File size exceeds limit",
+          message: "Audio file must be less than 25MB",
+        }),
+        {
+          status: 413,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
 
     const transcription = await openAIClient.audio.transcriptions.create({
@@ -27,4 +42,4 @@ export async function POST(req: Request) {
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
-} 
+}

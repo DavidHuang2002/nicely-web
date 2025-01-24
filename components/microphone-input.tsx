@@ -62,6 +62,8 @@ export function MicrophoneInput({
   const recorderRef = useRef<any>(null);
   const [stream, setStream] = useState<MediaStream | undefined>();
 
+  const MAX_RECORDING_DURATION = 60; // Maximum recording duration in seconds
+
   useEffect(() => {
     const initializeRecorder = async () => {
       try {
@@ -92,6 +94,13 @@ export function MicrophoneInput({
     };
   }, []);
 
+  const startRecordingTimer = () => {
+    setTimeout(() => {
+      pauseRecording();
+      toast.info("Maximum recording duration reached. You can continue by clicking resume.");
+    }, MAX_RECORDING_DURATION * 1000);
+  };
+
   const startRecording = async () => {
     if (!recorderRef.current) {
       toast.error("Microphone not initialized");
@@ -102,7 +111,11 @@ export function MicrophoneInput({
       await recorderRef.current.start();
       setIsRecording(true);
       setIsPaused(false);
-      toast.info("Recording started...");
+      toast.info(
+        `Recording started. (Maximum duration: ${MAX_RECORDING_DURATION} seconds.)`
+      );
+
+      startRecordingTimer();
     } catch (error) {
       console.error("Error starting recording:", error);
       toast.error("Failed to start recording");
@@ -145,7 +158,11 @@ export function MicrophoneInput({
       await recorderRef.current.start();
       setIsPaused(false);
       setIsRecording(true);
-      toast.info("Recording resumed");
+      toast.info(
+        `Recording resumed. (Maximum duration: ${MAX_RECORDING_DURATION} seconds.)`
+      );
+
+      startRecordingTimer();
     } catch (error) {
       console.error("Error resuming recording:", error);
       toast.error("Failed to resume recording");
@@ -207,7 +224,7 @@ export function MicrophoneInput({
   return (
     <div className="relative flex gap-2 items-center">
       {isRecording || isPaused ? (
-        <div className="flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px]">
+        <div className="flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px] overflow-hidden">
           <Button
             type="button"
             onClick={() => {
