@@ -22,6 +22,7 @@ import {
   PauseIcon,
   PlayIcon,
   SendIcon,
+  LoaderIcon,
 } from "./icons";
 import { WaveformVisualizer } from "./waveform-visualizer";
 
@@ -61,6 +62,7 @@ export function MicrophoneInput({
   const [recordingDuration, setRecordingDuration] = useState(0);
   const recorderRef = useRef<any>(null);
   const [stream, setStream] = useState<MediaStream | undefined>();
+  const [isTranscribing, setIsTranscribing] = useState(false);
 
   const MAX_RECORDING_DURATION = 60; // Maximum recording duration in seconds
 
@@ -97,7 +99,9 @@ export function MicrophoneInput({
   const startRecordingTimer = () => {
     setTimeout(() => {
       pauseRecording();
-      toast.info("Maximum recording duration reached. You can continue by clicking resume.");
+      toast.info(
+        "Maximum recording duration reached. You can continue by clicking resume."
+      );
     }, MAX_RECORDING_DURATION * 1000);
   };
 
@@ -129,6 +133,7 @@ export function MicrophoneInput({
       const { blob } = await recorderRef.current.stop();
       setIsRecording(false);
       setIsPaused(true);
+      setIsTranscribing(true);
 
       const formData = new FormData();
       formData.append("audio", blob, "audio.wav");
@@ -148,6 +153,8 @@ export function MicrophoneInput({
     } catch (error) {
       console.error("Error pausing recording:", error);
       toast.error("Failed to pause recording");
+    } finally {
+      setIsTranscribing(false);
     }
   };
 
@@ -224,7 +231,13 @@ export function MicrophoneInput({
   return (
     <div className="relative flex gap-2 items-center">
       {isRecording || isPaused ? (
-        <div className="flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px] overflow-hidden">
+        <div className="relative flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px] overflow-hidden">
+          {isTranscribing && (
+            <LoaderIcon
+              size={24}
+              className="text-primary-foreground animate-spin"
+            />
+          )}
           <Button
             type="button"
             onClick={() => {
@@ -236,6 +249,7 @@ export function MicrophoneInput({
             }}
             variant="ghost"
             className="rounded-full p-2 h-fit hover:bg-primary/90"
+            disabled={isTranscribing}
           >
             <motion.div
               animate={isRecording ? { scale: [1, 1.2, 1] } : {}}
@@ -258,6 +272,7 @@ export function MicrophoneInput({
             onClick={stopAndSend}
             variant="ghost"
             className="rounded-full p-2 h-fit hover:bg-primary/90"
+            disabled={isTranscribing}
           >
             <SendIcon size={20} className="text-primary-foreground" />
           </Button>
@@ -267,6 +282,7 @@ export function MicrophoneInput({
           type="button"
           onClick={startRecording}
           className="rounded-full p-6 h-fit bg-primary hover:bg-primary/90"
+          disabled={isTranscribing}
         >
           <MicrophoneIcon size={24} />
         </Button>
@@ -277,6 +293,7 @@ export function MicrophoneInput({
           type="button"
           onClick={stopAndSend}
           className="rounded-full p-6 h-fit bg-primary hover:bg-primary/90"
+          disabled={isTranscribing}
         >
           <SendIcon size={24} />
         </Button>
