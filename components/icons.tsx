@@ -888,3 +888,57 @@ export const NotebookIcon = ({ size = 16 }: { size?: number }) => (
     <path d="M16 2v4" />
   </svg>
 );
+
+export const MicrophoneIcon = ({
+  size = 16,
+  className,
+}: {
+  size?: number;
+  className?: string;
+}) => (
+  <svg
+    height={size}
+    width={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+    <line x1="12" x2="12" y1="19" y2="22" />
+  </svg>
+);
+
+export const KeyboardIcon = ({
+  size = 16,
+  className,
+}: {
+  size?: number;
+  className?: string;
+}) => (
+  <svg
+    height={size}
+    width={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect x="2" y="4" width="20" height="16" rx="2" ry="2" />
+    <path d="M6 8h.001" />
+    <path d="M10 8h.001" />
+    <path d="M14 8h.001" />
+    <path d="M18 8h.001" />
+    <path d="M8 12h.001" />
+    <path d="M12 12h.001" />
+    <path d="M16 12h.001" />
+    <path d="M7 16h10" />
+  </svg>
+);

@@ -12,6 +12,7 @@ import { createMessage } from "@/lib/utils";
 import { onboardingFinishedMessageContent } from "@/lib/ai/prompts";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CombinedInput } from "../combined-input";
 
 const onboardingFinishedMessage: Message = createMessage(
   onboardingFinishedMessageContent,
@@ -95,9 +96,10 @@ export function Chat({
           messages.length > 0 &&
           // because we are not displaying tool invocations, so we also want to display thinking
           // for the message after it
-          (messages[messages.length - 1].role === "user"
-           || messages[messages.length - 1].toolInvocations
-          ) && <ThinkingMessage />}
+          (messages[messages.length - 1].role === "user" ||
+            messages[messages.length - 1].toolInvocations) && (
+            <ThinkingMessage />
+          )}
 
         <div
           ref={messagesEndRef}
@@ -115,7 +117,7 @@ export function Chat({
             Go to home
           </Button>
         ) : (
-          <MultimodalInput
+          <CombinedInput
             chatId={chatId}
             input={input}
             setInput={setInput}
