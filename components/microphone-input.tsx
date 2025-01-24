@@ -135,6 +135,11 @@ export function MicrophoneInput({
       setIsPaused(true);
       setIsTranscribing(true);
 
+      // Add toast notification for transcription in progress
+      toast.loading("Transcribing your message...", {
+        id: "transcription-toast",
+      });
+
       const formData = new FormData();
       formData.append("audio", blob, "audio.wav");
 
@@ -149,10 +154,14 @@ export function MicrophoneInput({
 
       const { text } = await response.json();
       setInput(input + (input ? " " : "") + text);
-      toast.success("Recording transcribed");
+      toast.success("Recording transcribed", {
+        id: "transcription-toast",
+      });
     } catch (error) {
       console.error("Error pausing recording:", error);
-      toast.error("Failed to pause recording");
+      toast.error("Failed to pause recording", {
+        id: "transcription-toast",
+      });
     } finally {
       setIsTranscribing(false);
     }
@@ -185,6 +194,12 @@ export function MicrophoneInput({
         setIsRecording(false);
         setIsPaused(false);
         setRecordingDuration(0);
+        setIsTranscribing(true);
+
+        // Add toast notification for transcription in progress
+        toast.loading("Transcribing your message...", {
+          id: "transcription-toast",
+        });
 
         const formData = new FormData();
         formData.append("audio", blob, "audio.wav");
@@ -210,7 +225,9 @@ export function MicrophoneInput({
           content: newInput,
         });
 
-        toast.success("Message sent!");
+        toast.success("Message sent!", {
+          id: "transcription-toast",
+        });
       } else if (input) {
         // If we're not recording but have input (from previous transcription), just send it
         await append({
@@ -224,7 +241,11 @@ export function MicrophoneInput({
       setInput("");
     } catch (error) {
       console.error("Error stopping recording:", error);
-      toast.error("Failed to transcribe audio");
+      toast.error("Failed to transcribe audio", {
+        id: "transcription-toast",
+      });
+    } finally {
+      setIsTranscribing(false);
     }
   };
 
