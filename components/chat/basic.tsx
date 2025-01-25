@@ -57,13 +57,16 @@ export function Chat({
     api: apiRoute,
     maxSteps: 4,
     initialMessages,
-    id: chatId,
+    // TODO: for some reason when passed in an id, the chat messages are not showing
+    // up in front end
+    // id: chatId,
     body: {
       chatId,
     },
     onFinish: (message) => {
       console.log("message", message);
       if (chatCompletedToolIsCalled(message)) {
+        console.log("chat completed tool is called");
         // remove the tool call message
         setMessages((prev) => prev.slice(0, -1));
 
@@ -157,7 +160,7 @@ export function Chat({
             chatId={chatId}
             input={input}
             setInput={setInput}
-            handleSubmit={customHandleSubmit}
+            handleSubmit={aiSDKHandleSubmit}
             isLoading={isLoading}
             stop={stop}
             messages={messages}

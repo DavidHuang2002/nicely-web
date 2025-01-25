@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { User, UserSchema } from "@/models/user";
 import { Chat, ChatSchema, ChatTypeEnum } from "@/models/chat";
-import { Message } from "@/models/message";
+import { DatabaseMessage } from "@/models/message";
 import { z } from "zod";
 
 const supabase = createClient(
@@ -56,7 +56,7 @@ export async function updateUser(
 
 export async function saveMessage(
   chatId: string,
-  message: Message
+  message: DatabaseMessage
 ): Promise<void> {
   const { error } = await supabase.from("messages").insert({
     chat_id: chatId,
@@ -72,7 +72,16 @@ export async function saveMessage(
   }
 }
 
-export async function getChatMessages(chatId: string): Promise<Message[]> {
+export async function getChatMessages(
+  chatId: string,
+  userId: string
+): Promise<DatabaseMessage[]> {
+  // make sure the user has access to the chat
+  const chat = await getChat(chatId);
+  if (!chat || chat.user_id !== userId) {
+    throw new Error("User does not have access to this chat");
+  }
+
   const { data: messages, error } = await supabase
     .from("messages")
     .select("*")
@@ -99,9 +108,8 @@ export const getChat = async (chatId: string): Promise<Chat | null> => {
 export async function createChat(
   userId: string,
   chatId: string,
-  type: z.infer<typeof ChatTypeEnum>,
+  type: z.infer<typeof ChatTypeEnum>
 ): Promise<void> {
-
   console.log("User ID:", userId);
   console.log("Chat ID:", chatId);
   console.log("Type:", type);
@@ -128,12 +136,11 @@ export async function createChat(
   }
 }
 
-
 export const createChatWithInitialMessages = async (
   userId: string,
   chatId: string,
   type: z.infer<typeof ChatTypeEnum>,
-  initialMessages?: Message[]
+  initialMessages?: DatabaseMessage[]
 ): Promise<void> => {
   await createChat(userId, chatId, type);
   if (initialMessages) {
@@ -141,5 +148,4 @@ export const createChatWithInitialMessages = async (
       await saveMessage(chatId, message);
     }
   }
-}
-
+};

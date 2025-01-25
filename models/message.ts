@@ -10,7 +10,7 @@ export const ToolInvocationSchema = z.object({
   result: z.any().optional(),
 });
 
-export const MessageSchema = z.object({
+export const DatabaseMessageSchema = z.object({
   id: z.string().uuid(),
   role: MessageRoleEnum,
   content: z.union([z.string(), z.record(z.any())]),
@@ -23,5 +23,5 @@ export const MessageSchema = z.object({
   totalTokens: z.number().optional(),
 });
 
-export type Message = z.infer<typeof MessageSchema>;
+export type DatabaseMessage = z.infer<typeof DatabaseMessageSchema>;
 export type ToolInvocation = z.infer<typeof ToolInvocationSchema>;
