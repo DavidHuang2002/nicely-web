@@ -4,6 +4,7 @@ import { createMessage, generateUUID } from "@/lib/utils";
 import { Chat } from "./basic";
 import { Message } from "ai";
 import { useEffect, useState } from "react";
+import { LoadingBreather } from "./loading";
 
 export const untangleOpenner =
   "Hey, it's good to see you here. 😊 What's been on your mind lately? You can share whatever feels right—I'm here to listen and help make sense of things together.";
@@ -51,7 +52,7 @@ export default function UntangleChat({
   }, [chatId]);
 
   if (isLoading) {
-    return <div>Loading...</div>; // You might want to replace this with a proper loading component
+    return <LoadingBreather />;
   }
 
   return (
