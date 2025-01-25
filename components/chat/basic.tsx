@@ -39,8 +39,7 @@ export function Chat({
   chatId?: string;
   frontEndRoute?: string;
 }) {
-  chatId = chatId || generateUUID();
-  console.log("front end chatId", chatId);
+  chatId = chatId || generateUUID() as string;
 
   const [isCompleted, setIsCompleted] = useState(false);
   const router = useRouter();
