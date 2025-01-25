@@ -17,8 +17,10 @@ export default async function LandingPage() {
         wellness between therapy sessions.
       </p>
       <div className="flex gap-4">
-        <SignInButton mode="modal">
-          <Button size="lg">Get Started</Button>
+        <SignInButton mode="modal" signUpForceRedirectUrl="/sign-in-success">
+          <Button size="lg" type="button">
+            Get Started
+          </Button>
         </SignInButton>
       </div>
     </div>
