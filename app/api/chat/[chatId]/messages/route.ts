@@ -5,8 +5,10 @@ import { convertDbMessagesToAiMessages } from "@/lib/utils";
 
 export async function GET(
   req: Request,
-  { params }: { params: { chatId: string } }
+  { params }: { params: Promise<{ chatId: string }> }
 ) {
+  const chatId = (await params).chatId;
+
   const clerkUser = await currentUser();
   if (!clerkUser) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -21,7 +23,7 @@ export async function GET(
   const userId = user.id!;
 
   try {
-    const dbMessages = await getChatMessages(params.chatId, userId);
+    const dbMessages = await getChatMessages(chatId, userId);
     const aiMessages = convertDbMessagesToAiMessages(dbMessages);
     return NextResponse.json(aiMessages);
   } catch (error) {
