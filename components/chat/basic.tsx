@@ -8,11 +8,12 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
-import { createMessage } from "@/lib/utils";
+import { createMessage, generateUUID } from "@/lib/utils";
 import { onboardingFinishedMessageContent } from "@/lib/ai/prompts";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CombinedInput } from "../combined-input";
+import { ChatRequestOptions } from "ai";
 
 const onboardingFinishedMessage: Message = createMessage(
   onboardingFinishedMessageContent,
@@ -29,19 +30,25 @@ export function Chat({
   initialMessages = [],
   apiRoute = "/api/chat",
   isOnboarding = false,
+  frontEndRoute,
+  chatId,
 }: {
   initialMessages?: Array<Message>;
   apiRoute?: string;
   isOnboarding?: boolean;
+  chatId?: string;
+  frontEndRoute?: string;
 }) {
-  const chatId = "001";
+  chatId = chatId || generateUUID();
+  console.log("front end chatId", chatId);
+
   const [isCompleted, setIsCompleted] = useState(false);
   const router = useRouter();
 
   const {
     messages,
     setMessages,
-    handleSubmit,
+    handleSubmit: aiSDKHandleSubmit,
     input,
     setInput,
     append,
@@ -51,6 +58,10 @@ export function Chat({
     api: apiRoute,
     maxSteps: 4,
     initialMessages,
+    id: chatId,
+    body: {
+      chatId,
+    },
     onFinish: (message) => {
       console.log("message", message);
       if (chatCompletedToolIsCalled(message)) {
@@ -70,6 +81,19 @@ export function Chat({
       }
     },
   });
+
+  const customHandleSubmit = async (
+    event?: {
+      preventDefault?: () => void;
+    },
+    chatRequestOptions?: ChatRequestOptions
+  ) => {
+    if (frontEndRoute) {
+      console.log("pushing to new route", frontEndRoute, chatId);
+      window.history.replaceState({}, "", `${frontEndRoute}/${chatId}`);
+    }
+    aiSDKHandleSubmit(event, chatRequestOptions);
+  };
 
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
@@ -134,7 +158,7 @@ export function Chat({
             chatId={chatId}
             input={input}
             setInput={setInput}
-            handleSubmit={handleSubmit}
+            handleSubmit={customHandleSubmit}
             isLoading={isLoading}
             stop={stop}
             messages={messages}

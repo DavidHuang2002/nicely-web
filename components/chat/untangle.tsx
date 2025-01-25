@@ -1,4 +1,4 @@
-import { createMessage } from "@/lib/utils";
+import { createMessage, generateUUID } from "@/lib/utils";
 import { Chat } from "./basic";
 
 
@@ -7,9 +7,14 @@ export const untangleOpenner = "Hey, it’s good to see you here. 😊 What’s 
 
 const untangleOpennerMessage = createMessage(untangleOpenner, "assistant");
 
-export default function UntangleChat() {
+export default function UntangleChat({
+  chatId,
+}: {
+  chatId?: string;
+}) {
   return <Chat 
     initialMessages={[untangleOpennerMessage]}
     apiRoute="/api/chat/untangle"
+    chatId={chatId}
     />;
 }
