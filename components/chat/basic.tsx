@@ -13,7 +13,7 @@ import { onboardingFinishedMessageContent } from "@/lib/ai/prompts";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CombinedInput } from "../combined-input";
-import { ChatRequestOptions } from "ai";
+import { ChatRequestOptions, CreateMessage } from "ai";
 
 const onboardingFinishedMessage: Message = createMessage(
   onboardingFinishedMessageContent,
@@ -50,7 +50,7 @@ export function Chat({
     handleSubmit: aiSDKHandleSubmit,
     input,
     setInput,
-    append,
+    append: aiSDKAppend,
     isLoading,
     stop,
   } = useChat({
@@ -84,17 +84,29 @@ export function Chat({
     },
   });
 
+  const jumpToNewChatRouteIfNeeded = () => {
+    if (frontEndRoute) {
+      console.log("pushing to new route", frontEndRoute, chatId);
+      window.history.replaceState({}, "", `${frontEndRoute}/${chatId}`);
+    }
+  };
+
   const customHandleSubmit = async (
     event?: {
       preventDefault?: () => void;
     },
     chatRequestOptions?: ChatRequestOptions
   ) => {
-    if (frontEndRoute) {
-      console.log("pushing to new route", frontEndRoute, chatId);
-      window.history.replaceState({}, "", `${frontEndRoute}/${chatId}`);
-    }
+    jumpToNewChatRouteIfNeeded();
     await aiSDKHandleSubmit(event, chatRequestOptions);
+  };
+
+  const customAppend = async (
+    message: Message | CreateMessage,
+    chatRequestOptions?: ChatRequestOptions
+  ) => {
+    jumpToNewChatRouteIfNeeded();
+    return await aiSDKAppend(message, chatRequestOptions);
   };
 
   const [messagesContainerRef, messagesEndRef] =
@@ -149,7 +161,7 @@ export function Chat({
               className="px-8"
               onClick={(event) => {
                 event.preventDefault();
-                append(createMessage("Let's get started!", "user"));
+                customAppend(createMessage("Let's get started!", "user"));
               }}
             >
               Let&apos;s get started!
@@ -160,12 +172,12 @@ export function Chat({
             chatId={chatId}
             input={input}
             setInput={setInput}
-            handleSubmit={aiSDKHandleSubmit}
+            handleSubmit={customHandleSubmit}
             isLoading={isLoading}
             stop={stop}
             messages={messages}
             setMessages={setMessages}
-            append={append}
+            append={customAppend}
           />
         )}
       </form>
