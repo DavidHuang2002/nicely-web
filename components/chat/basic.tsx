@@ -91,7 +91,7 @@ export function Chat({
       console.log("pushing to new route", frontEndRoute, chatId);
       window.history.replaceState({}, "", `${frontEndRoute}/${chatId}`);
     }
-    aiSDKHandleSubmit(event, chatRequestOptions);
+    await aiSDKHandleSubmit(event, chatRequestOptions);
   };
 
   const [messagesContainerRef, messagesEndRef] =
@@ -109,7 +109,7 @@ export function Chat({
         {messages.map((message, index) => (
           <PreviewMessage
             key={message.id}
-            chatId={chatId}
+            chatId={chatId!}
             message={message}
             isLoading={isLoading && messages.length - 1 === index}
           />
