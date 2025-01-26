@@ -15,6 +15,7 @@ export const UserSchema = z.object({
   onboarding_completed: z.boolean().default(false),
   created_at: z.date().optional(),
   updated_at: z.date().optional(),
+  terms_accepted: z.boolean().default(false).optional(),
 });
 
 export type User = z.infer<typeof UserSchema>;

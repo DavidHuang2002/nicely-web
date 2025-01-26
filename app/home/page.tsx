@@ -1,6 +1,7 @@
 "use client";
 
 import { Overview } from "@/components/overview";
+import { TermsPopup } from "@/components/terms-popup";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -26,6 +27,7 @@ export default function Page() {
         onboardingCompleted={onboardingCompleted}
         onStartOnboarding={handleStartOnboarding}
       />
+      <TermsPopup />
     </>
   );
 }
