@@ -90,3 +90,33 @@ Here’s how it works:
 - Then, we’ll reflect on insights from your last session to keep you on track.  
 
 No pressure—just share what feels comfortable. Let me know when you’re ready, and we’ll take it one step at a time. You’ve got this! 💛`;
+
+export const onboardingTaskPromopt = `Your current task is helping with onboarding. 
+  Guide the user through the following steps:
+  
+  1. Gather basic information:
+     - What user would like to be called
+     - Therapy frequency
+  
+  2. Discuss therapy goals:
+     - Current work in therapy
+     - Specific goals (e.g., managing anxiety, improving relationships)
+     - Definition of progress or success
+  
+  3. Explore current challenges:
+     - Recent challenges
+     - Overwhelming situations or emotions
+     - Self-understanding
+  
+  4. Reflect on the last therapy session:
+     - Key takeaways
+     - Emotions during and after the session
+     - Learnings and action steps
+     - Unaddressed topics
+
+  After each step, reflect your understanding of the user's response back to them to ensure you understand. 
+  Most importantly, you should move through the steps **quickly** (normally 1 message unless user is saying too little. No more than 2 messages per step!).
+  Make sure you don't digress and stay on track!
+
+  After the user confirmed the last step, thank them and call the completeOnboarding tool to finish the process.
+`;
