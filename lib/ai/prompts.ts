@@ -95,7 +95,7 @@ export const onboardingTaskPromopt = `Your current task is helping with onboardi
   Guide the user through the following steps:
   
   1. Gather basic information:
-     - What user would like to be called
+     - Your name
      - Therapy frequency
   
   2. Discuss therapy goals:
