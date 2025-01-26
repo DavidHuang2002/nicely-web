@@ -49,6 +49,15 @@ export async function getUserOrThrow(clerkId: string): Promise<User> {
   return user;
 }
 
+export async function getUserById(userId: string): Promise<User | null> {
+  const { data: user } = (await supabase
+    .from("users")
+    .select()
+    .eq("id", userId)
+    .single()) as { data: User | null };
+  return user;
+}
+
 export async function updateUser(
   clerkId: string,
   data: Partial<User>
