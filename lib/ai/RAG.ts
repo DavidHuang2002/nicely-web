@@ -14,7 +14,7 @@ import { makeReflectionPrompt } from "./prompts";
 import { convertMessagesToStr } from "./utils";
 import { z } from "zod";
 import { searchReflections } from "../database/qdrant";
-import { getUser } from "../database/supabase";
+import { getUser, getUserOrThrow } from "../database/supabase";
 import { therapistPrompt } from "./prompts";
 
 export async function extractAndStoreInsights(
@@ -99,7 +99,7 @@ export const makeUntangleSystemPrompt = async (
   // const mostRecentUserGoalString = mostRecentUserGoal.map((point) => JSON.stringify(point)).join("\n");
 
   // get the user's basic information
-  const user = await getUser(userId);
+  const user = await getUserOrThrow(userId);
   const userBasicInformation = `
    Preferred name: ${user?.preferred_name}
    `;

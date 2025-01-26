@@ -30,12 +30,19 @@ export async function addUserIfNotExists(clerkId: string): Promise<void> {
   }
 }
 
-export async function getUser(clerkId: string): Promise<User> {
+export async function getUser(clerkId: string): Promise<User | null> {
   const { data: user } = (await supabase
     .from("users")
     .select()
     .eq("clerk_id", clerkId)
     .single()) as { data: User | null };
+
+  return user;
+}
+
+// throw error if user not found
+export async function getUserOrThrow(clerkId: string): Promise<User> {
+  const user = await getUser(clerkId);
   if (!user) {
     throw new Error(`User not found for clerkId: ${clerkId}`);
   }
@@ -60,7 +67,7 @@ export async function saveMessage(
   chatId: string,
   message: DatabaseMessage
 ): Promise<void> {
-  // don't save empty messages
+  // 
   if (message.content == "") {
     return;
   }

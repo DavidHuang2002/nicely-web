@@ -1,7 +1,7 @@
 import { streamText, tool } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { currentUser, User } from "@clerk/nextjs/server";
-import { addUserIfNotExists, getOnboardingChatOrNullIfNonExistent, getUser, saveMessage, updateUser } from "@/lib/database/supabase";
+import { addUserIfNotExists, getOnboardingChatOrNullIfNonExistent, getUser, getUserOrThrow, saveMessage, updateUser } from "@/lib/database/supabase";
 import { z } from "zod";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 import { extractAndStoreInsights } from "@/lib/ai/RAG";
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
 
   await addUserIfNotExists(clerkUser.id);
 
-  const user = await getUser(clerkUser.id);
+  const user = await getUserOrThrow(clerkUser.id);
 
   // get onboarding chatId
   const chat = await getOnboardingChatOrNullIfNonExistent(user.id!);
