@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  await addUserIfNotExists(clerkUser.id);
+  
 
   const user = await getUserOrThrow(clerkUser.id);
 

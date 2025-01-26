@@ -1,27 +1,31 @@
 "use client";
 
 import { Overview } from "@/components/overview";
-import { OnboardingModal } from "@/components/onboarding-modal";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingCompleted, setOnboardingCompleted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    // get onboarding status from server to check if user has completed onboarding
     fetch("/api/chat/onboarding")
       .then((res) => res.json())
       .then((data) => {
-        if (!data.onboardingCompleted) {
-          setShowOnboarding(true);
-        }
+        setOnboardingCompleted(data.onboardingCompleted);
       });
   }, []);
 
+  const handleStartOnboarding = () => {
+    router.push("/onboarding");
+  };
+
   return (
     <>
-      <Overview />
-      {showOnboarding && <OnboardingModal />}
+      <Overview
+        onboardingCompleted={onboardingCompleted}
+        onStartOnboarding={handleStartOnboarding}
+      />
     </>
   );
 }

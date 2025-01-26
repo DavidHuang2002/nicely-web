@@ -1,22 +1,31 @@
 import { currentUser } from "@clerk/nextjs/server";
 import {
+  addUserIfNotExists,
   createChatWithInitialMessages,
   getOnboardingChatOrNullIfNonExistent,
   getUser,
+  getUserOrThrow,
 } from "@/lib/database/supabase";
 import { NextResponse } from "next/server";
 import { getAIChatMessages } from "@/lib/ai/chat";
 import { onboardingOpenner } from "@/lib/ai/prompts";
 import { createAIMessage, generateUUID } from "@/lib/utils";
-import { DatabaseMessage } from "@/models/message";
 
 export async function GET(req: Request) {
   const clerkUser = await currentUser();
+  console.log("clerkUser", clerkUser);
+
   if (!clerkUser) {
-    return new Response("Unauthorized", { status: 401 });
+    return NextResponse.json({ exists: false });
   }
 
   const user = await getUser(clerkUser.id);
+
+  console.log("user", user);
+
+  if (!user) {
+    return NextResponse.json({ exists: false }); 
+  }
 
   try {
     const existingChats = await getOnboardingChatOrNullIfNonExistent(user!.id!);
@@ -42,13 +51,12 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const clerkUser = await currentUser();
   if (!clerkUser) {
-    return new Response("Unauthorized", { status: 401 });
+    return NextResponse.json({ exists: false });
   }
 
-  const user = await getUser(clerkUser.id);
-  if (!user) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  await addUserIfNotExists(clerkUser.id);
+
+  const user = await getUserOrThrow(clerkUser.id);
 
   const onboardingOpennerMessage = createAIMessage(
     onboardingOpenner,
