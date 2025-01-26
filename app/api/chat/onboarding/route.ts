@@ -1,11 +1,12 @@
 import { streamText, tool } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { currentUser, User } from "@clerk/nextjs/server";
-import { addUserIfNotExists, getUser, updateUser } from "@/lib/database/supabase";
+import { addUserIfNotExists, getOnboardingChatOrNullIfNonExistent, getUser, saveMessage, updateUser } from "@/lib/database/supabase";
 import { z } from "zod";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 import { extractAndStoreInsights } from "@/lib/ai/RAG";
 import { therapistPrompt } from "@/lib/ai/prompts";
+import { generateUUID } from "@/lib/utils";
 
 const taskPrompt =  `Your current task is helping with onboarding. 
   Guide the user through the following steps:
@@ -56,40 +57,72 @@ const handleOnboardingFinished = (user: User) => {
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const user = await currentUser();
-  console.log("onboarding chat for user", user?.id);
+  const clerkUser = await currentUser();
+  console.log("onboarding chat for user", clerkUser?.id);
 
-  if (!user) {
+  if (!clerkUser) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  await addUserIfNotExists(user.id);
+  await addUserIfNotExists(clerkUser.id);
+
+  const user = await getUser(clerkUser.id);
+
+  // get onboarding chatId
+  const chat = await getOnboardingChatOrNullIfNonExistent(user.id!);
+  if (!chat) {
+    return new Response("Onboarding chat not found", { status: 404 });
+  }
+
+  // save the user's messages to the chat
+  const lastMessage = messages[messages.length - 1];
+  if (lastMessage.role === "user") {
+    await saveMessage(chat.id, lastMessage);
+  }
 
   const result = streamText({
     model: openai("gpt-4o"),
     system: onboardingPrompt,
     messages,
+    onFinish: async (completion) => {
+      await saveMessage(
+        chat.id,
+        {
+          id: generateUUID(),
+          role: "assistant",
+          content: completion.text,
+          created_at: new Date(),
+          promptTokens: completion.usage.promptTokens,
+        completionTokens: completion.usage.completionTokens,
+        totalTokens: completion.usage.totalTokens,
+      });
+    }, 
     tools: {
       [COMPLETE_ONBOARDING_TOOL_NAME]: tool({
         description: "Complete the onboarding process",
         // @ts-ignore: seem like there is a bug in the types
         parameters: z.object({}),
         execute: async () => {
-          handleOnboardingFinished(user);
-          await extractAndStoreInsights(messages, user.id);
+          handleOnboardingFinished(clerkUser);
+          await extractAndStoreInsights(messages, clerkUser.id);
           return { completed: true };
         },
       }),
 
-      "saveNameAndFrequency": tool({
+      saveNameAndFrequency: tool({
         description: "Save the user's name and therapy frequency",
         parameters: z.object({
           preferredName: z.string().describe("The user's preferred name"),
-          therapyFrequency: z.enum(["weekly", "biweekly", "monthly", "other"]).describe("The user's therapy frequency"),
-        }),   
+          therapyFrequency: z
+            .enum(["weekly", "biweekly", "monthly", "other"])
+            .describe("The user's therapy frequency"),
+        }),
 
         execute: async ({ preferredName, therapyFrequency }) => {
-          await updateUser(user.id, { preferred_name: preferredName, therapy_frequency: therapyFrequency }); 
+          await updateUser(clerkUser.id, {
+            preferred_name: preferredName,
+            therapy_frequency: therapyFrequency,
+          });
           return { completed: true };
         },
       }),

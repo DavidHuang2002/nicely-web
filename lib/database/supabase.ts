@@ -60,6 +60,11 @@ export async function saveMessage(
   chatId: string,
   message: DatabaseMessage
 ): Promise<void> {
+  // don't save empty messages
+  if (message.content == "") {
+    return;
+  }
+
   const { error } = await supabase.from("messages").insert({
     chat_id: chatId,
     role: message.role,

@@ -18,6 +18,7 @@ export default function OnboardingChat() {
 
         if (data.exists) {
           setChatId(data.chatId);
+          console.log("initial messages", data.messages);
           setInitialMessages(data.messages);
         } else {
           // Create new onboarding chat
