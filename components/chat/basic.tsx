@@ -8,14 +8,14 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
-import { createMessage, generateUUID } from "@/lib/utils";
+import { createAIMessage, generateUUID } from "@/lib/utils";
 import { onboardingFinishedMessageContent } from "@/lib/ai/prompts";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CombinedInput } from "../combined-input";
 import { ChatRequestOptions, CreateMessage } from "ai";
 
-const onboardingFinishedMessage: Message = createMessage(
+const onboardingFinishedMessage: Message = createAIMessage(
   onboardingFinishedMessageContent,
   "assistant"
 );
@@ -39,7 +39,7 @@ export function Chat({
   chatId?: string;
   frontEndRoute?: string;
 }) {
-  chatId = chatId || generateUUID() as string;
+  chatId = chatId || (generateUUID() as string);
 
   const [isCompleted, setIsCompleted] = useState(false);
   const router = useRouter();
@@ -161,7 +161,7 @@ export function Chat({
               className="px-8"
               onClick={(event) => {
                 event.preventDefault();
-                customAppend(createMessage("Let's get started!", "user"));
+                customAppend(createAIMessage("Let's get started!", "user"));
               }}
             >
               Let&apos;s get started!

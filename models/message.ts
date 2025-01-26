@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export const MessageRoleEnum = z.enum(["user", "assistant", "system", "tool"]);
+export const MessageRoleEnum = z.enum(["user", "assistant", "system", "data"]);
 
 export const ToolInvocationSchema = z.object({
   toolName: z.string(),
   toolCallId: z.string(),
-  state: z.enum(["start", "result"]),
+  state: z.string(),
   args: z.record(z.any()).optional(),
   result: z.any().optional(),
 });
@@ -17,7 +17,7 @@ export const DatabaseMessageSchema = z.object({
   toolInvocations: z.array(ToolInvocationSchema).optional(),
   // metadata is used to store additional information about the message
   metadata: z.record(z.any()).optional(),
-  created_at: z.date().default(() => new Date()),
+  created_at: z.date().default(() => new Date()).optional(),
   promptTokens: z.number().optional(),
   completionTokens: z.number().optional(),
   totalTokens: z.number().optional(),

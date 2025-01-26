@@ -1,6 +1,6 @@
 "use client";
 
-import { createMessage, generateUUID } from "@/lib/utils";
+import { createAIMessage, generateUUID } from "@/lib/utils";
 import { Chat } from "./basic";
 import { Message } from "ai";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { LoadingBreather } from "./loading";
 export const untangleOpenner =
   "Hey, it's good to see you here. 😊 What's been on your mind lately? You can share whatever feels right—I'm here to listen and help make sense of things together.";
 
-const untangleOpennerMessage = createMessage(untangleOpenner, "assistant");
+const untangleOpennerMessage = createAIMessage(untangleOpenner, "assistant");
 
 export default function UntangleChat({
   chatId,

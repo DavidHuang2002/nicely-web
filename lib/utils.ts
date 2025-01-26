@@ -48,7 +48,7 @@ export function sanitizeUIMessages(messages: Array<Message>): Array<Message> {
   );
 }
 
-export function createMessage(
+export function createAIMessage(
   content: string,
   role: "assistant" | "user"
 ): Message {
@@ -68,7 +68,7 @@ export function convertDbMessageToAiMessage(
     role: dbMessage.role as "assistant" | "user",
     createdAt: dbMessage.created_at,
     // TODO: figure the type of toolInvocations and fix it when necessary
-    toolInvocations: dbMessage.toolInvocations as any[] || undefined,
+    toolInvocations: (dbMessage.toolInvocations as any[]) || undefined,
   };
 }
 

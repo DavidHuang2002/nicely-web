@@ -1,9 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { User, UserSchema } from "@/models/user";
 import { Chat, ChatSchema, ChatTypeEnum } from "@/models/chat";
-import { DatabaseMessage } from "@/models/message";
+import { DatabaseMessage, DatabaseMessageSchema } from "@/models/message";
 import { z } from "zod";
-
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
@@ -31,12 +30,15 @@ export async function addUserIfNotExists(clerkId: string): Promise<void> {
   }
 }
 
-export async function getUser(clerkId: string): Promise<User | null> {
+export async function getUser(clerkId: string): Promise<User> {
   const { data: user } = (await supabase
     .from("users")
     .select()
     .eq("clerk_id", clerkId)
     .single()) as { data: User | null };
+  if (!user) {
+    throw new Error(`User not found for clerkId: ${clerkId}`);
+  }
   return user;
 }
 
@@ -72,7 +74,7 @@ export async function saveMessage(
   }
 }
 
-export async function getChatMessages(
+export async function getChatMessagesFromDB(
   chatId: string,
   userId: string
 ): Promise<DatabaseMessage[]> {
@@ -103,6 +105,24 @@ export const getChat = async (chatId: string): Promise<Chat | null> => {
     .eq("id", chatId)
     .single();
   return chat;
+};
+
+export const getOnboardingChatOrNullIfNonExistent = async (
+  userId: string
+): Promise<Chat | null> => {
+  const { data: chats, error } = await supabase
+    .from("chats")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("type", "onboarding");
+
+  if (error) {
+    console.error("Error fetching onboarding chat:", error);
+    throw error;
+  }
+
+  // Return first chat or null if none exists
+  return chats.length > 0 ? chats[0] : null;
 };
 
 export async function createChat(

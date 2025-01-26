@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { getChatMessages, getUser } from "@/lib/database/supabase";
+import { getChatMessagesFromDB, getUser } from "@/lib/database/supabase";
 import { currentUser } from "@clerk/nextjs/server";
 import { convertDbMessagesToAiMessages } from "@/lib/utils";
+import { getAIChatMessages } from "@/lib/ai/chat";
 
 export async function GET(
   req: Request,
@@ -23,8 +24,7 @@ export async function GET(
   const userId = user.id!;
 
   try {
-    const dbMessages = await getChatMessages(chatId, userId);
-    const aiMessages = convertDbMessagesToAiMessages(dbMessages);
+    const aiMessages = await getAIChatMessages(chatId, userId);
     return NextResponse.json(aiMessages);
   } catch (error) {
     console.error("Error fetching chat messages:", error);
