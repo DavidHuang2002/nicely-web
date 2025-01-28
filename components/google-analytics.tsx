@@ -25,7 +25,7 @@ export function GoogleAnalytics() {
             };
             
             gtag('event', 'conversion', {
-                'send_to': 'AW-16760511928/Me7ICMH_spQaELi7hLg-',
+                'send_to': 'AW-16760511928/_h4NCOqm95UaELi7hLg-',
                 'value': 1.0,
                 'currency': 'USD',
                 'event_callback': callback
