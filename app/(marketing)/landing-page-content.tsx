@@ -16,13 +16,12 @@ export function LandingPageContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent leading-tight">
-            AI Therapy Companion
+          <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent leading-tight">
+            Your journey to well-being continues beyond the couch
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed px-4 md:px-0">
-            Your personal AI companion to help process emotions and maintain
-            mental wellness between therapy sessions. We&apos;re here to support
-            your journey towards better mental health.
+            Meet Nicely, your AI companion that helps you sustain therapy&apos;s
+            peace and clarity.
           </p>
         </motion.div>
 
@@ -36,17 +35,17 @@ export function LandingPageContent() {
           <FeatureCard
             icon={<SparklesIcon size={24} />}
             title="Untangle Emotions"
-            description="Process complex feelings with therapy-like emotional support"
+            description="Make sense of your emotions, one step at a time"
           />
           <FeatureCard
             icon={<HeartIcon size={24} />}
             title="Daily Self-Care"
-            description="Build healthy habits with personalized guidance"
+            description="Self-care that adapts to your journey and grows with you"
           />
           <FeatureCard
             icon={<NotebookIcon size={24} />}
             title="Session Notes"
-            description="Reflect on therapy insights and track your progress"
+            description="Easily revisit and build on your therapy discoveries"
           />
         </motion.div>
 
@@ -62,7 +61,7 @@ export function LandingPageContent() {
               size="lg"
               className="px-6 py-6 text-base md:text-lg rounded-full w-full md:w-auto md:px-8"
             >
-              Start Your Journey
+              Join now
             </Button>
           </SignInButton>
           <p className="mt-4 text-sm text-muted-foreground">
