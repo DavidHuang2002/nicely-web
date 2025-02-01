@@ -5,8 +5,12 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Plus, Mic, Upload } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { UploadRecordingDialog } from "@/components/upload-recording-dialog";
 
 export default function SessionNotesPage() {
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <motion.div
@@ -24,11 +28,9 @@ export default function SessionNotesPage() {
                 Voice Journal
               </Link>
             </Button>
-            <Button asChild>
-              <Link href="/notes/upload">
-                <Upload className="mr-2 h-4 w-4" />
-                Upload Recording
-              </Link>
+            <Button onClick={() => setIsUploadDialogOpen(true)}>
+              <Upload className="mr-2 h-4 w-4" />
+              Upload Recording
             </Button>
           </div>
         </div>
@@ -51,6 +53,11 @@ export default function SessionNotesPage() {
 
         {/* Timeline/Calendar View Toggle could be added here */}
       </motion.div>
+
+      <UploadRecordingDialog
+        open={isUploadDialogOpen}
+        onOpenChange={setIsUploadDialogOpen}
+      />
     </div>
   );
 }
