@@ -12,7 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 const ROUTE_TITLES: Record<string, string> = {
   "/untangle": "Untangle Emotions",
   "/chat/self-care": "Daily Self-Care",
-  "/chat/notes": "Session Notes",
+  "/notes": "Session Notes",
 };
 
 export const Navbar = () => {

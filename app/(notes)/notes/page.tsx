@@ -27,7 +27,7 @@ export default function SessionNotesPage() {
             <Button asChild>
               <Link href="/notes/upload">
                 <Upload className="mr-2 h-4 w-4" />
-                Upload Session
+                Upload Recording
               </Link>
             </Button>
           </div>
