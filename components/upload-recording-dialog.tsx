@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface UploadRecordingDialogProps {
   open: boolean;
@@ -17,6 +18,7 @@ export function UploadRecordingDialog({
 }: UploadRecordingDialogProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -47,6 +49,52 @@ export function UploadRecordingDialog({
 
   const handleRemoveFile = () => {
     setFile(null);
+  };
+
+  const uploadFile = async () => {
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+
+      // Get presigned URL
+      const presignedRes = await fetch("/api/uploads/presigned", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileType: file.type,
+          fileSize: file.size,
+        }),
+      });
+
+      if (!presignedRes.ok) {
+        throw new Error("Failed to get upload URL");
+      }
+
+      const { url, key } = await presignedRes.json();
+
+      // Upload to S3
+      const uploadRes = await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload file");
+      }
+
+      toast.success("Recording uploaded successfully");
+      onOpenChange(false);
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Failed to upload recording");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -96,13 +144,17 @@ export function UploadRecordingDialog({
           </div>
           <Button
             type="submit"
-            disabled={!file}
-            onClick={() => {
-              // TODO: Handle file upload
-              console.log("Uploading file:", file);
-            }}
+            disabled={!file || isUploading}
+            onClick={uploadFile}
           >
-            Upload Recording
+            {isUploading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              "Upload Recording"
+            )}
           </Button>
         </div>
       </DialogContent>
