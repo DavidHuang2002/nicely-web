@@ -66,8 +66,8 @@ export const Overview = ({
           title="Session Notes"
           description="Reflect on your therapy sessions and track your progress over time"
           icon={<NotebookIcon size={24} />}
-          href="/chat/notes"
-          disabled={true}
+          href="/notes"
+          disabled={!onboardingCompleted}
         />
       </div>
     </motion.div>
