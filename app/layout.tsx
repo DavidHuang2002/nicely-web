@@ -11,6 +11,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import { TranscriptionStatus } from "@/components/transcription-status";
 
 export const metadata = {
   title: "Nicely",
@@ -33,6 +34,7 @@ export default function RootLayout({
           <Toaster position="top-center" richColors />
           <Navbar />
           {children}
+          <TranscriptionStatus />
         </body>
       </html>
     </ClerkProvider>

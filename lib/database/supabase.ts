@@ -3,7 +3,7 @@ import { User, UserSchema } from "@/models/user";
 import { Chat, ChatSchema, ChatTypeEnum } from "@/models/chat";
 import { DatabaseMessage, DatabaseMessageSchema } from "@/models/message";
 import { z } from "zod";
-import { Transcription, TranscriptionSchema } from "@/models/transcription";
+import { CreateTranscriptionSchema, Transcription, TranscriptionSchema } from "@/models/transcription";
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
@@ -201,12 +201,12 @@ export async function createTranscriptionRecord({
   s3Key: string;
   status: Transcription["status"];
 }): Promise<Transcription> {
-  const newTranscription = TranscriptionSchema.parse({
+  const newTranscription = CreateTranscriptionSchema.parse({
     user_id: userId,
     s3_key: s3Key,
     status,
-    created_at: new Date(),
-    updated_at: new Date(),
+    transcription_job_name: null,
+    transcription_text: null,
   });
 
   const { data, error } = await supabase
@@ -216,6 +216,8 @@ export async function createTranscriptionRecord({
     .single();
 
   if (error) throw error;
+  
+  // Parse the response data through our schema
   return TranscriptionSchema.parse(data);
 }
 

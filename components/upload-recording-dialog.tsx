@@ -68,6 +68,8 @@ export function UploadRecordingDialog({
         }),
       });
 
+      console.log("presignedRes", presignedRes);
+
       if (!presignedRes.ok) {
         throw new Error("Failed to get upload URL");
       }
@@ -87,7 +89,34 @@ export function UploadRecordingDialog({
         throw new Error("Failed to upload file");
       }
 
-      toast.success("Recording uploaded successfully");
+      // Start processing the uploaded file
+      const processRes = await fetch("/api/uploads/process", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ s3Key: key }),
+      });
+
+      if (!processRes.ok) {
+        throw new Error("Failed to start processing");
+      }
+
+      const { transcriptionId } = await processRes.json();
+
+      // Store transcriptionId in localStorage for tracking
+      const pendingTranscriptions = JSON.parse(
+        localStorage.getItem("pendingTranscriptions") || "[]"
+      );
+      pendingTranscriptions.push(transcriptionId);
+      localStorage.setItem(
+        "pendingTranscriptions",
+        JSON.stringify(pendingTranscriptions)
+      );
+
+      toast.success("Recording uploaded and processing started", {
+        description: "We'll notify you when transcription is complete",
+        duration: 5000,
+      });
+
       onOpenChange(false);
     } catch (error) {
       console.error("Upload error:", error);
