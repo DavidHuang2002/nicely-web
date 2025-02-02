@@ -3,6 +3,7 @@ import { User, UserSchema } from "@/models/user";
 import { Chat, ChatSchema, ChatTypeEnum } from "@/models/chat";
 import { DatabaseMessage, DatabaseMessageSchema } from "@/models/message";
 import { z } from "zod";
+import { Transcription, TranscriptionSchema } from "@/models/transcription";
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
@@ -76,7 +77,7 @@ export async function saveMessage(
   chatId: string,
   message: DatabaseMessage
 ): Promise<void> {
-  // 
+  //
   if (message.content == "") {
     return;
   }
@@ -190,3 +191,73 @@ export const createChatWithInitialMessages = async (
     }
   }
 };
+
+export async function createTranscriptionRecord({
+  userId,
+  s3Key,
+  status,
+}: {
+  userId: string;
+  s3Key: string;
+  status: Transcription["status"];
+}): Promise<Transcription> {
+  const newTranscription = TranscriptionSchema.parse({
+    user_id: userId,
+    s3_key: s3Key,
+    status,
+    created_at: new Date(),
+    updated_at: new Date(),
+  });
+
+  const { data, error } = await supabase
+    .from("transcriptions")
+    .insert(newTranscription)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return TranscriptionSchema.parse(data);
+}
+
+export async function updateTranscriptionStatus(
+  id: string,
+  update: Partial<Omit<Transcription, "id" | "user_id" | "created_at">>
+): Promise<void> {
+  const updateData = {
+    ...update,
+    updated_at: new Date(),
+  };
+
+  const { error } = await supabase
+    .from("transcriptions")
+    .update(updateData)
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function getTranscriptionById(
+  id: string
+): Promise<Transcription | null> {
+  const { data, error } = await supabase
+    .from("transcriptions")
+    .select()
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  return data ? TranscriptionSchema.parse(data) : null;
+}
+
+export async function getUserTranscriptions(
+  userId: string
+): Promise<Transcription[]> {
+  const { data, error } = await supabase
+    .from("transcriptions")
+    .select()
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data.map((record) => TranscriptionSchema.parse(record));
+}
