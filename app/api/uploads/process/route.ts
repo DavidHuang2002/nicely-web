@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     const transcriptionRecord = await createTranscriptionRecord({
       userId: user.id!,
       s3Key,
-      status: "processing",
+      status: "pending",
     });
 
     // Start AWS transcription job
