@@ -1,9 +1,6 @@
 // components/transcription-status.tsx
 "use client";
 
-// a background process that checks the status of the transcription
-// and updates the status in the database
-
 import { useEffect, useCallback } from "react";
 import { toast } from "sonner";
 
@@ -13,14 +10,44 @@ export function TranscriptionStatus() {
       localStorage.getItem("pendingTranscriptions") || "[]"
     );
 
-    if (pendingTranscriptions.length === 0) return;
+    if (pendingTranscriptions.length === 0) {
+      // Remove the floating indicator if no pending transcriptions
+      const indicator = document.getElementById("transcription-indicator");
+      if (indicator) {
+        indicator.remove();
+      }
+      return;
+    }
+
+    // Create or update floating indicator
+    let indicator = document.getElementById("transcription-indicator");
+    if (!indicator) {
+      indicator = document.createElement("div");
+      indicator.id = "transcription-indicator";
+      indicator.className = "fixed bottom-4 right-4 z-50";
+      document.body.appendChild(indicator);
+    }
+
+    // Update indicator content
+    indicator.innerHTML = `
+      <div class="bg-background/80 backdrop-blur-sm border rounded-full px-4 py-2 shadow-lg flex items-center gap-2 text-sm text-muted-foreground">
+        <div class="animate-spin">
+          <svg class="h-4 w-4" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+          </svg>
+        </div>
+      Processing ${pendingTranscriptions.length} session note${
+      pendingTranscriptions.length > 1 ? "s" : ""
+    } 🎯
+      </div>
+    `;
 
     for (const transcriptionId of pendingTranscriptions) {
       try {
         const res = await fetch(`/api/transcribe/${transcriptionId}`);
 
         if (!res.ok) {
-          // Show specific error message based on status code
           const errorMessage =
             res.status === 404
               ? "Transcription not found"
@@ -28,16 +55,15 @@ export function TranscriptionStatus() {
 
           toast.error("Failed to check transcription", {
             description: errorMessage,
-            duration: 4000,
           });
 
           // remove from pending list
           const updated = pendingTranscriptions.filter(
             (id: string) => id !== transcriptionId
           );
-            localStorage.setItem(
-              "pendingTranscriptions",
-              JSON.stringify(updated)
+          localStorage.setItem(
+            "pendingTranscriptions",
+            JSON.stringify(updated)
           );
 
           continue;
@@ -54,6 +80,9 @@ export function TranscriptionStatus() {
             "pendingTranscriptions",
             JSON.stringify(updated)
           );
+
+          // log session summary id
+          console.log("session summary id: ", data.sessionSummaryId);
 
           // Show completion notification
           toast.success("Transcription completed!", {
@@ -79,16 +108,10 @@ export function TranscriptionStatus() {
         }
       } catch (error) {
         console.error("Error checking transcription status:", error);
-
-        // Show error notification to user
         toast.error("Connection error", {
           description:
             "Failed to check transcription status. Will retry automatically.",
-          duration: 4000,
         });
-
-        // Don't remove from pending list on connection errors
-        // This allows the component to retry on next interval
       }
     }
   }, []);
@@ -100,7 +123,14 @@ export function TranscriptionStatus() {
     // Then check every 30 seconds
     const interval = setInterval(checkTranscriptionStatus, 30000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      // Clean up indicator on unmount
+      const indicator = document.getElementById("transcription-indicator");
+      if (indicator) {
+        indicator.remove();
+      }
+    };
   }, [checkTranscriptionStatus]);
 
   return null;
