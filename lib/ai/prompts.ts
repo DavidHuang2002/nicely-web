@@ -41,6 +41,7 @@ Extract the following **five categories** from the session transcript:
 Each entry in these sections must follow this format:
 
 - **summary**: A short, precise summary of the item.
+- **detail**: A detailed description of the item.
 - **excerpt**: A direct quote or relevant excerpt from the session transcript that supports this item. Infer from the speaker labels who is client vs. therapist and use client/therapist in excerpt.
 
 ## **3. Extraction Guidelines**
@@ -57,18 +58,21 @@ Each entry in these sections must follow this format:
   "recommendations": [
     {
       "summary": "Practice saying 'no' at least once this week when feeling overburdened.",
+      "detail": "The client’s habitual overcommitment stems from a deep-seated fear of social rejection and a misplaced sense of responsibility for others' expectations. This exercise will serve as a controlled confrontation with that fear. By choosing a real-life moment to decline a request, the client will gather experiential evidence that setting boundaries does not equate to rejection or incompetence. The goal is to rewire the association between saying ‘no’ and negative social consequences.",
       "excerpt": "Therapist: 'Next time you feel pressured to take on extra work, pause and ask yourself if it aligns with your priorities. Then, try saying no in a way that feels respectful but firm.'"
     }
   ],
   "therapist_insights": [
     {
       "summary": "Stress isn’t just about workload, but about emotional boundaries.",
+      "detail": "The therapist identified that the client’s stress is not primarily caused by the quantity of tasks but by the emotional toll of feeling responsible for others' opinions and expectations. This insight shifts the focus from productivity management to emotional self-regulation. Without addressing this pattern, even reduced workloads will continue to feel overwhelming because the underlying emotional triggers remain intact. The real task is disentangling self-worth from external validation.",
       "excerpt": "Therapist: 'It's not just the number of tasks—you feel drained because you're absorbing other people’s expectations as your responsibility.'"
     }
   ],
   "client_learnings": [
     {
       "summary": "Realized I avoid saying no because I fear being seen as unhelpful.",
+      "detail": "The client uncovered a fundamental belief: that their value is tied to how much they accommodate others. This belief fuels a behavioral cycle of overextension and emotional exhaustion. Recognizing this pattern is the first step toward breaking it. The next step will be testing whether setting limits actually results in social rejection or if it’s an unfounded fear shaped by past experiences.",
       "excerpt": "Client: 'I guess I say yes to everything because I don’t want people to think I’m not pulling my weight. But it’s exhausting.'"
     }
   ]
