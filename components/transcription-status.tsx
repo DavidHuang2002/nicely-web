@@ -17,7 +17,10 @@ export function TranscriptionStatus() {
     const transcriptionTimestamps = JSON.parse(
       localStorage.getItem("transcriptionTimestamps") || "{}"
     );
-
+    console.log("checking transcription status");
+    console.log("pending transcriptions: ", pendingTranscriptions);
+    console.log("transcription timestamps: ", transcriptionTimestamps);
+    
     // Filter out timed-out transcriptions
     const currentTime = Date.now();
     const activeTranscriptions = pendingTranscriptions.filter((id: string) => {

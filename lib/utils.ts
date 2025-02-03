@@ -83,7 +83,7 @@ export function estimateProcessingTime(audioDurationInSeconds: number): number {
   const fixedCost = 180;
   
   // Variable cost: 0.5x the audio duration
-  const variableCost = audioDurationInSeconds * 0.5;
+  const variableCost = audioDurationInSeconds * 0.1;
   
   // Total time in seconds
   const totalSeconds = fixedCost + variableCost;
