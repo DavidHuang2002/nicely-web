@@ -5,7 +5,7 @@ import { useEffect, useCallback } from "react";
 import { toast } from "sonner";
 
 // Add this constant at the top of the file
-const TRANSCRIPTION_TIMEOUT_MS = 3 * 60 * 1000; // 30 minutes in milliseconds
+const TRANSCRIPTION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes in milliseconds
 
 export function TranscriptionStatus() {
   const checkTranscriptionStatus = useCallback(async () => {
