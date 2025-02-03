@@ -77,3 +77,18 @@ export function convertDbMessagesToAiMessages(
 ): Message[] {
   return dbMessages.map(convertDbMessageToAiMessage);
 }
+
+export function estimateProcessingTime(audioDurationInSeconds: number): number {
+  // Fixed cost of 3 minutes (180 seconds)
+  const fixedCost = 180;
+  
+  // Variable cost: 0.5x the audio duration
+  const variableCost = audioDurationInSeconds * 0.5;
+  
+  // Total time in seconds
+  const totalSeconds = fixedCost + variableCost;
+  
+  // Round up to nearest 5 minutes
+  const totalMinutes = Math.ceil(totalSeconds / 60);
+  return Math.ceil(totalMinutes / 5) * 5;
+}

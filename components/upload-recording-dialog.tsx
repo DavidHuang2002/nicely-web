@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Upload, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-
+import { estimateProcessingTime } from "@/lib/utils";
 interface UploadRecordingDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -56,6 +56,22 @@ export function UploadRecordingDialog({
 
     try {
       setIsUploading(true);
+
+      // Get audio duration
+      const audio = new Audio();
+      const objectUrl = URL.createObjectURL(file);
+
+      // Wait for metadata to load to get duration
+      await new Promise((resolve, reject) => {
+        audio.addEventListener("loadedmetadata", resolve);
+        audio.addEventListener("error", reject);
+        audio.src = objectUrl;
+      });
+
+      const durationInSeconds = audio.duration;
+      URL.revokeObjectURL(objectUrl);
+
+      const estimatedMinutes = estimateProcessingTime(durationInSeconds);
 
       // Get presigned URL
       const presignedRes = await fetch("/api/uploads/presigned", {
@@ -123,7 +139,7 @@ export function UploadRecordingDialog({
       );
 
       toast.success("Recording uploaded and processing started", {
-        description: "We'll notify you when transcription is complete",
+        description: `We'll notify you when transcription is complete (estimated ${estimatedMinutes} minutes)`,
         duration: 5000,
       });
 
