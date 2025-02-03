@@ -3,6 +3,8 @@ import { User, UserSchema } from "@/models/user";
 import { Chat, ChatSchema, ChatTypeEnum } from "@/models/chat";
 import { DatabaseMessage, DatabaseMessageSchema } from "@/models/message";
 import { z } from "zod";
+import { CreateTranscriptionSchema, Transcription, TranscriptionSchema } from "@/models/transcription";
+import { CreateSessionSummarySchema, SessionSummary, SessionSummarySchema } from "@/models/session-summary";
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
@@ -76,7 +78,7 @@ export async function saveMessage(
   chatId: string,
   message: DatabaseMessage
 ): Promise<void> {
-  // 
+  //
   if (message.content == "") {
     return;
   }
@@ -190,3 +192,144 @@ export const createChatWithInitialMessages = async (
     }
   }
 };
+
+export async function createTranscriptionRecord({
+  userId,
+  s3Key,
+  status,
+}: {
+  userId: string;
+  s3Key: string;
+  status: Transcription["status"];
+}): Promise<Transcription> {
+  const newTranscription = CreateTranscriptionSchema.parse({
+    user_id: userId,
+    s3_key: s3Key,
+    status,
+    transcription_job_name: null,
+    transcription_text: null,
+  });
+
+  const { data, error } = await supabase
+    .from("transcriptions")
+    .insert(newTranscription)
+    .select()
+    .single();
+
+  if (error) throw error;
+  
+  // Parse the response data through our schema
+  return TranscriptionSchema.parse(data);
+}
+
+export async function updateTranscriptionStatus(
+  id: string,
+  update: Partial<Omit<Transcription, "id" | "user_id" | "created_at">>
+): Promise<void> {
+  const updateData = {
+    ...update,
+    updated_at: new Date(),
+  };
+
+  const { error } = await supabase
+    .from("transcriptions")
+    .update(updateData)
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function getTranscriptionById(
+  id: string
+): Promise<Transcription | null> {
+  const { data, error } = await supabase
+    .from("transcriptions")
+    .select()
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  return data ? TranscriptionSchema.parse(data) : null;
+}
+
+export async function getUserTranscriptions(
+  userId: string
+): Promise<Transcription[]> {
+  const { data, error } = await supabase
+    .from("transcriptions")
+    .select()
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data.map((record) => TranscriptionSchema.parse(record));
+}
+
+export async function createSessionSummary(
+  summary: z.infer<typeof CreateSessionSummarySchema>
+): Promise<SessionSummary> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .insert(summary)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return SessionSummarySchema.parse(data);
+}
+
+export async function getSessionSummaryById(
+  id: string
+): Promise<SessionSummary | null> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .select()
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  return data ? SessionSummarySchema.parse(data) : null;
+}
+
+export async function getUserSessionSummaries(
+  userId: string
+): Promise<SessionSummary[]> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .select()
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data.map((record) => SessionSummarySchema.parse(record));
+}
+
+export async function getTranscriptionSessionSummary(
+  transcriptionId: string
+): Promise<SessionSummary | null> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .select()
+    .eq("transcription_id", transcriptionId)
+    .single();
+
+  if (error) throw error;
+  return data ? SessionSummarySchema.parse(data) : null;
+}
+
+export async function updateSessionSummary(
+  id: string,
+  update: Partial<Omit<SessionSummary, "id" | "user_id" | "transcription_id" | "created_at">>
+): Promise<void> {
+  const updateData = {
+    ...update,
+    updated_at: new Date(),
+  };
+
+  const { error } = await supabase
+    .from("session_summaries")
+    .update(updateData)
+    .eq("id", id);
+
+  if (error) throw error;
+}

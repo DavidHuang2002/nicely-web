@@ -104,7 +104,7 @@ export async function POST(req: Request) {
         parameters: z.object({}),
         execute: async () => {
           handleOnboardingFinished(clerkUser);
-          await extractAndStoreInsights(messages, clerkUser.id);
+          await extractAndStoreInsights(messages, user.id!);
           return { completed: true };
         },
       }),

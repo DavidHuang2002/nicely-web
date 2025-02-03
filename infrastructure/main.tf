@@ -61,11 +61,15 @@ resource "aws_iam_user_policy" "app_user_policy" {
           "s3:PutObject",
           "s3:GetObject",
           "s3:ListBucket",
-          "s3:DeleteObject"
+          "s3:DeleteObject",
+          "transcribe:StartTranscriptionJob",
+          "transcribe:GetTranscriptionJob",
+          "transcribe:ListTranscriptionJobs"
         ]
         Resource = [
           aws_s3_bucket.audio_uploads.arn,
-          "${aws_s3_bucket.audio_uploads.arn}/*"
+          "${aws_s3_bucket.audio_uploads.arn}/*",
+          "arn:aws:transcribe:*:*:transcription-job/*"
         ]
       }
     ]
