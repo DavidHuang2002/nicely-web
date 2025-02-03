@@ -53,7 +53,7 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
         <div className="flex items-center gap-2 text-primary">
           <CalendarIcon className="h-5 w-5" />
           <time className="text-lg">
-            {summary.created_at.toLocaleDateString(undefined, {
+            {summary.session_date.toLocaleDateString(undefined, {
               weekday: "long",
               year: "numeric",
               month: "long",

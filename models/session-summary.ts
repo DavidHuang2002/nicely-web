@@ -20,6 +20,7 @@ export const GeneratedSessionSummarySchema = z.object({
 const SessionSummaryBaseSchema = GeneratedSessionSummarySchema.extend({
   user_id: z.string().uuid(),
   transcription_id: z.string().uuid(),
+  session_date: z.string().or(z.date()).transform((val) => new Date(val)),
 });
 
 // Schema for creating a new session summary

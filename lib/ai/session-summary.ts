@@ -27,6 +27,7 @@ export async function extractAndStoreSummary(
       ...generatedSummary,
       user_id: userId,
       transcription_id: transcriptionId,
+      session_date: new Date(),
     };
 
     // Store in Supabase
