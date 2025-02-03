@@ -30,6 +30,9 @@ export async function extractAndStoreSummary(
         prompt: makeSessionSummaryPrompt(chunk),
       });
       
+
+      console.log("generatedSummary: ", generatedSummary);
+      
       chunkSummaries.push(generatedSummary);
       
       // Add a small delay between chunks to respect rate limits
