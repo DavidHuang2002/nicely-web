@@ -3,7 +3,6 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getTranscriptionById, updateTranscriptionStatus } from "@/lib/database/supabase";
 import { formatTranscriptionText, getTranscriptionStatus } from "@/lib/aws/transcribe";
-import { GetTranscriptionJobCommandOutput } from "@aws-sdk/client-transcribe";
 import { extractAndStoreSummary } from "@/lib/ai/session-summary";
 
 
