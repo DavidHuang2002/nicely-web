@@ -5,7 +5,8 @@ import { getTranscriptionById, updateTranscriptionStatus } from "@/lib/database/
 import { formatTranscriptionText, getTranscriptionStatus } from "@/lib/aws/transcribe";
 import { extractAndStoreSummary } from "@/lib/ai/session-summary";
 
-
+// set max duration to 300 seconds
+export const maxDuration = 300;
 
 export async function GET(
   req: Request,
