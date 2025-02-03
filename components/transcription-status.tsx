@@ -57,11 +57,11 @@ export function TranscriptionStatus() {
 
           // Show completion notification
           toast.success("Transcription completed!", {
-            description: "Your recording has been transcribed successfully.",
+            description: "Your recording has been processed successfully.",
             action: {
               label: "View",
               onClick: () =>
-                (window.location.href = `/notes/${transcriptionId}`),
+                (window.location.href = `/notes/${data.sessionSummaryId}`),
             },
           });
         } else if (data.status === "failed") {

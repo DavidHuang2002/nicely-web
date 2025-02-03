@@ -21,6 +21,64 @@ export const sessionNotesTaskPrompt = `Help the user reflect on their therapy se
 - Prompting for unspoken or unresolved topics they may want to note.
 `;
 
+
+export const makeSessionSummaryPrompt = (transcriptionText: string) => {
+  return `You are an expert therapy assistant analyzing a transcribed therapy session. Your task is to extract key elements that will help the client quickly review their session, retain important insights, and take meaningful next steps.
+
+Review the conversation and generate a structured summary following these rules:
+
+## **1. Overall Structure**
+Extract the following **five categories** from the session transcript:
+
+- **title**: A short phrase capturing the main theme of the session.
+- **one_line_summary**: A single-sentence summary of the session’s primary focus.
+- **full_recap**: A concise but detailed summary of key discussion points.
+- **recommendations**: Concrete actions, exercises, or unresolved topics the client should focus on.
+- **therapist_insights**: Key advice, reframes, or strategies shared by the therapist.
+- **client_learnings**: Breakthroughs, realizations, or patterns the client identified.
+
+## **2. Formatting for "recommendations", "therapist_insights", and "client_learnings"**
+Each entry in these sections must follow this format:
+
+- **summary**: A short, precise summary of the item.
+- **excerpt**: A direct quote or relevant excerpt from the session transcript that supports this item. Infer from the speaker labels who is client vs. therapist and use client/therapist in excerpt.
+
+## **3. Extraction Guidelines**
+- **Be concise and structured.** Use clear, actionable language.
+- **Preserve context.** Each "excerpt" must directly relate to the summary.
+- **Filter noise.** Ignore small talk or off-topic discussions.
+- **Capture key themes.** Focus on **cognitive, emotional, or behavioral patterns**.
+
+## **Example Output**
+{
+  "title": "Managing Workplace Stress",
+  "one_line_summary": "The session focused on setting emotional boundaries at work to reduce stress and self-doubt.",
+  "full_recap": "The client discussed feeling overwhelmed at work, struggling to say no to extra tasks, and worrying about disappointing others. The therapist introduced the concept of emotional boundaries and suggested ways to prioritize well-being without guilt.",
+  "recommendations": [
+    {
+      "summary": "Practice saying 'no' at least once this week when feeling overburdened.",
+      "excerpt": "Therapist: 'Next time you feel pressured to take on extra work, pause and ask yourself if it aligns with your priorities. Then, try saying no in a way that feels respectful but firm.'"
+    }
+  ],
+  "therapist_insights": [
+    {
+      "summary": "Stress isn’t just about workload, but about emotional boundaries.",
+      "excerpt": "Therapist: 'It's not just the number of tasks—you feel drained because you're absorbing other people’s expectations as your responsibility.'"
+    }
+  ],
+  "client_learnings": [
+    {
+      "summary": "Realized I avoid saying no because I fear being seen as unhelpful.",
+      "excerpt": "Client: 'I guess I say yes to everything because I don’t want people to think I’m not pulling my weight. But it’s exhausting.'"
+    }
+  ]
+}
+  
+Here is the prior conversation:
+
+${transcriptionText}`;
+}
+
 export const onboardingFinishedMessageContent: string = `You’re all set! 🎉
 
 Thank you for sharing and trusting me with your thoughts. 💛 Now that I’ve gotten to know you better, I’m ready to give you personalized support tailored to your needs.

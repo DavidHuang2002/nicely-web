@@ -4,6 +4,7 @@ import { Chat, ChatSchema, ChatTypeEnum } from "@/models/chat";
 import { DatabaseMessage, DatabaseMessageSchema } from "@/models/message";
 import { z } from "zod";
 import { CreateTranscriptionSchema, Transcription, TranscriptionSchema } from "@/models/transcription";
+import { CreateSessionSummarySchema, SessionSummary, SessionSummarySchema } from "@/models/session-summary";
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
@@ -262,4 +263,73 @@ export async function getUserTranscriptions(
 
   if (error) throw error;
   return data.map((record) => TranscriptionSchema.parse(record));
+}
+
+export async function createSessionSummary(
+  summary: z.infer<typeof CreateSessionSummarySchema>
+): Promise<SessionSummary> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .insert(summary)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return SessionSummarySchema.parse(data);
+}
+
+export async function getSessionSummaryById(
+  id: string
+): Promise<SessionSummary | null> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .select()
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  return data ? SessionSummarySchema.parse(data) : null;
+}
+
+export async function getUserSessionSummaries(
+  userId: string
+): Promise<SessionSummary[]> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .select()
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data.map((record) => SessionSummarySchema.parse(record));
+}
+
+export async function getTranscriptionSessionSummary(
+  transcriptionId: string
+): Promise<SessionSummary | null> {
+  const { data, error } = await supabase
+    .from("session_summaries")
+    .select()
+    .eq("transcription_id", transcriptionId)
+    .single();
+
+  if (error) throw error;
+  return data ? SessionSummarySchema.parse(data) : null;
+}
+
+export async function updateSessionSummary(
+  id: string,
+  update: Partial<Omit<SessionSummary, "id" | "user_id" | "transcription_id" | "created_at">>
+): Promise<void> {
+  const updateData = {
+    ...update,
+    updated_at: new Date(),
+  };
+
+  const { error } = await supabase
+    .from("session_summaries")
+    .update(updateData)
+    .eq("id", id);
+
+  if (error) throw error;
 }

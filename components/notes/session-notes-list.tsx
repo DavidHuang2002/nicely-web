@@ -13,10 +13,13 @@ export default function SessionNotesList() {
           className="p-6 rounded-lg border border-border hover:border-primary/50 transition-colors"
         >
           <p className="text-sm text-muted-foreground">March 15, 2024</p>
-          <h3 className="text-lg font-medium mt-1">Weekly Check-in</h3>
+          <h3 className="text-lg font-medium mt-1">
+            Untangling Infatuation: Understanding Love vs. Projection
+          </h3>
           <p className="text-muted-foreground mt-2">
-            Discussed anxiety management techniques and set goals for the
-            week...
+            David explored his intense feelings for a girl, uncovering that his
+            emotions may stem from labeling, urgency, and a desire for
+            validation rather than genuine love.
           </p>
         </motion.div>
       </Link>

@@ -4,6 +4,9 @@ import { NextResponse } from "next/server";
 import { getTranscriptionById, updateTranscriptionStatus } from "@/lib/database/supabase";
 import { formatTranscriptionText, getTranscriptionStatus } from "@/lib/aws/transcribe";
 import { GetTranscriptionJobCommandOutput } from "@aws-sdk/client-transcribe";
+import { extractAndStoreSummary } from "@/lib/ai/session-summary";
+
+
 
 export async function GET(
   req: Request,
@@ -44,14 +47,31 @@ export async function GET(
           
           console.log("check transcription status - completed: Formatted text: ", formattedText);
 
-          // Update database status
+          // Update transcription status
+          await updateTranscriptionStatus(transcription.id, {
+            status: "extracting_summary",
+            transcription_text: formattedText,
+          });
+
+          // Extract and store session summary
+          const sessionSummary = await extractAndStoreSummary(
+            formattedText,
+            transcription.id,
+            transcription.user_id
+          );
+
+          // Update transcription status
           await updateTranscriptionStatus(transcription.id, {
             status: "completed",
-            transcription_text: formattedText,
           });
           
           transcription.status = "completed";
           transcription.transcription_text = formattedText;
+
+          return NextResponse.json({
+            status: transcription.status,
+            sessionSummaryId: sessionSummary.id,
+          }); 
         }
       } else if (awsStatus.TranscriptionJobStatus === "FAILED") {
         await updateTranscriptionStatus(transcription.id, {
@@ -61,7 +81,9 @@ export async function GET(
       }
     }
 
-    return NextResponse.json(transcription);
+    return NextResponse.json({
+      status: transcription.status,
+    });
   } catch (error) {
     console.error("Error checking transcription status:", error);
     return NextResponse.json(

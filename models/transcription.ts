@@ -5,6 +5,7 @@ export const TranscriptionStatusEnum = z.enum([
   "processing",
   "transcribing",
   "completed",
+  "extracting_summary",
   "failed",
 ]);
 
