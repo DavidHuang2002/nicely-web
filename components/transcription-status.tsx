@@ -4,13 +4,58 @@
 import { useEffect, useCallback } from "react";
 import { toast } from "sonner";
 
+// Add this constant at the top of the file
+const TRANSCRIPTION_TIMEOUT_MS = 3 * 60 * 1000; // 30 minutes in milliseconds
+
 export function TranscriptionStatus() {
   const checkTranscriptionStatus = useCallback(async () => {
     const pendingTranscriptions = JSON.parse(
       localStorage.getItem("pendingTranscriptions") || "[]"
     );
 
-    if (pendingTranscriptions.length === 0) {
+    // Get timestamps for pending transcriptions
+    const transcriptionTimestamps = JSON.parse(
+      localStorage.getItem("transcriptionTimestamps") || "{}"
+    );
+
+    // Filter out timed-out transcriptions
+    const currentTime = Date.now();
+    const activeTranscriptions = pendingTranscriptions.filter((id: string) => {
+      const timestamp = transcriptionTimestamps[id];
+      if (!timestamp) {
+        // If no timestamp found, consider it timed out
+        return false;
+      }
+
+      const age = currentTime - timestamp;
+      const isValid = age < TRANSCRIPTION_TIMEOUT_MS;
+
+      if (!isValid) {
+        // Show timeout notification
+        toast.error("Transcription timed out", {
+          description:
+            "The transcription process took too long and has been cancelled.",
+        });
+        // Remove the timestamp
+        delete transcriptionTimestamps[id];
+      }
+
+      return isValid;
+    });
+
+    // Update localStorage if any transcriptions were removed
+    if (activeTranscriptions.length !== pendingTranscriptions.length) {
+      localStorage.setItem(
+        "pendingTranscriptions",
+        JSON.stringify(activeTranscriptions)
+      );
+      localStorage.setItem(
+        "transcriptionTimestamps",
+        JSON.stringify(transcriptionTimestamps)
+      );
+    }
+
+    if (activeTranscriptions.length === 0) {
       // Remove the floating indicator if no pending transcriptions
       const indicator = document.getElementById("transcription-indicator");
       if (indicator) {
@@ -37,13 +82,13 @@ export function TranscriptionStatus() {
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
           </svg>
         </div>
-      Processing ${pendingTranscriptions.length} session note${
-      pendingTranscriptions.length > 1 ? "s" : ""
+      Processing ${activeTranscriptions.length} session note${
+      activeTranscriptions.length > 1 ? "s" : ""
     } 🎯
       </div>
     `;
 
-    for (const transcriptionId of pendingTranscriptions) {
+    for (const transcriptionId of activeTranscriptions) {
       try {
         const res = await fetch(`/api/transcribe/${transcriptionId}`);
 
@@ -58,7 +103,7 @@ export function TranscriptionStatus() {
           });
 
           // remove from pending list
-          const updated = pendingTranscriptions.filter(
+          const updated = activeTranscriptions.filter(
             (id: string) => id !== transcriptionId
           );
           localStorage.setItem(
@@ -73,7 +118,7 @@ export function TranscriptionStatus() {
 
         if (data.status === "completed") {
           // Remove from pending list
-          const updated = pendingTranscriptions.filter(
+          const updated = activeTranscriptions.filter(
             (id: string) => id !== transcriptionId
           );
           localStorage.setItem(
@@ -94,7 +139,7 @@ export function TranscriptionStatus() {
             },
           });
         } else if (data.status === "failed") {
-          const updated = pendingTranscriptions.filter(
+          const updated = activeTranscriptions.filter(
             (id: string) => id !== transcriptionId
           );
           localStorage.setItem(

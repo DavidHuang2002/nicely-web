@@ -112,6 +112,16 @@ export function UploadRecordingDialog({
         JSON.stringify(pendingTranscriptions)
       );
 
+      // Add timestamp storage
+      const transcriptionTimestamps = JSON.parse(
+        localStorage.getItem("transcriptionTimestamps") || "{}"
+      );
+      transcriptionTimestamps[transcriptionId] = Date.now();
+      localStorage.setItem(
+        "transcriptionTimestamps",
+        JSON.stringify(transcriptionTimestamps)
+      );
+
       toast.success("Recording uploaded and processing started", {
         description: "We'll notify you when transcription is complete",
         duration: 5000,
