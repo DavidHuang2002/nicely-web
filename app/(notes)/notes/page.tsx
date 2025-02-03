@@ -3,10 +3,13 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Plus, Mic, Upload } from "lucide-react";
+import { Mic, Upload } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { UploadRecordingDialog } from "@/components/upload-recording-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import SessionNotesList from "@/components/notes/session-notes-list";
+import  ThemesList from "@/components/notes/themes-list";
 
 export default function SessionNotesPage() {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
@@ -35,23 +38,21 @@ export default function SessionNotesPage() {
           </div>
         </div>
 
-        {/* Recent Sessions Section */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Recent Sessions</h2>
-          <div className="grid gap-4">
-            {/* We'll populate this with actual session data later */}
-            <div className="p-6 rounded-lg border border-border hover:border-primary/50 transition-colors">
-              <p className="text-sm text-muted-foreground">March 15, 2024</p>
-              <h3 className="text-lg font-medium mt-1">Weekly Check-in</h3>
-              <p className="text-muted-foreground mt-2">
-                Discussed anxiety management techniques and set goals for the
-                week...
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Tabs */}
+        <Tabs defaultValue="sessions" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+            <TabsTrigger value="sessions">Sessions</TabsTrigger>
+            <TabsTrigger value="themes">Themes</TabsTrigger>
+          </TabsList>
 
-        {/* Timeline/Calendar View Toggle could be added here */}
+          <TabsContent value="sessions" className="mt-6">
+            <SessionNotesList />
+          </TabsContent>
+
+          <TabsContent value="themes" className="mt-6">
+            <ThemesList />
+          </TabsContent>
+        </Tabs>
       </motion.div>
 
       <UploadRecordingDialog
