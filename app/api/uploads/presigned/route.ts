@@ -3,7 +3,7 @@ import { generatePresignedUrl } from "@/lib/aws/s3";
 import { NextResponse } from "next/server";
 
 const ALLOWED_TYPES = ["audio/mpeg", "audio/wav", "audio/x-m4a"];
-const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
+const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200MB
 
 export async function POST(req: Request) {
   try {
