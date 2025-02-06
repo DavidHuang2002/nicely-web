@@ -18,8 +18,8 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-  			background: 'hsl(var(--background))',
-  			foreground: 'hsl(var(--foreground))',
+  			background: '#FFFFFF',
+  			foreground: '#1F2937',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -29,7 +29,9 @@ module.exports = {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
+  				DEFAULT: '#8B5CF6',
+  				light: '#A78BFA',
+  				dark: '#7C3AED',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {
