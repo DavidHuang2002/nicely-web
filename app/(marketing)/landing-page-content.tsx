@@ -7,13 +7,25 @@ import { HeartIcon, SparklesIcon, NotebookIcon } from "@/components/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 export function LandingPageContent() {
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-white to-primary/5">
+      <style jsx>{`
+        @keyframes scroll-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-100%); }
+        }
+
+        @keyframes scroll-right {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
+      <div className="min-h-screen bg-[#F5F5F5]">
         {/* Navigation Bar */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-md border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               {/* Logo */}
@@ -31,7 +43,8 @@ export function LandingPageContent() {
               {/* Sign Up Button */}
               <SignInButton mode="modal">
                 <Button
-                  className="rounded-full px-6 py-2 bg-primary hover:bg-primary/90 text-white"
+                  className="rounded-full px-6 py-2 text-white"
+                  style={{ backgroundColor: '#1A1CD7', '--hover-color': '#4F46E5' }}
                 >
                   Sign Up Today
                 </Button>
@@ -41,7 +54,7 @@ export function LandingPageContent() {
         </nav>
 
         {/* Add padding to account for fixed navbar */}
-        <div className="pt-16">
+        <div className="pt-8">
           <div className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
             {/* Hero Section */}
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-16 items-center relative">
@@ -74,18 +87,18 @@ export function LandingPageContent() {
 
               {/* Text Content */}
               <motion.div
-                className="text-left space-y-5 sm:space-y-6 flex flex-col items-start justify-center lg:pl-12"
+                className="text-left space-y-5 sm:space-y-6 flex flex-col items-start justify-center lg:pl-13"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight text-gray-900">
+                <h1 className="text-[55px] sm:text-[65px] lg:text-[71px] font-bold leading-tight tracking-tight text-gray-900">
                   Everything your<br />
-                  <span className="text-primary">therapy journey</span><br />
+                  <span className="text-[#6559D4]">therapy journey</span><br />
                   needs
                 </h1>
-                <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed max-w-xl">
-                  Feel like your best self with organized therapy notes, between-session insights, and self-care exercises.
+                <p className="text-base sm:text-xl text-gray-700 leading-relaxed max-w-xl">
+                Make real progress in therapy by remember key insights, track your growth, and stay engaged between sessions.
                 </p>
                 
                 <motion.div
@@ -97,9 +110,9 @@ export function LandingPageContent() {
                   <SignInButton mode="modal" signUpForceRedirectUrl="/sign-in-success">
                     <Button
                       size="lg"
-                      className="px-8 py-6 text-lg rounded-full w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white"
+                      className="px-8 py-6 text-lg rounded-full w-full sm:w-auto text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
                     >
-                      Try 14 days free
+                      Join now, completely free
                     </Button>
                   </SignInButton>
                 </motion.div>
@@ -158,8 +171,15 @@ export function LandingPageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
+              {/* Title Section */}
+              <div className="lg:col-span-3 text-center mt-20">
+                <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                  How Nicely Works
+                </h2>
+              </div>
+
               <FeatureCard
-                icon={<SparklesIcon className="text-primary" size={22} />}
+                icon={<FeatureSparklesIcon size={22} />}
                 title="Between Session Thoughts"
                 description="Quickly record what's happening to help plan your next session"
               />
@@ -177,51 +197,144 @@ export function LandingPageContent() {
 
             {/* Testimonials Section */}
             <motion.div
-              className="w-full max-w-6xl mx-auto px-4 py-16"
+              className="w-full max-w-7xl mx-auto px-4 py-16"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                What our users say
+              <h2 className="text-4xl font-bold text-center mb-12 mt-12 text-black">
+                Join our community today
               </h2>
-              <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="md:translate-y-8"
+
+              {/* Scrolling Container */}
+              <div className="relative overflow-hidden">
+                {/* First Row - Scrolling Left */}
+                <div 
+                  className="flex space-x-6 mb-6"
+                  style={{
+                    animation: 'scroll-left 30s linear infinite',
+                  }}
                 >
                   <TestimonialCard
-                    name="Sarah M."
-                    review="Nicely has been a game-changer for my mental health journey. It helps me maintain the progress I make in therapy."
-                    highlight
+                    name="@hiral.sidhu"
+                    review="I just got on it and thank you sooo much for this is truly helped me"
                   />
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
+                  <TestimonialCard
+                    name="pierce"
+                    review="hey! i just tried your ai model and it's sick, i already feel a little better"
+                  />
+                  <TestimonialCard
+                    name="@_hebored_"
+                    review="Naw tho this really helps"
+                  />
+                  <TestimonialCard
+                    name="@mindful22"
+                    review="Great way to track my progress"
+                  />
+                  <TestimonialCard
+                    name="@healing_journey"
+                    review="Makes therapy so much more effective"
+                  />
+                  <TestimonialCard
+                    name="@growth_mindset"
+                    review="Perfect companion between sessions"
+                  />
+                  <TestimonialCard
+                    name="@wellness_seeker"
+                    review="Exactly what I needed for my journey"
+                  />
+                </div>
+
+                {/* Second Row - Scrolling Right */}
+                <div 
+                  className="flex space-x-6"
+                  style={{
+                    animation: 'scroll-right 30s linear infinite',
+                  }}
                 >
                   <TestimonialCard
-                    name="James R."
-                    review="The daily check-ins and guided reflections have helped me stay consistent with my mental health practices."
+                    name="@therapy_progress"
+                    review="Really helps me stay on track"
                   />
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="md:translate-y-12"
-                >
                   <TestimonialCard
-                    name="Emily L."
-                    review="Having Nicely as a companion between therapy sessions gives me the confidence to tackle challenges on my own."
+                    name="@mental_health_matters"
+                    review="Such a supportive tool"
                   />
-                </motion.div>
+                  <TestimonialCard
+                    name="@self_care_daily"
+                    review="Changed how I approach therapy"
+                  />
+                  <TestimonialCard
+                    name="@mindfulness_path"
+                    review="Incredibly helpful features"
+                  />
+                  <TestimonialCard
+                    name="@therapy_goals"
+                    review="Makes progress tracking easy"
+                  />
+                  <TestimonialCard
+                    name="decim033"
+                    review="This would actually help my therapist"
+                  />
+                  <TestimonialCard
+                    name="@user5"
+                    review="Love how intuitive the interface is!"
+                  />
+                </div>
               </div>
             </motion.div>
             
+                        {/* Why Nicely & Commitment Section */}
+                        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 px-4 py-16">
+              {/* Why Nicely? Section */}
+              <div className="space-y-8">
+                <h2 className="text-4xl font-bold text-gray-900">
+                  Why Nicely?
+                </h2>
+                <div className="space-y-6">
+                  <ExpandableHighlight
+                    icon={<SparklesIcon className="w-4 h-4 text-white" />}
+                    title="Capture Key Moments Effortlessly"
+                    description="Therapy insights are processed automatically, so nothing is missed."
+                  />
+                  <ExpandableHighlight
+                    icon={<BellIcon className="w-4 h-4 text-white" />}
+                    title="Reminders That Fit Your Journey"
+                    description="Receive gentle reminders aligned with your goals to keep you supported each day."
+                  />
+                  <ExpandableHighlight
+                    icon={<ChartIcon className="w-4 h-4 text-white" />}
+                    title="Track Your Growth, Easily"
+                    description="Track your progress over time with a clear view to appreciate each step forward."
+                  />
+                </div>
+              </div>
+
+              {/* Our Commitment Section */}
+              <div className="space-y-8">
+                <h2 className="text-4xl font-bold text-gray-900">
+                  Our Commitment
+                </h2>
+                <div className="space-y-6">
+                  <ExpandableHighlight
+                    icon={<ShieldIcon className="w-4 h-4 text-white" />}
+                    title="Data Ownership & Control"
+                    description="You remain full in control to all of your data and can choose to delete them anytime."
+                  />
+                  <ExpandableHighlight
+                    icon={<LockIcon className="w-4 h-4 text-white" />}
+                    title="Privacy-Powered AI"
+                    description="We securely store data in Supabase (which is HIPAA-compliant) using a vector database, making our AI smarter and more responsive."
+                  />
+                  <ExpandableHighlight
+                    icon={<HeartIcon className="w-4 h-4 text-white" />}
+                    title="Built for You, Here for You"
+                    description="You deserve a solution that truly works. We are here building it with you to make it happen."
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Collaborators Section */}
             <motion.div
               className="w-full max-w-lg lg:max-w-4xl mx-auto"
@@ -229,7 +342,7 @@ export function LandingPageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.6 }}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-black">
                 Built by Collaborators From
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 items-center justify-items-center">
@@ -259,61 +372,6 @@ export function LandingPageContent() {
                 />
               </div>
             </motion.div>
-
-            {/* Why Nicely & Commitment Section */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 px-4 py-16">
-              {/* Why Nicely? Section */}
-              <motion.div
-                className="space-y-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
-                <h2 className="text-3xl sm:text-4xl font-bold text-primary">Why Nicely?</h2>
-                <div className="space-y-8">
-                  <FeatureRow
-                    title="Grounded in Research"
-                    description="Built on methods that truly support progress."
-                  />
-                  <FeatureRow
-                    title="Capture Key Moments Effortlessly"
-                    description="Therapy insights are processed automatically, so nothing is missed."
-                  />
-                  <FeatureRow
-                    title="Reminders That Fit Your Journey"
-                    description="Receive gentle reminders aligned with your goals to keep you supported each day."
-                  />
-                  <FeatureRow
-                    title="Track Your Growth, Easily"
-                    description="Track your progress over time with a clear view to appreciate each step forward."
-                  />
-                </div>
-              </motion.div>
-
-              {/* Our Commitment Section */}
-              <motion.div
-                className="space-y-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-              >
-                <h2 className="text-3xl sm:text-4xl font-bold text-primary">Our Commitment</h2>
-                <div className="space-y-8">
-                  <FeatureRow
-                    title="Data Ownership & Control"
-                    description="You own your data. You remain full in control to all of your data and can choose to delete or migrate them anytime you choose."
-                  />
-                  <FeatureRow
-                    title="Advanced Data Encryption"
-                    description="All data is secured using AES encryption during transmission and at rest, providing top-tier protection against unauthorized access."
-                  />
-                  <FeatureRow
-                    title="Automatic Audio Deletion"
-                    description="Audio recordings are permanently deleted after transcription, ensuring recordings are never accessible to anyone, anytime."
-                  />
-                </div>
-              </motion.div>
-            </div>
           </div>
         </div>
       </div>
@@ -361,9 +419,9 @@ export function LandingPageContent() {
             </div>
 
             {/* Copyright */}
-            <div className="pt-2 text-white/70 text-sm">
+            {/* <div className="pt-2 text-white/70 text-sm">
               <p>© 2024 Nicely.</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -381,12 +439,12 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center p-6 lg:p-8 rounded-3xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
-      <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+    <div className="flex flex-col items-center text-center p-6 lg:p-8 rounded-3xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200">
+      <div className="size-14 rounded-2xl flex items-center justify-center mb-5 bg-[#6559D4]">
         {icon}
       </div>
       <h3 className="text-xl font-semibold mb-3 text-gray-900">{title}</h3>
-      <p className="text-gray-500 text-base lg:text-lg">
+      <p className="text-gray-700 text-base lg:text-base">
         {description}
       </p>
     </div>
@@ -396,59 +454,21 @@ function FeatureCard({
 function TestimonialCard({ 
   name, 
   review,
-  highlight = false 
 }: { 
   name: string; 
   review: string;
-  highlight?: boolean;
 }) {
   return (
-    <div className="h-full group">
-      <div 
-        className={cn(
-          "h-full p-6 lg:p-8 rounded-3xl transition-all duration-300 border",
-          "hover:shadow-xl hover:-translate-y-1",
-          highlight ? 
-            "bg-primary/5 border-primary/20 hover:bg-primary/10" : 
-            "bg-white border-gray-100 hover:border-primary/20"
-        )}
-      >
-        <div className="space-y-5">
-          <div className="relative">
-            <svg
-              className={cn(
-                "absolute -top-3 -left-3 w-8 h-8 transform -rotate-12",
-                highlight ? "text-primary" : "text-gray-300"
-              )}
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-            </svg>
-            <p className={cn(
-              "text-lg leading-relaxed relative",
-              highlight ? "text-gray-800" : "text-gray-500"
-            )}>
-              "{review}"
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className={cn(
-              "size-10 rounded-full flex items-center justify-center",
-              highlight ? "bg-primary/20" : "bg-primary/10"
-            )}>
-              <span className={cn(
-                "text-base font-medium",
-                highlight ? "text-primary" : "text-primary/70"
-              )}>
-                {name.split(' ')[0][0]}
-                {name.split(' ')[1][0]}
-              </span>
-            </div>
-            <span className="font-semibold text-lg text-gray-900">{name}</span>
-          </div>
+    <div className="flex-shrink-0 w-[300px] p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="flex-shrink-0 w-5 h-5 text-gray-400">
+          "
         </div>
+        <span className="font-medium text-gray-900">{name}</span>
       </div>
+      <p className="text-gray-700 text-sm">
+        {review}
+      </p>
     </div>
   );
 }
@@ -482,24 +502,66 @@ function UniversityLogo({
   );
 }
 
-function FeatureRow({
+function ExpandableHighlight({
+  icon,
   title,
   description,
 }: {
+  icon: React.ReactNode;
   title: string;
   description: string;
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
-    <div className="flex gap-4">
-      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-primary">
-        {/* Placeholder for icon - you can add your icons here later */}
-        <div className="w-6 h-6 border-2 border-current rounded-full" />
-      </div>
-      <div className="space-y-1">
-        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-        <p className="text-gray-600 leading-relaxed">{description}</p>
+    <div className="group">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full"
+      >
+        <div className="flex items-start gap-4 group-hover:opacity-80 transition-opacity duration-200">
+          <div className="mt-[3px]">
+            <div className="w-7 h-7 rounded-full bg-[#6559D4] flex items-center justify-center">
+              {icon}
+            </div>
+          </div>
+          <div className="flex justify-between items-center w-full">
+            <h3 className="text-2xl text-gray-900 text-left">{title}</h3>
+            <ChevronIcon 
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                isExpanded ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+        </div>
+      </button>
+      
+      <div 
+        className={`overflow-hidden transition-all duration-200 ${
+          isExpanded ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <p className="text-base text-gray-600 leading-relaxed mt-3 ml-10">
+          {description}
+        </p>
       </div>
     </div>
+  );
+}
+
+function ChevronIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
   );
 }
 
@@ -523,6 +585,74 @@ function TwitterIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
       <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+    </svg>
+  );
+}
+
+function FeatureSparklesIcon(props: React.ComponentProps<"svg"> & { size?: number }) {
+  return (
+    <svg 
+      width={props.size || 22} 
+      height={props.size || 22} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth={2} 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}
+    >
+      <path d="M12 3l1.912 5.813a2 2 0 001.272 1.272L21 12l-5.813 1.912a2 2 0 00-1.272 1.272L12 21l-1.912-5.813a2 2 0 00-1.272-1.272L3 12l5.813-1.912a2 2 0 001.272-1.272L12 3z"/>
+    </svg>
+  );
+}
+
+function SparklesIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth={2} 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}
+    >
+      <path d="M12 3l1.912 5.813a2 2 0 001.272 1.272L21 12l-5.813 1.912a2 2 0 00-1.272 1.272L12 21l-1.912-5.813a2 2 0 00-1.272-1.272L3 12l5.813-1.912a2 2 0 001.272-1.272L12 3z"/>
+    </svg>
+  );
+}
+
+function BellIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+    </svg>
+  );
+}
+
+function ChartIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M23 6l-9.5 9.5-5-5L1 18"/>
+      <path d="M17 6h6v6"/>
+    </svg>
+  );
+}
+
+function ShieldIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+  );
+}
+
+function LockIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0110 0v4"/>
     </svg>
   );
 }
