@@ -34,7 +34,7 @@ export const SessionSummarySchema = SessionSummaryBaseSchema.extend({
   updated_at: z.string().or(z.date()).transform((val) => new Date(val)),
 });
 
-// Type inference
+// Type inference for the session summary
 export type GeneratedSessionSummary = z.infer<typeof GeneratedSessionSummarySchema>;
 export type CreateSessionSummary = z.infer<typeof CreateSessionSummarySchema>;
 export type SessionSummary = z.infer<typeof SessionSummarySchema>;
