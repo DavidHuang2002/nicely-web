@@ -199,21 +199,22 @@ export function LandingPageContent() {
                   How Nicely Works
                 </h2>
               </div>
-
               <FeatureCard
-                icon={<FeatureSparklesIcon size={22} />}
-                title="Between Session Thoughts"
-                description="Quickly record what's happening to help plan your next session"
+                icon={<NotebookIcon size={22} />}
+                title="Session Notes"
+                description="Effortlessly summarize key points and action items from last session."
               />
+
               <FeatureCard
                 icon={<HeartIcon size={22} />}
                 title="Daily Self-Care"
                 description="Easier and interactive conversations to complete homeworks exercises."
               />
+
               <FeatureCard
-                icon={<NotebookIcon size={22} />}
-                title="Session Notes"
-                description="Effortlessly summarize key points and action items from last session"
+                icon={<FeatureSparklesIcon size={22} />}
+                title="Between Session Thoughts"
+                description="Quickly record what's happening to help plan your next session"
               />
             </motion.div>
 
