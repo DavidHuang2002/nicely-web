@@ -53,14 +53,14 @@ export const Overview = ({
           description="Reflect on your therapy sessions and track your progress over time"
           icon={<NotebookIcon size={24} />}
           href="/notes"
-          disabled={!onboardingCompleted}
+          // disabled={!onboardingCompleted}
         />
         <TherapyOption
           title="Between-session Thoughts"
           description="Work through complex feelings with an AI companion trained in therapeutic techniques"
           icon={<SparklesIcon size={24} />}
           href="/untangle"
-          disabled={!onboardingCompleted}
+          // disabled={!onboardingCompleted}
         />
         <TherapyOption
           title="Daily Self-Care"
