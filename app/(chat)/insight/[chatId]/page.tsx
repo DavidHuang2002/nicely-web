@@ -5,14 +5,20 @@ export default async function Page({
   searchParams,
 }: {
   params: Promise<{ chatId: string }>;
-  searchParams: { summary?: string; excerpt?: string; detail?: string };
+  searchParams: Promise<{
+    summary?: string;
+    excerpt?: string;
+    detail?: string;
+  }>;
 }) {
   const chatId = (await params).chatId;
-  const insight = searchParams.summary
+  const awaitedSearchParams = await searchParams;
+
+  const insight = awaitedSearchParams.summary
     ? {
-        summary: searchParams.summary,
-        excerpt: searchParams.excerpt || "",
-        detail: searchParams.detail || "",
+        summary: awaitedSearchParams.summary,
+        excerpt: awaitedSearchParams.excerpt || "",
+        detail: awaitedSearchParams.detail || "",
       }
     : undefined;
 

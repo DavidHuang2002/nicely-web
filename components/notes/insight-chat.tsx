@@ -16,13 +16,19 @@ interface InsightChatProps {
   initialButtonText?: string;
 }
 
+const replaceClientWithYou = (message: string | undefined) => {
+  if (!message) return "";
+  return message.replace("Client", "You");
+};
+
 export default function InsightChat({
   insight,
   chatId,
   initialButtonText,
 }: InsightChatProps) {
   const initialMessage = createAIMessage(
-    `I see you want to explore the insight: "${insight?.summary}". This came from the observation: "${insight?.excerpt}". Would you like to discuss this further or share any thoughts about it?`,
+    `I see you want to explore the insight: "${insight?.summary}". This came from the observation: "${replaceClientWithYou(insight?.excerpt)}"
+    Would you like me to help you explore this insight further?`,
     "assistant"
   );
 
