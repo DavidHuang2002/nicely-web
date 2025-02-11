@@ -529,12 +529,20 @@ function FeatureCard({
 }) {
   return (
     <motion.div 
+      className="flex flex-col items-center text-center p-8 lg:p-10 rounded-3xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+      whileHover={{ y: -5 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      <div className="size-16 rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-br from-[#6559D4] to-[#4F46E5]">
+        <div className="text-white">
+          {icon}
+        </div>
       </div>
-      <h3 className="text-xl font-semibold mb-3 text-gray-900">{title}</h3>
-      <p className="text-gray-700 text-base lg:text-base">
+      <h3 className="text-2xl font-semibold mb-4 text-gray-900 tracking-tight">{title}</h3>
+      <p className="text-gray-600 text-lg leading-relaxed">
         {description}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -743,6 +751,7 @@ function LockIcon(props: React.ComponentProps<"svg">) {
     </svg>
   );
 }
+
 function FeatureListItem({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-center space-x-3 text-sm sm:text-base text-gray-700">
