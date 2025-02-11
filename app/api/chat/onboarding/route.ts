@@ -7,37 +7,10 @@ import { COMPLETE_ONBOARDING_TOOL_NAME } from "@/models/constants";
 import { extractAndStoreInsights } from "@/lib/ai/RAG";
 import { therapistPrompt } from "@/lib/ai/prompts";
 import { generateUUID } from "@/lib/utils";
-
-const taskPrompt =  `Your current task is helping with onboarding. 
-  Guide the user through the following steps:
-  
-  1. Gather basic information:
-     - What user would like to be called
-     - Therapy frequency
-  
-  2. Discuss therapy goals:
-     - Current work in therapy
-     - Specific goals (e.g., managing anxiety, improving relationships)
-     - Definition of progress or success
-  
-  3. Explore current challenges:
-     - Recent challenges
-     - Overwhelming situations or emotions
-     - Self-understanding
-  
-  4. Reflect on the last therapy session:
-     - Key takeaways
-     - Emotions during and after the session
-     - Learnings and action steps
-     - Unaddressed topics
-
-  After each step, reflect your understanding of the user's response back to them and ask any clarifying questions if you have any (but not too many). If not, move on to the next step.
-
-  After the user confirmed the last step, thank them and call the completeOnboarding tool to finish the process.
-`;
+import { onboardingTaskPromopt } from "@/lib/ai/prompts";
 
 const onboardingPrompt = `
-  ${taskPrompt}
+  ${onboardingTaskPromopt}
 
   Regarding your role in the process:
   ${therapistPrompt}
@@ -109,19 +82,14 @@ export async function POST(req: Request) {
         },
       }),
 
-      saveNameAndFrequency: tool({
-        description: "Save the user's name and therapy frequency",
+      saveName: tool({
+        description: "Save the user's name",
         parameters: z.object({
           preferredName: z.string().describe("The user's preferred name"),
-          therapyFrequency: z
-            .enum(["weekly", "biweekly", "monthly", "other"])
-            .describe("The user's therapy frequency"),
         }),
-
-        execute: async ({ preferredName, therapyFrequency }) => {
+        execute: async ({ preferredName }) => {
           await updateUser(clerkUser.id, {
             preferred_name: preferredName,
-            therapy_frequency: therapyFrequency,
           });
           return { completed: true };
         },

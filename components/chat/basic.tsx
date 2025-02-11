@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CombinedInput } from "../combined-input";
 import { ChatRequestOptions, CreateMessage } from "ai";
+import { InitialOptionsButtons } from "./initial-options-buttons";
 
 const onboardingFinishedMessage: Message = createAIMessage(
   onboardingFinishedMessageContent,
@@ -32,12 +33,14 @@ export function Chat({
   isOnboarding = false,
   frontEndRoute,
   chatId,
+  initialButtonOptions,
 }: {
   initialMessages?: Array<Message>;
   apiRoute?: string;
   isOnboarding?: boolean;
   chatId?: string;
   frontEndRoute?: string;
+  initialButtonOptions?: Array<string>;
 }) {
   chatId = chatId || (generateUUID() as string);
 
@@ -116,7 +119,7 @@ export function Chat({
     <div className="flex flex-col min-w-0 h-[calc(100dvh-52px)] bg-background">
       <div
         ref={messagesContainerRef}
-        className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
+        className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-auto pt-4"
       >
         {/* TODO: have a overview for specifc type of chat */}
         {/* {messages.length === 0 && <Overview />} */}
@@ -154,19 +157,12 @@ export function Chat({
           >
             Go to home
           </Button>
-        ) : messages.length === 1 && isOnboarding ? (
-          <div className="flex justify-center w-full">
-            <Button
-              type="button"
-              className="px-8"
-              onClick={(event) => {
-                event.preventDefault();
-                customAppend(createAIMessage("Let's get started!", "user"));
-              }}
-            >
-              Let&apos;s get started!
-            </Button>
-          </div>
+        ) : messages.length === 1 &&
+          (initialButtonOptions?.length || isOnboarding) ? (
+          <InitialOptionsButtons
+            options={initialButtonOptions || ["Let's get started!"]}
+            customAppend={customAppend}
+          />
         ) : (
           <CombinedInput
             chatId={chatId}
