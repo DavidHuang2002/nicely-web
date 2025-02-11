@@ -116,7 +116,7 @@ export function Chat({
     <div className="flex flex-col min-w-0 h-[calc(100dvh-52px)] bg-background">
       <div
         ref={messagesContainerRef}
-        className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
+        className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-auto pt-4"
       >
         {/* TODO: have a overview for specifc type of chat */}
         {/* {messages.length === 0 && <Overview />} */}
