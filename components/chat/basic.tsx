@@ -32,12 +32,14 @@ export function Chat({
   isOnboarding = false,
   frontEndRoute,
   chatId,
+  initialButtonText,
 }: {
   initialMessages?: Array<Message>;
   apiRoute?: string;
   isOnboarding?: boolean;
   chatId?: string;
   frontEndRoute?: string;
+  initialButtonText?: string;
 }) {
   chatId = chatId || (generateUUID() as string);
 
@@ -154,17 +156,22 @@ export function Chat({
           >
             Go to home
           </Button>
-        ) : messages.length === 1 && isOnboarding ? (
+        ) : messages.length === 1 && (initialButtonText || isOnboarding) ? (
           <div className="flex justify-center w-full">
             <Button
               type="button"
               className="px-8"
               onClick={(event) => {
                 event.preventDefault();
-                customAppend(createAIMessage("Let's get started!", "user"));
+                customAppend(
+                  createAIMessage(
+                    initialButtonText || "Let's get started!",
+                    "user"
+                  )
+                );
               }}
             >
-              Let&apos;s get started!
+              {initialButtonText || "Let's get started!"}
             </Button>
           </div>
         ) : (
