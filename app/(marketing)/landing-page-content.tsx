@@ -92,13 +92,12 @@ export function LandingPageContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-[55px] sm:text-[65px] lg:text-[71px] font-bold leading-tight tracking-tight text-gray-900">
-                  Everything your<br />
-                  <span className="text-[#6559D4]">therapy journey</span><br />
-                  needs
+                <h1 className="text-[30px] sm:text-[40px] lg:text-[50px] font-bold leading-tight tracking-tight text-gray-900">
+                Jump back in to your progress in
+                  <span className="text-[#6559D4]"> therapy.</span><br />
                 </h1>
-                <p className="text-base sm:text-xl text-gray-700 leading-relaxed max-w-xl">
-                Make real progress in therapy by remember key insights, track your growth, and stay engaged between sessions.
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed max-w-xl">
+                Completely free, no downloads - just an empathetic AI that keeps track of your therapy progress and make the healing process easier whenever and wherever you need it.
                 </p>
                 
                 <motion.div
@@ -109,10 +108,10 @@ export function LandingPageContent() {
                 >
                   <SignInButton mode="modal" signUpForceRedirectUrl="/sign-in-success">
                     <Button
-                      size="lg"
-                      className="px-8 py-6 text-lg rounded-full w-full sm:w-auto text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
+                      className="px-8 sm:px-7 py-4 sm:py-5 text-[15px] sm:text-base rounded-lg w-full sm:w-auto 
+                        text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
                     >
-                      Join now, completely free
+                      Get started today
                     </Button>
                   </SignInButton>
                 </motion.div>
@@ -164,35 +163,161 @@ export function LandingPageContent() {
               </motion.div>
             </div>
 
+            {/* Collaborators Section */}
+            <motion.div
+              className="w-full max-w-lg lg:max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+            >
+              <h2 className="text-lg sm:text-xl font-medium text-center mb-8 sm:mb-10 text-gray-600 pt-12">
+                Built with therapists and collaborators at
+              </h2>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 items-center justify-items-center">
+                <UniversityLogo 
+                  name="UPenn" 
+                  image={"/images/upenn.png"}
+                  width={400}
+                  height={150}
+                />
+                <UniversityLogo 
+                  name="Columbia" 
+                  image={"/images/columbia.png"}
+                  width={400}
+                  height={150}
+                />
+                <UniversityLogo 
+                  name="Vanderbilt" 
+                  image={"/images/vanderbilt.png"}
+                  width={400}
+                  height={150}
+                />
+                <UniversityLogo 
+                  name="Northwestern" 
+                  image={"/images/northwestern.png"}
+                  width={400}
+                  height={150}
+                />
+              </div>
+            </motion.div>
+
             {/* Features Section */}
             <motion.div
-              className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10 max-w-lg lg:max-w-6xl mx-auto w-full"
+              className="max-w-6xl mx-auto w-full px-4 py-16"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               {/* Title Section */}
-              <div className="lg:col-span-3 text-center mt-20">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                  How Nicely Works
-                </h2>
+              <div className="text-center mb-4">
+                <div className="relative inline-block">
+                  {/* Decorative Elements */}
+                  <div className="absolute -left-6 -top-6 w-12 h-12 bg-blue-100 rounded-full opacity-50 blur-lg" />
+                  <div className="absolute -right-4 -bottom-4 w-8 h-8 bg-purple-100 rounded-full opacity-50 blur-lg" />
+                  
+                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 relative">
+                    How{" "}
+                    <span className="text-[#6559D4] relative">
+                      Nicely
+                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                    </span>
+                    {" "}Works
+                  </h2>
+                </div>
               </div>
 
-              <FeatureCard
-                icon={<FeatureSparklesIcon size={22} />}
-                title="Between Session Thoughts"
-                description="Quickly record what's happening to help plan your next session"
-              />
-              <FeatureCard
-                icon={<HeartIcon size={22} />}
-                title="Daily Self-Care"
-                description="Easier and interactive conversations to complete homeworks exercises."
-              />
-              <FeatureCard
-                icon={<NotebookIcon size={22} />}
-                title="Session Notes"
-                description="Effortlessly summarize key points and action items from last session"
-              />
+              {/* Features Stack */}
+              <div className="flex flex-col space-y-12 sm:space-y-16">
+                {/* Session Notes */}
+                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <div className="space-y-4">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                        Session Notes
+                      </h3>
+                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                        Effortlessly summarize key points and action items from last session.
+                      </p>
+                      <ul className="space-y-2">
+                        <FeatureListItem>Automated session summaries</FeatureListItem>
+                        <FeatureListItem>Track action items</FeatureListItem>
+                        <FeatureListItem>Review previous insights</FeatureListItem>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="w-full h-full object-cover"
+                      >
+                        <source src={"/videos/session-notes.mp4"} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Daily Self-Care */}
+                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start lg:flex-row-reverse">
+                    <div className="space-y-4 lg:order-2">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                        Daily Self-Care
+                      </h3>
+                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                        Easier and interactive conversations to complete homeworks exercises.
+                      </p>
+                      <ul className="space-y-2">
+                        <FeatureListItem>Interactive exercises</FeatureListItem>
+                        <FeatureListItem>Guided self-care routines</FeatureListItem>
+                        <FeatureListItem>Progress tracking</FeatureListItem>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden lg:order-1">
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="w-full h-full object-cover"
+                      >
+                        <source src={"/videos/transcription.mp4"} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Between Session Thoughts */}
+                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <div className="space-y-4">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                        Between Session Thoughts
+                      </h3>
+                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                        Quickly record what's happening to help plan your next session
+                      </p>
+                      <ul className="space-y-2">
+                        <FeatureListItem>Quick thought capture</FeatureListItem>
+                        <FeatureListItem>Session planning</FeatureListItem>
+                        <FeatureListItem>Progress journaling</FeatureListItem>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="w-full h-full object-cover"
+                      >
+                        <source src={"/videos/thoughts.mp4"} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Testimonials Section */}
@@ -335,43 +460,7 @@ export function LandingPageContent() {
               </div>
             </div>
 
-            {/* Collaborators Section */}
-            <motion.div
-              className="w-full max-w-lg lg:max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.6 }}
-            >
-              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-black">
-                Built by Collaborators From
-              </h2>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 items-center justify-items-center">
-                <UniversityLogo 
-                  name="UPenn" 
-                  image={"/images/upenn.png"}
-                  width={400}
-                  height={150}
-                />
-                <UniversityLogo 
-                  name="Columbia" 
-                  image={"/images/columbia.png"}
-                  width={400}
-                  height={150}
-                />
-                <UniversityLogo 
-                  name="Vanderbilt" 
-                  image={"/images/vanderbilt.png"}
-                  width={400}
-                  height={150}
-                />
-                <UniversityLogo 
-                  name="Northwestern" 
-                  image={"/images/northwestern.png"}
-                  width={400}
-                  height={150}
-                />
-              </div>
-            </motion.div>
+
           </div>
         </div>
       </div>
@@ -439,9 +528,7 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center p-6 lg:p-8 rounded-3xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200">
-      <div className="size-14 rounded-2xl flex items-center justify-center mb-5 bg-[#6559D4]">
-        {icon}
+    <motion.div 
       </div>
       <h3 className="text-xl font-semibold mb-3 text-gray-900">{title}</h3>
       <p className="text-gray-700 text-base lg:text-base">
@@ -653,6 +740,30 @@ function LockIcon(props: React.ComponentProps<"svg">) {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
       <path d="M7 11V7a5 5 0 0110 0v4"/>
+    </svg>
+  );
+}
+function FeatureListItem({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-center space-x-3 text-sm sm:text-base text-gray-700">
+      <CheckIcon className="w-4 h-4 text-[#6559D4]" />
+      <span>{children}</span>
+    </li>
+  );
+}
+
+function CheckIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth={2} 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}
+    >
+      <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }
