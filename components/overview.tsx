@@ -49,6 +49,13 @@ export const Overview = ({
 
       <div className="grid md:grid-cols-3 gap-6">
         <TherapyOption
+          title="Session Notes"
+          description="Reflect on your therapy sessions and track your progress over time"
+          icon={<NotebookIcon size={24} />}
+          href="/notes"
+          disabled={!onboardingCompleted}
+        />
+        <TherapyOption
           title="Untangle Emotions"
           description="Work through complex feelings with an AI companion trained in therapeutic techniques"
           icon={<SparklesIcon size={24} />}
@@ -61,13 +68,6 @@ export const Overview = ({
           icon={<HeartIcon size={24} />}
           href="/chat/self-care"
           disabled={true}
-        />
-        <TherapyOption
-          title="Session Notes"
-          description="Reflect on your therapy sessions and track your progress over time"
-          icon={<NotebookIcon size={24} />}
-          href="/notes"
-          disabled={!onboardingCompleted}
         />
       </div>
     </motion.div>
