@@ -56,7 +56,7 @@ export const Overview = ({
           disabled={!onboardingCompleted}
         />
         <TherapyOption
-          title="Untangle Emotions"
+          title="Between-session Thoughts"
           description="Work through complex feelings with an AI companion trained in therapeutic techniques"
           icon={<SparklesIcon size={24} />}
           href="/untangle"
