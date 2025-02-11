@@ -216,32 +216,32 @@ export function LandingPageContent() {
                   }}
                 >
                   <TestimonialCard
-                    name="@hiral.sidhu"
-                    review="I just got on it and thank you sooo much for this is truly helped me"
+                    name="warm.toffee"
+                    review="Honestly, I didn't expect to use this much, but now it's part of my weekly routine. Super helpful."
                   />
                   <TestimonialCard
-                    name="pierce"
-                    review="hey! i just tried your ai model and it's sick, i already feel a little better"
+                    name="tinycactus05"
+                    review="This makes it so easy to keep track of what's actually important. No more scrambling before sessions!"
                   />
                   <TestimonialCard
-                    name="@_hebored_"
-                    review="Naw tho this really helps"
+                    name="moonlit.02"
+                    review="I never realized how much I forget between sessions until I started using this. Total game changer."
                   />
                   <TestimonialCard
-                    name="@mindful22"
-                    review="Great way to track my progress"
+                    name="cozy-teacup-65"
+                    review="loved it."
                   />
                   <TestimonialCard
-                    name="@healing_journey"
-                    review="Makes therapy so much more effective"
+                    name="nightowl-7"
+                    review="Now I can easily find my notes when I need them."
                   />
                   <TestimonialCard
-                    name="@growth_mindset"
-                    review="Perfect companion between sessions"
+                    name="cloudberrypuff"
+                    review="Love that I don't have to stress about forgetting things between sessions anymore."
                   />
                   <TestimonialCard
-                    name="@wellness_seeker"
-                    review="Exactly what I needed for my journey"
+                    name="sleepyotter"
+                    review="My therapist said I am more engaged, and I feel that I am making much more progress!"
                   />
                 </div>
 
@@ -253,32 +253,32 @@ export function LandingPageContent() {
                   }}
                 >
                   <TestimonialCard
-                    name="@therapy_progress"
-                    review="Really helps me stay on track"
+                    name="brianna_w5"
+                    review="Before this I never knew what to talk about in therapy. Now I show up with actual insights."
                   />
                   <TestimonialCard
-                    name="@mental_health_matters"
-                    review="Such a supportive tool"
+                    name="shy.penguin"
+                    review="It's wild how much I used to forget. Now I can pick up right where we left off, and it makes my sessions way better."
                   />
                   <TestimonialCard
-                    name="@self_care_daily"
-                    review="Changed how I approach therapy"
+                    name="buttercup_26"
+                    review="This has made my work after therapy feel effortless."
                   />
                   <TestimonialCard
-                    name="@mindfulness_path"
-                    review="Incredibly helpful features"
+                    name="sleepymoth"
+                    review="Didn't expect to like the structured reminders, but they actually help me remember key things without feeling like homework."
                   />
                   <TestimonialCard
-                    name="@therapy_goals"
-                    review="Makes progress tracking easy"
+                    name="hannah.r21"
+                    review="Before this, I let my therapist guide every session. Now, I come in with things I want to dive into."
                   />
                   <TestimonialCard
-                    name="decim033"
-                    review="This would actually help my therapist"
+                    name="autumn.lantern"
+                    review="My notes used to be all over the place, but now I can actually use them in therapy."
                   />
                   <TestimonialCard
-                    name="@user5"
-                    review="Love how intuitive the interface is!"
+                    name="honey_dreams"
+                    review="Started to figure patterns in my emotions I'd never noticed before."
                   />
                 </div>
               </div>
