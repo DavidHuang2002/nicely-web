@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CombinedInput } from "../combined-input";
 import { ChatRequestOptions, CreateMessage } from "ai";
+import { InitialOptionsButtons } from "./initial-options-buttons";
 
 const onboardingFinishedMessage: Message = createAIMessage(
   onboardingFinishedMessageContent,
@@ -32,14 +33,14 @@ export function Chat({
   isOnboarding = false,
   frontEndRoute,
   chatId,
-  initialButtonText,
+  initialButtonOptions,
 }: {
   initialMessages?: Array<Message>;
   apiRoute?: string;
   isOnboarding?: boolean;
   chatId?: string;
   frontEndRoute?: string;
-  initialButtonText?: string;
+  initialButtonOptions?: Array<string>;
 }) {
   chatId = chatId || (generateUUID() as string);
 
@@ -156,24 +157,12 @@ export function Chat({
           >
             Go to home
           </Button>
-        ) : messages.length === 1 && (initialButtonText || isOnboarding) ? (
-          <div className="flex justify-center w-full">
-            <Button
-              type="button"
-              className="px-8"
-              onClick={(event) => {
-                event.preventDefault();
-                customAppend(
-                  createAIMessage(
-                    initialButtonText || "Let's get started!",
-                    "user"
-                  )
-                );
-              }}
-            >
-              {initialButtonText || "Let's get started!"}
-            </Button>
-          </div>
+        ) : messages.length === 1 &&
+          (initialButtonOptions?.length || isOnboarding) ? (
+          <InitialOptionsButtons
+            options={initialButtonOptions || ["Let's get started!"]}
+            customAppend={customAppend}
+          />
         ) : (
           <CombinedInput
             chatId={chatId}

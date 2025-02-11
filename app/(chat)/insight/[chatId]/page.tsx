@@ -28,7 +28,6 @@ export default async function Page({
     <InsightChat
       chatId={chatId}
       insight={insight}
-      initialButtonText="Let's get started!"
     />
   );
 }

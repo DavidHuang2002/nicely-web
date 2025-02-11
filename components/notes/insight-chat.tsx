@@ -13,7 +13,6 @@ interface InsightChatProps {
     detail: string;
   };
   chatId?: string;
-  initialButtonText?: string;
 }
 
 const replaceClientWithYou = (message: string | undefined) => {
@@ -24,11 +23,20 @@ const replaceClientWithYou = (message: string | undefined) => {
 export default function InsightChat({
   insight,
   chatId,
-  initialButtonText,
 }: InsightChatProps) {
+  const initialButtonOptions = [
+    "Help me reflect on this",
+    "Give me an exercise to work on this",
+    "How can I apply this insight?",
+  ];
+  
   const initialMessage = createAIMessage(
-    `I see you want to explore the insight: "${insight?.summary}". This came from the observation: "${replaceClientWithYou(insight?.excerpt)}"
-    Would you like me to help you explore this insight further?`,
+    `I see you want to explore the insight: "${
+      insight?.summary
+    }". This came from the observation: "${replaceClientWithYou(
+      insight?.excerpt
+    )}"
+    How would you like to explore this insight further?`,
     "assistant"
   );
 
@@ -38,7 +46,7 @@ export default function InsightChat({
       apiRoute="/api/chat/insight"
       chatId={chatId}
       frontEndRoute="/insight"
-      initialButtonText="Let's get started!"
+      initialButtonOptions={initialButtonOptions}
     />
   );
 }
