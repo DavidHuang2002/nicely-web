@@ -36,7 +36,7 @@ export function LandingPageContent() {
           }
         }
       `}</style>
-      <div className="min-h-screen bg-[#F5F5F5]">
+      <div className="min-h-screen bg-[#F5F5F5] overflow-x-hidden">
         {/* Navigation Bar */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-md border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +48,7 @@ export function LandingPageContent() {
                   alt="Nicely Logo"
                   width={140}
                   height={60}
-                  className="h-10 w-auto"
+                  className="h-8 sm:h-10 w-auto"
                   priority
                 />
               </Link>
@@ -56,7 +56,7 @@ export function LandingPageContent() {
               {/* Sign Up Button */}
               <SignInButton mode="modal">
                 <Button
-                  className="rounded-full px-6 py-2 text-white"
+                  className="rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base text-white"
                   style={{
                     backgroundColor: "#1A1CD7",
                     ["--hover-color" as string]: "#4F46E5",
@@ -70,8 +70,8 @@ export function LandingPageContent() {
         </nav>
 
         {/* Add padding to account for fixed navbar */}
-        <div className="pt-8">
-          <div className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="pt-1 sm:pt-2">
+          <div className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-6 lg:px-8 py-4 sm:py-8 overflow-x-hidden">
             {/* Hero Section */}
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-16 items-center relative">
               {/* Decorative Elements */}
@@ -103,17 +103,17 @@ export function LandingPageContent() {
 
               {/* Text Content */}
               <motion.div
-                className="text-left space-y-5 sm:space-y-6 flex flex-col items-start justify-center lg:pl-13"
+                className="text-left space-y-4 sm:space-y-5 flex flex-col items-start justify-center lg:pl-13"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-[30px] sm:text-[40px] lg:text-[50px] font-bold leading-tight tracking-tight text-gray-900">
-                Jump back in to your progress in
-                  <span className="text-[#6559D4]"> therapy.</span><br />
+                <h1 className="text-[26px] sm:text-[36px] lg:text-[46px] font-bold leading-tight tracking-tight text-gray-900">
+                Effortlessly revisit key insights from your therapy sessions.
+                  <span className="text-[#6559D4]"> No digging, no hassle.</span><br />
                 </h1>
-                <p className="text-sm sm:text-base text-gray-700 leading-relaxed max-w-xl">
-                Completely free, no downloads - just an empathetic AI that keeps track of your therapy progress and make the healing process easier whenever and wherever you need it.
+                <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed max-w-xl">
+                Completely free, no downloads - just an empathetic AI that recaps your therapy progress into clear, actionable insights, so you can reflect and engage whenever and wherever you need it.
                 </p>
 
                 <motion.div
@@ -130,7 +130,7 @@ export function LandingPageContent() {
                       className="px-8 sm:px-7 py-4 sm:py-5 text-[15px] sm:text-base rounded-lg w-full sm:w-auto 
                         text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
                     >
-                      Get started today
+                      Join Nicely Now
                     </Button>
                   </SignInButton>
                 </motion.div>
@@ -138,7 +138,7 @@ export function LandingPageContent() {
 
               {/* Phone Image with Decorative Elements */}
               <motion.div
-                className="relative w-full max-w-md mx-auto lg:max-w-none"
+                className="relative w-full max-w-[280px] sm:max-w-[300px] lg:max-w-none mx-auto"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
@@ -221,85 +221,58 @@ export function LandingPageContent() {
             </motion.div>
 
             {/* Features Section */}
-            <motion.div
-              className="max-w-6xl mx-auto w-full px-4 py-16"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-            >
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
               {/* Title Section */}
-              <div className="text-center mb-4">
-                <div className="relative inline-block">
-                  {/* Decorative Elements */}
-                  <div className="absolute -left-6 -top-6 w-12 h-12 bg-blue-100 rounded-full opacity-50 blur-lg" />
-                  <div className="absolute -right-4 -bottom-4 w-8 h-8 bg-purple-100 rounded-full opacity-50 blur-lg" />
+              <div className="text-center mb-8 sm:mb-12 mt-4 sm:mt-5">
+                <div className="relative inline-block px-4 sm:px-0">
+                  {/* Different decorative elements */}
+                  <div className="absolute -left-12 top-1/2 w-24 h-24 bg-amber-100/30 rounded-full blur-2xl transform -translate-y-1/2" />
+                  <div className="absolute right-0 top-0 w-20 h-20 bg-[#6559D4]/10 rounded-full blur-xl" />
                   
-                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 relative">
+                  <h2 className="text-4xl sm:text-4xl lg:text-5xl font-bold text-gray-900 relative">
                     How{" "}
-                    <span className="text-[#6559D4] relative">
+                    <span className="text-[#6559D4] relative inline-block px-2">
                       Nicely
+                      {/* Purple underline */}
                       <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                      {/* Decorative dots */}
+                      <div className="absolute -right-4 -top-4 text-[#6559D4] text-lg">•</div>
+                      <div className="absolute -left-4 -bottom-4 text-amber-400 text-lg">•</div>
                     </span>
                     {" "}Works
+                    {/* Different star decoration */}
+                    <span className="absolute -right-8 top-1/2 transform -translate-y-1/2 text-amber-400 text-3xl rotate-12">
+                      ⋆
+                    </span>
                   </h2>
                 </div>
               </div>
 
               {/* Features Stack */}
-              <div className="flex flex-col space-y-12 sm:space-y-16">
+              <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
                 {/* Session Notes */}
-                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                    <div className="space-y-4">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                        Session Notes
+                <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8 lg:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start">
+                    <div className="space-y-3 sm:space-y-4">
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
+                        Automated Transcription
                       </h3>
-                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed">
                         Effortlessly summarize key points and action items from last session.
                       </p>
-                      <ul className="space-y-2">
-                        <FeatureListItem>Automated session summaries</FeatureListItem>
-                        <FeatureListItem>Track action items</FeatureListItem>
-                        <FeatureListItem>Review previous insights</FeatureListItem>
+                      <ul className="space-y-2 sm:space-y-3">
+                        <FeatureListItem>No notes, no distractions—just healing</FeatureListItem>
+                        <FeatureListItem>Recording deleted right after transcribing</FeatureListItem>
+                        <FeatureListItem>Upload, and we handle the rest</FeatureListItem>
                       </ul>
                     </div>
-                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                    <div className="relative w-full aspect-video bg-gray-50 rounded-lg shadow-sm overflow-hidden">
                       <video 
                         autoPlay 
                         loop 
                         muted 
                         playsInline
-                        className="w-full h-full object-cover"
-                      >
-                        <source src={"/videos/session-notes.mp4"} type="video/mp4" />
-                      </video>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Daily Self-Care */}
-                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start lg:flex-row-reverse">
-                    <div className="space-y-4 lg:order-2">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                        Daily Self-Care
-                      </h3>
-                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                        Easier and interactive conversations to complete homeworks exercises.
-                      </p>
-                      <ul className="space-y-2">
-                        <FeatureListItem>Interactive exercises</FeatureListItem>
-                        <FeatureListItem>Guided self-care routines</FeatureListItem>
-                        <FeatureListItem>Progress tracking</FeatureListItem>
-                      </ul>
-                    </div>
-                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden lg:order-1">
-                      <video 
-                        autoPlay 
-                        loop 
-                        muted 
-                        playsInline
-                        className="w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover"
                       >
                         <source src={"/videos/transcription.mp4"} type="video/mp4" />
                       </video>
@@ -307,29 +280,59 @@ export function LandingPageContent() {
                   </div>
                 </div>
 
-                {/* Between Session Thoughts */}
-                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                    <div className="space-y-4">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                        Between Session Thoughts
+                {/* Daily Self-Care */}
+                <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8 lg:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start lg:flex-row-reverse">
+                    <div className="space-y-3 sm:space-y-4 lg:order-2">
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
+                        Session Takeaways
                       </h3>
-                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                        Quickly record what&apos;s happening to help plan your next session
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed">
+                        Next steps in healing are always clear, simple, and ready for you.
                       </p>
-                      <ul className="space-y-2">
-                        <FeatureListItem>Quick thought capture</FeatureListItem>
-                        <FeatureListItem>Session planning</FeatureListItem>
-                        <FeatureListItem>Progress journaling</FeatureListItem>
+                      <ul className="space-y-2 sm:space-y-3">
+                        <FeatureListItem>Never lose a breakthrough</FeatureListItem>
+                        <FeatureListItem>Simplify complex conversations into actionable insights</FeatureListItem>
+                        <FeatureListItem>Reflect and engage with past insights anytime</FeatureListItem>
                       </ul>
                     </div>
-                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                    <div className="relative w-full aspect-video bg-gray-50 rounded-lg shadow-sm overflow-hidden lg:order-1">
                       <video 
                         autoPlay 
                         loop 
                         muted 
                         playsInline
-                        className="w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover"
+                      >
+                        <source src={"/videos/session-notes.mp4"} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Between Session Thoughts */}
+                <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8 lg:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start">
+                    <div className="space-y-3 sm:space-y-4">
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
+                        Between Session Thoughts
+                      </h3>
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed">
+                        Speak freely to Nicely and easily revisit your progress before your next session
+                      </p>
+                      <ul className="space-y-2 sm:space-y-3">
+                        <FeatureListItem>24/7 guidance when emotions feel unclear</FeatureListItem>
+                        <FeatureListItem>Capture and structure your thoughts made simple</FeatureListItem>
+                        <FeatureListItem>Guide your next session with facts, not just memory</FeatureListItem>
+                      </ul>
+                    </div>
+                    <div className="relative w-full aspect-video bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover"
                       >
                         <source src={"/videos/thoughts.mp4"} type="video/mp4" />
                       </video>
@@ -337,7 +340,7 @@ export function LandingPageContent() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Testimonials Section */}
             <motion.div
@@ -346,11 +349,25 @@ export function LandingPageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              <h2 className="text-4xl font-bold text-center mb-12 mt-12 text-black">
-                Join our community today
-              </h2>
+              <div className="text-center mb-12">
+                <div className="relative inline-block">
+                  {/* Decorative Elements */}
+                  <div className="absolute -left-8 -top-8 w-16 h-16 bg-blue-100/50 rounded-full blur-xl" />
+                  <div className="absolute -right-6 -bottom-6 w-12 h-12 bg-purple-100/50 rounded-full blur-lg" />
+                  
+                  <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 relative">
+                    Join Our{" "}
+                    <span className="text-[#6559D4] relative inline-block mb-2">
+                      Community
+                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                    </span>
+                    {" "}Today
+                    <div className="absolute -right-4 top-0 text-amber-400 text-2xl">✦</div>
+                  </h2>
+                </div>
+              </div>
 
-              {/* Scrolling Container */}
+              {/* Rest of testimonials section */}
               <div className="relative overflow-hidden">
                 {/* First Row - Scrolling Left */}
                 <div
@@ -500,7 +517,7 @@ export function LandingPageContent() {
             {/* Social Links */}
             <div className="flex gap-3 pt-2">
               <a
-                href="https://linkedin.com/company/nicely"
+                href="https://www.linkedin.com/company/nicely-tech"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-white/80 transition-colors"
@@ -508,7 +525,7 @@ export function LandingPageContent() {
                 <LinkedInIcon className="size-5" />
               </a>
               <a
-                href="https://instagram.com/nicely"
+                href="https://www.instagram.com/nicely_tech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-white/80 transition-colors"
@@ -516,7 +533,7 @@ export function LandingPageContent() {
                 <InstagramIcon className="size-5" />
               </a>
               <a
-                href="https://twitter.com/nicely"
+                href="https://x.com/tech_nicely"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-white/80 transition-colors"
@@ -678,7 +695,7 @@ function LinkedInIcon(props: React.ComponentProps<"svg">) {
 function InstagramIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.281-.059 1.689-.073 4.948-.073zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
     </svg>
   );
 }
