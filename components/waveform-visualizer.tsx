@@ -24,16 +24,15 @@ export function WaveformVisualizer({
       container: waveformRef.current,
       waveColor: "rgb(var(--primary))",
       progressColor: "rgb(var(--primary))",
-      height: 32,
-      cursorWidth: 0,
-      interact: false,
-      normalize: true,
+      height: 'auto',
+      // normalize: true,
       // Optimize for real-time visualization
       barWidth: 4,
       barGap: 2,
       barRadius: 2,
-      minPxPerSec: 80, // Increase pixels per second for smoother visualization
+      minPxPerSec: 40, // Increase pixels per second for smoother visualization
       fillParent: true,
+      barHeight: 2,
     });
 
     // Initialize Record plugin with optimized settings
