@@ -2,6 +2,8 @@ import { Message } from "ai";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { DatabaseMessage } from "@/models/message";
+import lamejs from "@breezystack/lamejs";
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -92,3 +94,31 @@ export function estimateProcessingTime(audioDurationInSeconds: number): number {
   const totalMinutes = Math.ceil(totalSeconds / 60);
   return Math.ceil(totalMinutes / 5) * 5;
 }
+
+
+export const convertWavToMp3 = async (wavBlob: Blob): Promise<Blob> => {
+  // Convert Blob to ArrayBuffer
+  const arrayBuffer = await wavBlob.arrayBuffer();
+  const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  
+  // Configure MP3 encoder (mono, original sample rate, 128kbps)
+  const mp3encoder = new lamejs.Mp3Encoder(1, audioBuffer.sampleRate, 128);
+  
+  // Get audio data and convert to mono
+  const samples = new Int16Array(audioBuffer.length);
+  const channel = audioBuffer.getChannelData(0);
+  
+  // Convert Float32 to Int16 (required by lamejs)
+  for (let i = 0; i < channel.length; i++) {
+    samples[i] = channel[i] < 0 
+      ? Math.max(-32768, Math.floor(channel[i] * 32768)) 
+      : Math.min(32767, Math.floor(channel[i] * 32767));
+  }
+  
+  // Encode to MP3
+  const mp3Data = mp3encoder.encodeBuffer(samples);
+  const mp3End = mp3encoder.flush();
+  
+  return new Blob([mp3Data, mp3End], { type: 'audio/mp3' });
+}; 
