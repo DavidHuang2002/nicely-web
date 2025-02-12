@@ -108,12 +108,12 @@ export function LandingPageContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-[26px] sm:text-[36px] lg:text-[46px] font-bold leading-tight tracking-tight text-gray-900">
-                Effortlessly revisit key insights from your therapy sessions.
-                  <span className="text-[#6559D4]"> No digging, no hassle.</span><br />
+                <h1 className="text-[40px] sm:text-[46px] lg:text-[56px] font-bold leading-tight tracking-tight text-gray-900">
+                Breakthroughs into 
+                  <span className="text-[#6559D4]"> Actions</span><br />
                 </h1>
                 <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed max-w-xl">
-                Completely free, no downloads - just an empathetic AI that recaps your therapy progress into clear, actionable insights, so you can reflect and engage whenever and wherever you need it.
+                Effortlessly revisit key insights from your therapy sessions. No digging, no hassle.
                 </p>
 
                 <motion.div
@@ -130,7 +130,7 @@ export function LandingPageContent() {
                       className="px-8 sm:px-7 py-4 sm:py-5 text-[15px] sm:text-base rounded-lg w-full sm:w-auto 
                         text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
                     >
-                      Join Nicely Now
+                      Join now for free
                     </Button>
                   </SignInButton>
                 </motion.div>
