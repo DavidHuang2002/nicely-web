@@ -108,16 +108,12 @@ export function LandingPageContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-[55px] sm:text-[65px] lg:text-[71px] font-bold leading-tight tracking-tight text-gray-900">
-                  Everything your
-                  <br />
-                  <span className="text-[#6559D4]">therapy journey</span>
-                  <br />
-                  needs
+                <h1 className="text-[30px] sm:text-[40px] lg:text-[50px] font-bold leading-tight tracking-tight text-gray-900">
+                Jump back in to your progress in
+                  <span className="text-[#6559D4]"> therapy.</span><br />
                 </h1>
-                <p className="text-base sm:text-xl text-gray-700 leading-relaxed max-w-xl">
-                  Make real progress in therapy by remember key insights, track
-                  your growth, and stay engaged between sessions.
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed max-w-xl">
+                Completely free, no downloads - just an empathetic AI that keeps track of your therapy progress and make the healing process easier whenever and wherever you need it.
                 </p>
 
                 <motion.div
@@ -131,10 +127,10 @@ export function LandingPageContent() {
                     signUpForceRedirectUrl="/sign-in-success"
                   >
                     <Button
-                      size="lg"
-                      className="px-8 py-6 text-lg rounded-full w-full sm:w-auto text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
+                      className="px-8 sm:px-7 py-4 sm:py-5 text-[15px] sm:text-base rounded-lg w-full sm:w-auto 
+                        text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
                     >
-                      Join now, completely free
+                      Get started today
                     </Button>
                   </SignInButton>
                 </motion.div>
@@ -186,36 +182,161 @@ export function LandingPageContent() {
               </motion.div>
             </div>
 
+            {/* Collaborators Section */}
+            <motion.div
+              className="w-full max-w-lg lg:max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+            >
+              <h2 className="text-lg sm:text-xl font-medium text-center mb-8 sm:mb-10 text-gray-600 pt-12">
+                Built with therapists and collaborators at
+              </h2>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 items-center justify-items-center">
+                <UniversityLogo 
+                  name="UPenn" 
+                  image={"/images/upenn.png"}
+                  width={400}
+                  height={150}
+                />
+                <UniversityLogo 
+                  name="Columbia" 
+                  image={"/images/columbia.png"}
+                  width={400}
+                  height={150}
+                />
+                <UniversityLogo 
+                  name="Vanderbilt" 
+                  image={"/images/vanderbilt.png"}
+                  width={400}
+                  height={150}
+                />
+                <UniversityLogo 
+                  name="Northwestern" 
+                  image={"/images/northwestern.png"}
+                  width={400}
+                  height={150}
+                />
+              </div>
+            </motion.div>
+
             {/* Features Section */}
             <motion.div
-              className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10 max-w-lg lg:max-w-6xl mx-auto w-full"
+              className="max-w-6xl mx-auto w-full px-4 py-16"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               {/* Title Section */}
-              <div className="lg:col-span-3 text-center mt-20">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                  How Nicely Works
-                </h2>
+              <div className="text-center mb-4">
+                <div className="relative inline-block">
+                  {/* Decorative Elements */}
+                  <div className="absolute -left-6 -top-6 w-12 h-12 bg-blue-100 rounded-full opacity-50 blur-lg" />
+                  <div className="absolute -right-4 -bottom-4 w-8 h-8 bg-purple-100 rounded-full opacity-50 blur-lg" />
+                  
+                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 relative">
+                    How{" "}
+                    <span className="text-[#6559D4] relative">
+                      Nicely
+                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                    </span>
+                    {" "}Works
+                  </h2>
+                </div>
               </div>
-              <FeatureCard
-                icon={<NotebookIcon size={22} />}
-                title="Session Notes"
-                description="Effortlessly summarize key points and action items from last session."
-              />
 
-              <FeatureCard
-                icon={<HeartIcon size={22} />}
-                title="Daily Self-Care"
-                description="Easier and interactive conversations to complete homeworks exercises."
-              />
+              {/* Features Stack */}
+              <div className="flex flex-col space-y-12 sm:space-y-16">
+                {/* Session Notes */}
+                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <div className="space-y-4">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                        Session Notes
+                      </h3>
+                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                        Effortlessly summarize key points and action items from last session.
+                      </p>
+                      <ul className="space-y-2">
+                        <FeatureListItem>Automated session summaries</FeatureListItem>
+                        <FeatureListItem>Track action items</FeatureListItem>
+                        <FeatureListItem>Review previous insights</FeatureListItem>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="w-full h-full object-cover"
+                      >
+                        <source src={"/videos/session-notes.mp4"} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
 
-              <FeatureCard
-                icon={<FeatureSparklesIcon size={22} />}
-                title="Between Session Thoughts"
-                description="Quickly record what's happening to help plan your next session"
-              />
+                {/* Daily Self-Care */}
+                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start lg:flex-row-reverse">
+                    <div className="space-y-4 lg:order-2">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                        Daily Self-Care
+                      </h3>
+                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                        Easier and interactive conversations to complete homeworks exercises.
+                      </p>
+                      <ul className="space-y-2">
+                        <FeatureListItem>Interactive exercises</FeatureListItem>
+                        <FeatureListItem>Guided self-care routines</FeatureListItem>
+                        <FeatureListItem>Progress tracking</FeatureListItem>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden lg:order-1">
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="w-full h-full object-cover"
+                      >
+                        <source src={"/videos/transcription.mp4"} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Between Session Thoughts */}
+                <div className="bg-white rounded-3xl shadow-lg p-8 sm:p-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <div className="space-y-4">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                        Between Session Thoughts
+                      </h3>
+                      <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                        Quickly record what&apos;s happening to help plan your next session
+                      </p>
+                      <ul className="space-y-2">
+                        <FeatureListItem>Quick thought capture</FeatureListItem>
+                        <FeatureListItem>Session planning</FeatureListItem>
+                        <FeatureListItem>Progress journaling</FeatureListItem>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="w-full h-full object-cover"
+                      >
+                        <source src={"/videos/thoughts.mp4"} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Testimonials Section */}
@@ -239,32 +360,32 @@ export function LandingPageContent() {
                   }}
                 >
                   <TestimonialCard
-                    name="@hiral.sidhu"
-                    review="I just got on it and thank you sooo much for this is truly helped me"
+                    name="warm.toffee"
+                    review="Honestly, I didn't expect to use this much, but now it's part of my weekly routine. Super helpful."
                   />
                   <TestimonialCard
-                    name="pierce"
-                    review="hey! i just tried your ai model and it's sick, i already feel a little better"
+                    name="tinycactus05"
+                    review="This makes it so easy to keep track of what's actually important. No more scrambling before sessions!"
                   />
                   <TestimonialCard
-                    name="@_hebored_"
-                    review="Naw tho this really helps"
+                    name="moonlit.02"
+                    review="I never realized how much I forget between sessions until I started using this. Total game changer."
                   />
                   <TestimonialCard
-                    name="@mindful22"
-                    review="Great way to track my progress"
+                    name="cozy-teacup-65"
+                    review="loved it."
                   />
                   <TestimonialCard
-                    name="@healing_journey"
-                    review="Makes therapy so much more effective"
+                    name="nightowl-7"
+                    review="Now I can easily find my notes when I need them."
                   />
                   <TestimonialCard
-                    name="@growth_mindset"
-                    review="Perfect companion between sessions"
+                    name="cloudberrypuff"
+                    review="Love that I don't have to stress about forgetting things between sessions anymore."
                   />
                   <TestimonialCard
-                    name="@wellness_seeker"
-                    review="Exactly what I needed for my journey"
+                    name="sleepyotter"
+                    review="My therapist said I am more engaged, and I feel that I am making much more progress!"
                   />
                 </div>
 
@@ -276,32 +397,32 @@ export function LandingPageContent() {
                   }}
                 >
                   <TestimonialCard
-                    name="@therapy_progress"
-                    review="Really helps me stay on track"
+                    name="brianna_w5"
+                    review="Before this I never knew what to talk about in therapy. Now I show up with actual insights."
                   />
                   <TestimonialCard
-                    name="@mental_health_matters"
-                    review="Such a supportive tool"
+                    name="shy.penguin"
+                    review="It's wild how much I used to forget. Now I can pick up right where we left off, and it makes my sessions way better."
                   />
                   <TestimonialCard
-                    name="@self_care_daily"
-                    review="Changed how I approach therapy"
+                    name="buttercup_26"
+                    review="This has made my work after therapy feel effortless."
                   />
                   <TestimonialCard
-                    name="@mindfulness_path"
-                    review="Incredibly helpful features"
+                    name="sleepymoth"
+                    review="Didn't expect to like the structured reminders, but they actually help me remember key things without feeling like homework."
                   />
                   <TestimonialCard
-                    name="@therapy_goals"
-                    review="Makes progress tracking easy"
+                    name="hannah.r21"
+                    review="Before this, I let my therapist guide every session. Now, I come in with things I want to dive into."
                   />
                   <TestimonialCard
-                    name="decim033"
-                    review="This would actually help my therapist"
+                    name="autumn.lantern"
+                    review="My notes used to be all over the place, but now I can actually use them in therapy."
                   />
                   <TestimonialCard
-                    name="@user5"
-                    review="Love how intuitive the interface is!"
+                    name="honey_dreams"
+                    review="Started to figure patterns in my emotions I'd never noticed before."
                   />
                 </div>
               </div>
@@ -358,43 +479,6 @@ export function LandingPageContent() {
               </div>
             </div>
 
-            {/* Collaborators Section */}
-            <motion.div
-              className="w-full max-w-lg lg:max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.6 }}
-            >
-              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-black">
-                Built by Collaborators From
-              </h2>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 items-center justify-items-center">
-                <UniversityLogo
-                  name="UPenn"
-                  image={"/images/upenn.png"}
-                  width={400}
-                  height={150}
-                />
-                <UniversityLogo
-                  name="Columbia"
-                  image={"/images/columbia.png"}
-                  width={400}
-                  height={150}
-                />
-                <UniversityLogo
-                  name="Vanderbilt"
-                  image={"/images/vanderbilt.png"}
-                  width={400}
-                  height={150}
-                />
-                <UniversityLogo
-                  name="Northwestern"
-                  image={"/images/northwestern.png"}
-                  width={400}
-                  height={150}
-                />
-              </div>
-            </motion.div>
           </div>
         </div>
       </div>
@@ -462,13 +546,21 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center p-6 lg:p-8 rounded-3xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200">
-      <div className="size-14 rounded-2xl flex items-center justify-center mb-5 bg-[#6559D4]">
-        {icon}
+    <motion.div 
+      className="flex flex-col items-center text-center p-8 lg:p-10 rounded-3xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+      whileHover={{ y: -5 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      <div className="size-16 rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-br from-[#6559D4] to-[#4F46E5]">
+        <div className="text-white">
+          {icon}
+        </div>
       </div>
-      <h3 className="text-xl font-semibold mb-3 text-gray-900">{title}</h3>
-      <p className="text-gray-700 text-base lg:text-base">{description}</p>
-    </div>
+      <h3 className="text-2xl font-semibold mb-4 text-gray-900 tracking-tight">{title}</h3>
+      <p className="text-gray-600 text-lg leading-relaxed">
+        {description}
+      </p>
+    </motion.div>
   );
 }
 
@@ -681,6 +773,31 @@ function LockIcon(props: React.ComponentProps<"svg">) {
     >
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
       <path d="M7 11V7a5 5 0 0110 0v4" />
+    </svg>
+  );
+}
+
+function FeatureListItem({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-center space-x-3 text-sm sm:text-base text-gray-700">
+      <CheckIcon className="w-4 h-4 text-[#6559D4]" />
+      <span>{children}</span>
+    </li>
+  );
+}
+
+function CheckIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth={2} 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}
+    >
+      <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }
