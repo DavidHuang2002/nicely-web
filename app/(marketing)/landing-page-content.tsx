@@ -315,7 +315,7 @@ export function LandingPageContent() {
                         Between Session Thoughts
                       </h3>
                       <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                        Quickly record what's happening to help plan your next session
+                        Quickly record what&apos;s happening to help plan your next session
                       </p>
                       <ul className="space-y-2">
                         <FeatureListItem>Quick thought capture</FeatureListItem>
