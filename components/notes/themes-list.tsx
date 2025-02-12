@@ -57,9 +57,10 @@ export default function ThemesList() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {themes.map((theme) => (
-          <Link href={`/notes/themes/${theme.id}`} key={theme.id}>
-            <motion.div
-              whileHover={{ scale: 1.02 }}
+          // <Link href={`/notes/themes/${theme.id}`} key={theme.id}>
+          <motion.div
+            key={theme.id}
+            whileHover={{ scale: 1.02 }}
               className="h-[280px] p-5 rounded-xl bg-card/50 backdrop-blur-sm border border-border hover:border-primary/50 transition-colors flex flex-col"
             >
               <Badge
@@ -99,7 +100,7 @@ export default function ThemesList() {
                 </div>
               </div>
             </motion.div>
-          </Link>
+          // </Link>
         ))}
       </div>
     </div>
