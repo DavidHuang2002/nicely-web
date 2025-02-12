@@ -65,7 +65,7 @@ export function MicrophoneInput({
   const [isTranscribing, setIsTranscribing] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const MAX_RECORDING_DURATION = 20; // Maximum recording duration in seconds
+  const MAX_RECORDING_DURATION = 200; // Maximum recording duration in seconds
 
   useEffect(() => {
     const initializeRecorder = async () => {
