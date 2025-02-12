@@ -19,31 +19,41 @@ export function WaveformVisualizer({
   useEffect(() => {
     if (!waveformRef.current) return;
 
-    // Initialize WaveSurfer with modified settings for long recordings
+    // Initialize WaveSurfer with optimized settings for recording
     wavesurferRef.current = WaveSurfer.create({
       container: waveformRef.current,
       waveColor: "rgb(var(--primary))",
       progressColor: "rgb(var(--primary))",
-      cursorWidth: 0,
       height: 32,
-      normalize: true,
+      cursorWidth: 0,
       interact: false,
-      barWidth: 2,
-      barGap: 1,
-      barRadius: 3,
-      minPxPerSec: 10, // Compress the waveform for longer recordings
-      fillParent: true, // Make sure it fills the container
+      normalize: true,
+      // Optimize for real-time visualization
+      barWidth: 4,
+      barGap: 2,
+      barRadius: 2,
+      minPxPerSec: 80, // Increase pixels per second for smoother visualization
+      fillParent: true,
     });
 
-    // Initialize Record plugin with modified settings
+    // Initialize Record plugin with optimized settings
     recordPluginRef.current = wavesurferRef.current.registerPlugin(
       RecordPlugin.create({
         renderRecordedAudio: false,
-        scrollingWaveform: true, // Enable scrolling for long recordings
-        continuousWaveform: true,
-        continuousWaveformDuration: 5, // Reduce the duration window to prevent overflow
-        sampleRate: 8000,
-        maxDuration: 300, // Set maximum recording duration to 5 minutes
+        // Use scrolling waveform for better real-time visualization
+        scrollingWaveform: true,
+        // Disable continuous waveform when scrolling is enabled
+        continuousWaveform: false,
+        // Optimize sample rate for better performance
+        sampleRate: 16000,
+        // Set a reasonable buffer size for smooth rendering
+        bufferSize: 4096,
+        // Limit recording length to prevent memory issues
+        maxDuration: 300,
+        // Enable audio worklet for better performance
+        audioContext: {
+          latencyHint: "interactive",
+        },
       })
     );
 
@@ -67,8 +77,8 @@ export function WaveformVisualizer({
   }, [isRecording]);
 
   return (
-    <div className="w-full h-8 overflow-hidden">
-      <div ref={waveformRef} className="w-full" />
+    <div className="relative w-full h-8 overflow-hidden">
+      <div ref={waveformRef} className="w-full absolute inset-0" />
     </div>
   );
 }
