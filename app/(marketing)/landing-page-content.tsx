@@ -108,12 +108,12 @@ export function LandingPageContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-[40px] sm:text-[46px] lg:text-[56px] font-bold leading-tight tracking-tight text-gray-900">
-                Breakthroughs into 
-                  <span className="text-[#6559D4]"> Actions</span><br />
+                <h1 className="text-[45px] sm:text-[51px] lg:text-[62px] font-bold leading-tight tracking-tight text-gray-900 mt-50 lg:mt-0">
+                  You didn&apos;t go to therapy just to stay
+                  <span className="text-[#6559D4]"> the same.</span><br />
                 </h1>
-                <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed max-w-xl">
-                Effortlessly revisit key insights from your therapy sessions. No digging, no hassle.
+                <p className="text-[14px] sm:text-[16px] lg:text-[18px] text-gray-700 leading-relaxed max-w-xl">
+                <b className="text-[17px] sm:text-[19px] lg:text-[20px]">Therapy gives you direction, we help you walk it.</b><br /> Nicely turns your therapy goals into clear actions by automatically organizing your therapy notes.
                 </p>
 
                 <motion.div
@@ -130,7 +130,7 @@ export function LandingPageContent() {
                       className="px-8 sm:px-7 py-4 sm:py-5 text-[15px] sm:text-base rounded-lg w-full sm:w-auto 
                         text-white bg-[#FFC13B] hover:bg-[#E6A82F] transition-colors"
                     >
-                      Join now for free
+                      Get started today
                     </Button>
                   </SignInButton>
                 </motion.div>
@@ -236,12 +236,10 @@ export function LandingPageContent() {
                       {/* Purple underline */}
                       <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
                       {/* Decorative dots */}
-                      <div className="absolute -right-4 -top-4 text-[#6559D4] text-lg">•</div>
-                      <div className="absolute -left-4 -bottom-4 text-amber-400 text-lg">•</div>
                     </span>
                     {" "}Works
                     {/* Different star decoration */}
-                    <span className="absolute -right-8 top-1/2 transform -translate-y-1/2 text-amber-400 text-3xl rotate-12">
+                    <span className="absolute -right-5 top-1/2 transform -translate-y-1/2 text-amber-400 text-[50px] rotate-12">
                       ⋆
                     </span>
                   </h2>
