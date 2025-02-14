@@ -64,21 +64,22 @@ export const Navbar = () => {
         <h1 className="text-lg font-semibold flex-1">{title}</h1>
       )}
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-3">
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
-                size="icon"
+                variant="outline"
+                size="sm"
                 onClick={() => setIsSettingsOpen(true)}
-                className="hover:bg-muted"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Settings className="h-4 w-4 text-muted-foreground" />
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Settings</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Settings</p>
+              <p>Privacy & Settings</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
