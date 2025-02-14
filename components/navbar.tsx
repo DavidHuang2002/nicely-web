@@ -8,6 +8,15 @@ import { GitIcon, VercelIcon } from "./icons";
 import Link from "next/link";
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
+import { Settings } from "lucide-react";
+import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
+import { SettingsDialog } from "./settings-dialog";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/untangle": "Untangle Emotions",
@@ -18,6 +27,7 @@ const ROUTE_TITLES: Record<string, string> = {
 export const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const showBackButton = Object.keys(ROUTE_TITLES).some((route) =>
     pathname.startsWith(route)
@@ -54,7 +64,24 @@ export const Navbar = () => {
         <h1 className="text-lg font-semibold flex-1">{title}</h1>
       )}
 
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-2">
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsSettingsOpen(true)}
+                className="hover:bg-muted"
+              >
+                <Settings className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Settings</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <SignedIn>
           <UserButton />
         </SignedIn>
@@ -71,6 +98,8 @@ export const Navbar = () => {
           Deploy with Vercel
         </Button>
       </Link> */}
+
+      <SettingsDialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen} />
     </div>
   );
 };
