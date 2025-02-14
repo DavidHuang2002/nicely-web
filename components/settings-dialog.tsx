@@ -5,7 +5,7 @@ import { Switch } from "./ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ShieldIcon, BellIcon } from "lucide-react";
 import { useState } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/nextjs";
 import { DeleteAccountDialog } from "./delete-account-dialog";
 
 interface SettingsDialogProps {
