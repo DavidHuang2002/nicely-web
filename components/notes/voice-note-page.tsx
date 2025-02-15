@@ -123,12 +123,6 @@ export function VoiceNotePage() {
         return;
       }
 
-      // Show loading toast that will persist
-      toast.loading("Processing your voice journal...", {
-        id: "voice-journal-processing",
-        duration: Infinity, // Make it persist
-      });
-
       const res = await fetch("/api/notes/sessions", {
         method: "POST",
         headers: {
@@ -143,8 +137,6 @@ export function VoiceNotePage() {
 
       const data = await res.json();
 
-      // Dismiss the loading toast and show success
-      toast.dismiss("voice-journal-processing");
       toast.success("Journal entry saved", {
         description: "Your voice note has been processed successfully.",
         action: {
@@ -154,8 +146,6 @@ export function VoiceNotePage() {
         },
       });
     } catch (error) {
-      // Dismiss the loading toast and show error
-      toast.dismiss("voice-journal-processing");
       console.error("Error saving journal:", error);
       toast.error("Failed to save journal entry");
     }
@@ -172,6 +162,13 @@ export function VoiceNotePage() {
           </Button>
         </Link>
         <h1 className="text-2xl font-bold ml-2">Voice Journal</h1>
+      </div>
+
+      {/* Description */}
+      <div className="mb-8 max-w-2xl">
+        <p className="text-muted-foreground">
+          Make a voice note regarding your last therapy session.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -208,7 +205,7 @@ export function VoiceNotePage() {
               <Textarea
                 value={transcription}
                 onChange={(e) => setTranscription(e.target.value)}
-                placeholder="Your journal entry will appear here..."
+                placeholder="What stood out to me from the session was..."
                 className="min-h-[200px]"
               />
               {transcription && (
