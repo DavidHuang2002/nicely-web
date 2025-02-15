@@ -1,22 +1,14 @@
 "use client";
 
 import type { ChatRequestOptions, CreateMessage, Message } from "ai";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import type React from "react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { toast } from "sonner";
 import { useRecorder } from "@/hooks/use-recorder";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import {
-  MicrophoneIcon,
-  StopIcon,
-  PauseIcon,
-  PlayIcon,
-  SendIcon,
-  LoaderIcon,
-} from "./icons";
-import { WaveformVisualizer } from "./waveform-visualizer";
+import { MicrophoneIcon, SendIcon, LoaderIcon, StopIcon } from "./icons";
 import { transcribeAudioBlob } from "@/components/utils/transcribe";
 // Size threshold for direct upload vs S3 route (4.5MB)
 
@@ -134,74 +126,92 @@ export function MicrophoneInput({
   };
 
   return (
-    <div className="relative flex gap-2 items-center">
-      {isRecording || isPaused ? (
-        <div className="relative flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px] overflow-hidden">
-          {isTranscribing && (
-            <LoaderIcon
-              size={24}
-              className="text-primary-foreground animate-spin"
-            />
-          )}
-          <Button
-            type="button"
-            onClick={() => {
-              if (isRecording) {
-                handlePauseRecording();
-              } else if (isPaused) {
-                resumeRecording();
-              }
-            }}
-            variant="ghost"
-            className="rounded-full p-2 h-fit hover:bg-primary/90"
-            disabled={isTranscribing}
+    <div className="relative flex gap-2 items-center justify-center">
+      <AnimatePresence mode="wait">
+        {isRecording ? (
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            className="flex items-center gap-3 bg-primary/10 backdrop-blur-sm rounded-full p-4"
           >
-            <motion.div
-              animate={isRecording ? { scale: [1, 1.2, 1] } : {}}
-              transition={{ repeat: Infinity, duration: 1.5 }}
+            {isTranscribing ? (
+              <LoaderIcon className="w-6 h-6 text-primary animate-spin" />
+            ) : (
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [1, 0.7, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping" />
+                <MicrophoneIcon
+                  size={24}
+                  className="text-primary relative z-10"
+                />
+              </motion.div>
+            )}
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleStopAndSend}
+                className="rounded-full hover:bg-primary/20"
+                disabled={isTranscribing}
+              >
+                <SendIcon size={20} className="text-primary" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handlePauseRecording}
+                className="rounded-full hover:bg-primary/20"
+                disabled={isTranscribing}
+                type="button"
+              >
+                <StopIcon size={20} />
+              </Button>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+          >
+            <Button
+              onClick={startRecording}
+              className="rounded-full p-6 bg-primary/10 hover:bg-primary/20 transition-colors"
+              disabled={isTranscribing}
+              type="button"
             >
-              {isRecording ? (
-                <PauseIcon size={20} className="text-primary-foreground" />
-              ) : (
-                <PlayIcon size={20} className="text-primary-foreground" />
-              )}
-            </motion.div>
-          </Button>
+              <MicrophoneIcon size={24} className="text-primary" />
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <div className="flex-1">
-            <WaveformVisualizer isRecording={isRecording} stream={stream} />
-          </div>
-
+      {!isRecording && input && (
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+        >
           <Button
-            type="button"
             onClick={handleStopAndSend}
-            variant="ghost"
-            className="rounded-full p-2 h-fit hover:bg-primary/90"
+            className="rounded-full p-6 bg-primary/10 hover:bg-primary/20"
             disabled={isTranscribing}
+            type="button"
           >
-            <SendIcon size={20} className="text-primary-foreground" />
+            <SendIcon size={24} className="text-primary" />
           </Button>
-        </div>
-      ) : (
-        <Button
-          type="button"
-          onClick={startRecording}
-          className="rounded-full p-6 h-fit bg-primary hover:bg-primary/90"
-          disabled={isTranscribing}
-        >
-          <MicrophoneIcon size={24} />
-        </Button>
-      )}
-
-      {!isRecording && !isPaused && input && (
-        <Button
-          type="button"
-          onClick={handleStopAndSend}
-          className="rounded-full p-6 h-fit bg-primary hover:bg-primary/90"
-          disabled={isTranscribing}
-        >
-          <SendIcon size={24} />
-        </Button>
+        </motion.div>
       )}
     </div>
   );

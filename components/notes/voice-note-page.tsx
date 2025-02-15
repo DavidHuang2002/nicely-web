@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useRecorder } from "@/hooks/use-recorder";
 import { WaveformVisualizer } from "../waveform-visualizer";
 import { transcribeAudioBlob } from "@/components/utils/transcribe";
+import { RecordingButton } from "@/components/voice-note-recording-button";
 
 const MAX_RECORDING_DURATION = 30; // 30 minutes max for therapy sessions
 const SESSION_PROMPTS = {
@@ -169,69 +170,27 @@ export function VoiceNotePage() {
           <Card className="p-6">
             {/* Recording Controls */}
             <div className="flex justify-center mb-6">
-              {isRecording || isPaused ? (
-                <div className="relative flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px] overflow-hidden">
-                  {isTranscribing && (
-                    <motion.div
-                      className="absolute inset-0 bg-primary/90 flex items-center justify-center"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <Mic className="w-5 h-5 animate-pulse text-primary-foreground" />
-                    </motion.div>
-                  )}
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      if (isRecording) {
-                        handlePauseRecording();
-                      } else if (isPaused) {
-                        resumeRecording();
-                      }
-                    }}
-                    variant="ghost"
-                    className="rounded-full p-2 h-fit hover:bg-primary/90"
-                    disabled={isTranscribing}
-                  >
-                    {isRecording ? (
-                      <motion.div
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ repeat: Infinity, duration: 1.5 }}
-                      >
-                        <X className="h-5 w-5 text-primary-foreground" />
-                      </motion.div>
-                    ) : (
-                      <Mic className="h-5 w-5 text-primary-foreground" />
-                    )}
-                  </Button>
-
-                  <div className="flex-1">
-                    <WaveformVisualizer
-                      isRecording={isRecording}
-                      stream={stream}
-                    />
-                  </div>
-
-                  <Button
-                    type="button"
-                    onClick={handleStopRecording}
-                    variant="ghost"
-                    className="rounded-full p-2 h-fit hover:bg-primary/90"
-                    disabled={isTranscribing}
-                  >
-                    <Save className="h-5 w-5 text-primary-foreground" />
-                  </Button>
+              <RecordingButton
+                isRecording={isRecording}
+                isTranscribing={isTranscribing}
+                onStartRecording={handleStartRecording}
+              >
+                <div className="flex-1">
+                  <WaveformVisualizer
+                    isRecording={isRecording}
+                    stream={stream}
+                  />
                 </div>
-              ) : (
                 <Button
-                  size="lg"
-                  onClick={handleStartRecording}
+                  type="button"
+                  onClick={handleStopRecording}
+                  variant="ghost"
+                  className="rounded-full p-2 h-fit hover:bg-primary/90"
                   disabled={isTranscribing}
                 >
-                  <Mic className="mr-2 h-5 w-5" />
-                  Start Recording
+                  <Save className="h-5 w-5 text-primary-foreground" />
                 </Button>
-              )}
+              </RecordingButton>
             </div>
 
             {/* Transcription Area */}
