@@ -20,7 +20,8 @@ export const GeneratedSessionSummarySchema = z.object({
 // Base schema with common fields
 const SessionSummaryBaseSchema = GeneratedSessionSummarySchema.extend({
   user_id: z.string().uuid(),
-  transcription_id: z.string().uuid(),
+  transcription_id: z.string().uuid().optional().nullable(),
+  voice_note_id: z.string().uuid().optional().nullable(),
   session_date: z.string().or(z.date()).transform((val) => new Date(val)),
 });
 

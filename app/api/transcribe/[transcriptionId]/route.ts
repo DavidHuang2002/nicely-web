@@ -3,7 +3,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getTranscriptionById, updateTranscriptionStatus } from "@/lib/database/supabase";
 import { formatTranscriptionText, getTranscriptionStatus } from "@/lib/aws/transcribe";
-import { extractAndStoreSummary } from "@/lib/ai/session-summary";
+import { summarizeFromTranscript } from "@/lib/ai/session-summary";
 
 // set max duration to 300 seconds
 export const maxDuration = 300;
@@ -54,7 +54,7 @@ export async function GET(
           });
 
           // Extract and store session summary
-          const sessionSummary = await extractAndStoreSummary(
+          const sessionSummary = await summarizeFromTranscript(
             formattedText,
             transcription.id,
             transcription.user_id

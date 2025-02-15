@@ -8,7 +8,11 @@ import Link from "next/link";
 import { Card } from "../ui/card";
 import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
+import { useRecorder } from "@/hooks/use-recorder";
+import { WaveformVisualizer } from "../waveform-visualizer";
+import { transcribeAudioBlob } from "@/components/utils/transcribe";
 
+const MAX_RECORDING_DURATION = 30; // 30 minutes max for therapy sessions
 const SESSION_PROMPTS = {
   "Key Topics": [
     "What were the main issues we discussed?",
@@ -33,37 +37,115 @@ const SESSION_PROMPTS = {
 };
 
 export function VoiceNotePage() {
-  const [isRecording, setIsRecording] = useState(false);
   const [transcription, setTranscription] = useState("");
   const [selectedPrompt, setSelectedPrompt] = useState("");
+  const [isTranscribing, setIsTranscribing] = useState(false);
+
+  const {
+    isRecording,
+    isPaused,
+    stream,
+    startRecording,
+    stopRecording,
+    pauseRecording,
+    resumeRecording,
+  } = useRecorder(MAX_RECORDING_DURATION);
 
   const handleStartRecording = async () => {
     try {
-      // Initialize recording logic here
-      setIsRecording(true);
-      toast.info("Recording started");
+      const started = await startRecording();
+      if (started) {
+        toast.info("Recording started");
+      }
     } catch (error) {
+      console.error("Error starting recording:", error);
       toast.error("Failed to start recording");
     }
   };
 
   const handleStopRecording = async () => {
     try {
-      setIsRecording(false);
-      // Handle transcription here
-      // For now, just mock the transcription
-      setTranscription("Sample transcription text");
-      toast.success("Recording transcribed");
+      setIsTranscribing(true);
+      toast.loading("Transcribing your recording...", {
+        id: "transcription-toast",
+      });
+
+      const blob = await stopRecording();
+      if (blob) {
+        const transcribedText = await transcribeAudioBlob(blob, transcription);
+        if (transcribedText) {
+          setTranscription(transcribedText);
+        }
+      }
+
+      toast.success("Recording transcribed", {
+        id: "transcription-toast",
+      });
     } catch (error) {
+      console.error("Error stopping recording:", error);
       toast.error("Failed to transcribe recording");
+    } finally {
+      setIsTranscribing(false);
+    }
+  };
+
+  const handlePauseRecording = async () => {
+    try {
+      setIsTranscribing(true);
+      toast.loading("Transcribing your recording...", {
+        id: "transcription-toast",
+      });
+
+      const blob = await pauseRecording();
+      if (blob) {
+        const transcribedText = await transcribeAudioBlob(blob, transcription);
+        if (transcribedText) {
+          setTranscription(transcribedText);
+        }
+      }
+
+      toast.success("Recording transcribed", {
+        id: "transcription-toast",
+      });
+    } catch (error) {
+      console.error("Error pausing recording:", error);
+      toast.error("Failed to transcribe recording");
+    } finally {
+      setIsTranscribing(false);
     }
   };
 
   const handleSaveJournal = async () => {
     try {
-      // Save journal entry logic here
-      toast.success("Journal entry saved");
+      if (!transcription.trim()) {
+        toast.error("Please record or enter some text first");
+        return;
+      }
+
+      const res = await fetch("/api/notes/sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: transcription }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to save journal entry");
+      }
+
+      const data = await res.json();
+
+      toast.success("Journal entry saved", {
+        description: "Your voice note has been processed successfully.",
+        action: {
+          label: "View",
+          onClick: () =>
+            (window.location.href = `/notes/${data.sessionSummaryId}`),
+        },
+      });
     } catch (error) {
+      console.error("Error saving journal:", error);
       toast.error("Failed to save journal entry");
     }
   };
@@ -87,16 +169,69 @@ export function VoiceNotePage() {
           <Card className="p-6">
             {/* Recording Controls */}
             <div className="flex justify-center mb-6">
-              <Button
-                size="lg"
-                className={isRecording ? "bg-red-500 hover:bg-red-600" : ""}
-                onClick={
-                  isRecording ? handleStopRecording : handleStartRecording
-                }
-              >
-                <Mic className="mr-2 h-5 w-5" />
-                {isRecording ? "Stop Recording" : "Start Recording"}
-              </Button>
+              {isRecording || isPaused ? (
+                <div className="relative flex items-center gap-2 bg-primary rounded-full p-2 pr-4 w-[300px] overflow-hidden">
+                  {isTranscribing && (
+                    <motion.div
+                      className="absolute inset-0 bg-primary/90 flex items-center justify-center"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <Mic className="w-5 h-5 animate-pulse text-primary-foreground" />
+                    </motion.div>
+                  )}
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      if (isRecording) {
+                        handlePauseRecording();
+                      } else if (isPaused) {
+                        resumeRecording();
+                      }
+                    }}
+                    variant="ghost"
+                    className="rounded-full p-2 h-fit hover:bg-primary/90"
+                    disabled={isTranscribing}
+                  >
+                    {isRecording ? (
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ repeat: Infinity, duration: 1.5 }}
+                      >
+                        <X className="h-5 w-5 text-primary-foreground" />
+                      </motion.div>
+                    ) : (
+                      <Mic className="h-5 w-5 text-primary-foreground" />
+                    )}
+                  </Button>
+
+                  <div className="flex-1">
+                    <WaveformVisualizer
+                      isRecording={isRecording}
+                      stream={stream}
+                    />
+                  </div>
+
+                  <Button
+                    type="button"
+                    onClick={handleStopRecording}
+                    variant="ghost"
+                    className="rounded-full p-2 h-fit hover:bg-primary/90"
+                    disabled={isTranscribing}
+                  >
+                    <Save className="h-5 w-5 text-primary-foreground" />
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  size="lg"
+                  onClick={handleStartRecording}
+                  disabled={isTranscribing}
+                >
+                  <Mic className="mr-2 h-5 w-5" />
+                  Start Recording
+                </Button>
+              )}
             </div>
 
             {/* Transcription Area */}

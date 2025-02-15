@@ -5,13 +5,22 @@ import {
   type GeneratedSessionSummary,
   type SessionSummary
 } from "@/models/session-summary";
-import { createSessionSummary } from "@/lib/database/supabase";
+import { createSessionSummary, createVoiceNote } from "@/lib/database/supabase";
 import { makeSessionSummaryPrompt } from "./prompts";
 import { mergeSummaries, splitTextIntoChunks } from "./utils";
 
-// chunkszie in characters
+// chunkszie in characters for summarizing from long transcripts
 const CHUNK_SIZE = 10000;
-export async function extractAndStoreSummary(
+export const getCommonMetaData = (userId: string): { user_id: string; session_date: Date } => {
+  return {
+    user_id: userId,
+    session_date: new Date(),
+  };
+}
+
+
+
+export async function summarizeFromTranscript(
   transcriptionText: string,
   transcriptionId: string,
   userId: string
@@ -24,12 +33,7 @@ export async function extractAndStoreSummary(
     const chunkSummaries: GeneratedSessionSummary[] = [];
     
     for (const chunk of chunks) {
-      const { object: generatedSummary } = await generateObject({
-        model: openai("gpt-4o"),
-        schema: GeneratedSessionSummarySchema,
-        prompt: makeSessionSummaryPrompt(chunk, false),
-      });
-      
+      const generatedSummary = await generateSummary(chunk, false);
 
       console.log("generatedSummary: ", generatedSummary);
       
@@ -48,9 +52,8 @@ export async function extractAndStoreSummary(
     // Add required fields for database storage
     const summaryWithMetadata = {
       ...finalSummary,
-      user_id: userId,
+      ...getCommonMetaData(userId),
       transcription_id: transcriptionId,
-      session_date: new Date(),
     };
     console.log("summaryWithMetadata: ", summaryWithMetadata);
 
@@ -62,4 +65,50 @@ export async function extractAndStoreSummary(
     console.error("Error in extractAndStoreSummary:", error);
     throw error;
   }
+}
+
+export async function summarizeFromVoiceNote(
+  voiceNoteText: string,
+  voiceNoteId: string,
+  userId: string
+): Promise<SessionSummary> {
+  const generatedSummary = await generateSummary(voiceNoteText, true);
+
+  const summaryWithMetadata = {
+    ...generatedSummary,
+    ...getCommonMetaData(userId),
+    voice_note_id: voiceNoteId,
+  };
+
+  const sessionSummary = await createSessionSummary(summaryWithMetadata);
+  console.log(`Successfully processed session summary for voice note ${voiceNoteId}`);
+  return sessionSummary;
+} 
+
+export async function generateSummary(
+  text: string,
+  isVoiceNote: boolean,
+): Promise<GeneratedSessionSummary> {
+  const prompt = makeSessionSummaryPrompt(text, isVoiceNote);
+
+  const { object: generatedSummary } = await generateObject({
+    model: openai("gpt-4o"),
+    schema: GeneratedSessionSummarySchema,
+    prompt,
+  });
+
+  return generatedSummary;
+}
+
+// save the voice note to the database and then summarize it
+export async function processVoiceNote(
+  voiceNoteText: string,
+  userId: string
+): Promise<SessionSummary> {
+  const voiceNote = await createVoiceNote({
+    text: voiceNoteText,
+    user_id: userId,
+  });
+
+  return summarizeFromVoiceNote(voiceNoteText, voiceNote.id, userId);
 }

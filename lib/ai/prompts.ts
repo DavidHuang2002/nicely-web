@@ -22,10 +22,10 @@ export const sessionNotesTaskPrompt = `Help the user reflect on their therapy se
 `;
 
 
-export const makeSessionSummaryPrompt = (transcriptionText: string, isVoiceNote: boolean) => {
+export const makeSessionSummaryPrompt = (originalText: string, isVoiceNote: boolean) => {
   return `You are an expert therapy assistant analyzing a transcribed therapy session. Your task is to extract key elements that will help the client quickly review their session, retain important insights, and take meaningful next steps.
 
-Review the conversation and generate a structured summary following these rules:
+Review the ${isVoiceNote ? "voice note from client" : "conversation"} and generate a structured summary following these rules:
 
 ## **1. Overall Structure**
 Extract the following **five categories** from the session transcript:
@@ -80,7 +80,7 @@ Each entry in these sections must follow this format:
   
 Here is the prior conversation:
 
-${transcriptionText}`;
+${originalText}`;
 }
 
 export const onboardingFinishedMessageContent: string = `You’re all set! 🎉

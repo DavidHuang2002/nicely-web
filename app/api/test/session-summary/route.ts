@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { extractAndStoreSummary } from "@/lib/ai/session-summary";
+import { summarizeFromTranscript } from "@/lib/ai/session-summary";
 const SAMPLE_TRANSCRIPT = "sample here"
 export async function GET() {
   try {
-    const sessionSummary = await extractAndStoreSummary(
+    const sessionSummary = await summarizeFromTranscript(
       SAMPLE_TRANSCRIPT,
       "test-transcription-id",
       "test-user-id"

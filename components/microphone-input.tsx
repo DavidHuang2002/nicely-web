@@ -3,17 +3,9 @@
 import type { ChatRequestOptions, CreateMessage, Message } from "ai";
 import { motion } from "framer-motion";
 import type React from "react";
-import {
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { toast } from "sonner";
-import Recorder from "recorder-js";
-
+import { useRecorder } from "@/hooks/use-recorder";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import {
@@ -25,11 +17,10 @@ import {
   LoaderIcon,
 } from "./icons";
 import { WaveformVisualizer } from "./waveform-visualizer";
-import { convertWavToMp3 } from "@/lib/utils";
-
+import { transcribeAudioBlob } from "@/components/utils/transcribe";
 // Size threshold for direct upload vs S3 route (4.5MB)
 
-const MAX_RECORDING_DURATION = 4 ; // Maximum recording duration in minutes
+const MAX_RECORDING_DURATION = 4; // Maximum recording duration in minutes
 
 export function MicrophoneInput({
   chatId,
@@ -62,135 +53,38 @@ export function MicrophoneInput({
   ) => void;
   className?: string;
 }) {
-  const [isRecording, setIsRecording] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [recordingDuration, setRecordingDuration] = useState(0);
-  const recorderRef = useRef<any>(null);
-  const [stream, setStream] = useState<MediaStream | undefined>();
+  const {
+    isRecording,
+    isPaused,
+    stream,
+    startRecording,
+    stopRecording,
+    pauseRecording,
+    resumeRecording,
+  } = useRecorder(MAX_RECORDING_DURATION);
   const [isTranscribing, setIsTranscribing] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const initializeRecorder = async () => {
-      try {
-        const audioStream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        setStream(audioStream);
-        const audioContext = new (window.AudioContext ||
-          (window as any).webkitAudioContext)();
-        const recorder = new Recorder(audioContext);
-        await recorder.init(audioStream);
-        recorderRef.current = recorder;
-      } catch (error) {
-        console.error("Error initializing recorder:", error);
-        toast.error("Failed to access microphone");
-      }
-    };
-
-    initializeRecorder();
-
-    return () => {
-      if (recorderRef.current) {
-        recorderRef.current.stream
-          .getTracks()
-          .forEach((track: MediaStreamTrack) => track.stop());
-        setStream(undefined);
-      }
-    };
-  }, []);
-
-  const startRecordingTimer = () => {
-    // Clear any existing timer
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    // Set new timer
-    timerRef.current = setTimeout(() => {
-      // check if recording is in progress
-      if (recorderRef.current) {
-        pauseRecording();
-        toast.info(
-          "Maximum recording duration reached. You can continue by clicking resume.",
-        );
-      }
-    }, MAX_RECORDING_DURATION * 60 * 1000);
-  };
-
-  const startRecording = async () => {
-    if (!recorderRef.current) {
-      toast.error("Microphone not initialized");
-      return;
-    }
-
+  const handlePauseRecording = async () => {
     try {
-      await recorderRef.current.start();
-      setIsRecording(true);
-      setIsPaused(false);
-      toast.info(`Recording started.`, {
-        duration: 500,
-      });
-
-      startRecordingTimer();
-    } catch (error) {
-      console.error("Error starting recording:", error);
-      toast.error("Failed to start recording");
-    }
-  };
-
-  const handleAudioFile = async (blob: Blob, currentInput: string) => {
-    try {
-      // Convert WAV to MP3 before sending
-      const mp3Blob = await convertWavToMp3(blob);
-      const file = new File([mp3Blob], "recording.mp3", { type: "audio/mp3" });
-
-      const formData = new FormData();
-      formData.append("audio", file);
-
-      const response = await fetch("/api/transcribe/direct", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Direct transcription failed");
-      }
-
-      const { text } = await response.json();
-      return currentInput + (currentInput ? " " : "") + text;
-    } catch (error) {
-      console.error("Error processing audio:", error);
-      throw error;
-    }
-  };
-
-  const pauseRecording = async () => {
-    if (!recorderRef.current) return;
-
-    clearRecordingTimer();
-
-    try {
-      const { blob } = await recorderRef.current.stop();
-      setIsRecording(false);
-      setIsPaused(true);
       setIsTranscribing(true);
-
       toast.loading("Transcribing your message...", {
         id: "transcription-toast",
       });
 
-      const transcribedText = await handleAudioFile(blob, input);
-      if (transcribedText) {
-        setInput(transcribedText);
+      const blob = await pauseRecording();
+      if (blob) {
+        const transcribedText = await transcribeAudioBlob(blob, input);
+        if (transcribedText) {
+          setInput(transcribedText);
+        }
       }
 
       toast.success("Recording transcribed", {
         id: "transcription-toast",
       });
     } catch (error) {
-      console.error("Error pausing recording:", error);
-      toast.error("Failed to pause recording", {
+      console.error("Error in handlePauseRecording:", error);
+      toast.error("Failed to transcribe recording", {
         id: "transcription-toast",
       });
     } finally {
@@ -198,82 +92,44 @@ export function MicrophoneInput({
     }
   };
 
-  const resumeRecording = async () => {
-    if (!recorderRef.current) return;
-
-    try {
-      await recorderRef.current.start();
-      setIsPaused(false);
-      setIsRecording(true);
-      toast.info(
-        `Recording resumed. (Maximum duration: ${MAX_RECORDING_DURATION} minutes.)`
-      );
-
-      startRecordingTimer();
-    } catch (error) {
-      console.error("Error resuming recording:", error);
-      toast.error("Failed to resume recording");
-    }
-  };
-
-  const stopAndSend = async () => {
-    if (!recorderRef.current) return;
-
-    clearRecordingTimer();
-
+  const handleStopAndSend = async () => {
     try {
       if (isRecording) {
-        const { blob } = await recorderRef.current.stop();
-        setIsRecording(false);
-        setIsPaused(false);
-        setRecordingDuration(0);
         setIsTranscribing(true);
-
         toast.loading("Transcribing your message...", {
           id: "transcription-toast",
         });
 
-        const transcribedText = await handleAudioFile(blob, input);
+        const blob = await stopRecording();
+        if (blob) {
+          const transcribedText = await transcribeAudioBlob(blob, input);
+          if (transcribedText) {
+            await append({
+              role: "user",
+              content: transcribedText,
+            });
+          }
+        }
 
         toast.success("Message sent!", {
           id: "transcription-toast",
           duration: 500,
-        });
-
-        // Send the message
-        await append({
-          role: "user",
-          content: transcribedText || "",
         });
       } else if (input) {
-        toast.success("Message sent!", {
-          id: "transcription-toast",
-          duration: 500,
-        });
-
-        // If we're not recording but have input, just send it
         await append({
           role: "user",
           content: input,
         });
       }
 
-      // Clear the input
       setInput("");
     } catch (error) {
-      console.error("Error stopping recording:", error);
+      console.error("Error in handleStopAndSend:", error);
       toast.error("Failed to transcribe audio", {
         id: "transcription-toast",
       });
     } finally {
       setIsTranscribing(false);
-    }
-  };
-
-  const clearRecordingTimer = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
     }
   };
 
@@ -291,7 +147,7 @@ export function MicrophoneInput({
             type="button"
             onClick={() => {
               if (isRecording) {
-                pauseRecording();
+                handlePauseRecording();
               } else if (isPaused) {
                 resumeRecording();
               }
@@ -318,7 +174,7 @@ export function MicrophoneInput({
 
           <Button
             type="button"
-            onClick={stopAndSend}
+            onClick={handleStopAndSend}
             variant="ghost"
             className="rounded-full p-2 h-fit hover:bg-primary/90"
             disabled={isTranscribing}
@@ -340,7 +196,7 @@ export function MicrophoneInput({
       {!isRecording && !isPaused && input && (
         <Button
           type="button"
-          onClick={stopAndSend}
+          onClick={handleStopAndSend}
           className="rounded-full p-6 h-fit bg-primary hover:bg-primary/90"
           disabled={isTranscribing}
         >

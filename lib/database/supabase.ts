@@ -5,6 +5,7 @@ import { DatabaseMessage, DatabaseMessageSchema } from "@/models/message";
 import { z } from "zod";
 import { CreateTranscriptionSchema, Transcription, TranscriptionSchema } from "@/models/transcription";
 import { CreateSessionSummarySchema, SessionSummary, SessionSummarySchema } from "@/models/session-summary";
+import { CreateVoiceNoteSchema, VoiceNoteSchema, VoiceNote, CreateVoiceNote } from "@/models/voice-note";
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
@@ -332,4 +333,28 @@ export async function updateSessionSummary(
     .eq("id", id);
 
   if (error) throw error;
+}
+
+export async function createVoiceNote(
+  data: CreateVoiceNote
+): Promise<VoiceNote> {
+  const { data: voiceNote, error } = await supabase
+    .from("voice_notes")
+    .insert(data)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return VoiceNoteSchema.parse(voiceNote);
+}
+
+export async function getVoiceNoteById(id: string): Promise<VoiceNote | null> {
+  const { data, error } = await supabase
+    .from("voice_notes")
+    .select()
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  return data ? VoiceNoteSchema.parse(data) : null;
 }
