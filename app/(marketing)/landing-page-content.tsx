@@ -73,7 +73,7 @@ export function LandingPageContent() {
         <div className="pt-1 sm:pt-2">
           <div className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-6 lg:px-8 py-4 sm:py-8 overflow-x-hidden">
             {/* Hero Section */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-16 items-center relative">
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-16 items-center relative mt-16 sm:mt-20 lg:mt-0">
               {/* Decorative Elements */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Purple arc */}
@@ -103,12 +103,12 @@ export function LandingPageContent() {
 
               {/* Text Content */}
               <motion.div
-                className="text-left space-y-4 sm:space-y-5 flex flex-col items-start justify-center lg:pl-13"
+                className="text-left space-y-4 sm:space-y-5 flex flex-col items-start justify-center lg:pl-13 pt-8 sm:pt-12 lg:pt-0"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-[45px] sm:text-[51px] lg:text-[62px] font-bold leading-tight tracking-tight text-gray-900 mt-50 lg:mt-0">
+                <h1 className="text-[45px] sm:text-[51px] lg:text-[62px] font-bold leading-tight tracking-tight text-gray-900">
                   You didn&apos;t go to therapy just to stay
                   <span className="text-[#6559D4]"> the same.</span><br />
                 </h1>
@@ -133,6 +133,47 @@ export function LandingPageContent() {
                       Get started today
                     </Button>
                   </SignInButton>
+
+                  {/* Privacy Link Section - Replacing Security Badges */}
+                  <div className="mt-3 flex items-center space-x-2 group cursor-pointer"
+                    onClick={() => {
+                      const privacySection = document.getElementById('privacy-section');
+                      if (privacySection) {
+                        const offset = window.innerHeight / 2 - privacySection.offsetHeight / 2;
+                        const elementPosition = privacySection.getBoundingClientRect().top + window.pageYOffset;
+                        
+                        // Adjust offset based on screen size
+                        let adjustedOffset = offset;
+                        if (window.innerWidth < 640) { // mobile
+                          adjustedOffset = offset * 0.3; // slightly higher on mobile
+                        } else if (window.innerWidth < 1024) { // tablet
+                          adjustedOffset = offset * 0.35; // slightly higher on tablet
+                        }
+                        
+                        window.scrollTo({
+                          top: elementPosition - adjustedOffset,
+                          behavior: 'smooth'
+                        });
+                      }
+                    }}
+                  >
+                    <span className="text-gray-600 hover:text-gray-800 transition-colors duration-200 border-b border-gray-300 hover:border-gray-600 text-sm sm:text-base">
+                      Learn more about how we protect your privacy and data
+                    </span>
+                    <svg 
+                      className="w-4 h-4 text-gray-400 group-hover:text-gray-600 group-hover:transform group-hover:translate-x-1 transition-all duration-200" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M9 5l7 7-7 7" 
+                      />
+                    </svg>
+                  </div>
                 </motion.div>
               </motion.div>
 
@@ -223,7 +264,7 @@ export function LandingPageContent() {
             {/* Features Section */}
             <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
               {/* Title Section */}
-              <div className="text-center mb-8 sm:mb-12 mt-4 sm:mt-5">
+              <div className="text-center mb-4 sm:mb-8 mt-4 sm:mt-5">
                 <div className="relative inline-block px-4 sm:px-0">
                   {/* Different decorative elements */}
                   <div className="absolute -left-12 top-1/2 w-24 h-24 bg-amber-100/30 rounded-full blur-2xl transform -translate-y-1/2" />
@@ -243,6 +284,10 @@ export function LandingPageContent() {
                       ⋆
                     </span>
                   </h2>
+                  <p className="mt-4 text-base sm:text-lg lg:text-xl text-gray-600 mx-auto leading-relaxed max-w-xl">
+                    Your journey to better mental health, made simple and effective
+                    <span className="absolute -right-4 bottom-0 text-amber-400 text-sm">✧</span>
+                  </p>
                 </div>
               </div>
 
@@ -336,6 +381,127 @@ export function LandingPageContent() {
                       </video>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Privacy Commitment Section */}
+            <div id="privacy-section" className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+              <div className="text-center mb-12">
+                <div className="relative inline-block">
+                  {/* Decorative elements */}
+                  <div className="absolute -left-8 top-1/2 w-16 h-16 bg-purple-100/30 rounded-full blur-xl transform -translate-y-1/2" />
+                  <div className="absolute right-0 top-0 w-12 h-12 bg-amber-100/40 rounded-full blur-lg" />
+                  
+                  <h2 className="text-5xl sm:text-5xl font-bold text-gray-900 relative">
+                    Your Privacy, Our
+                    <span className="text-[#6559D4] relative inline-block ml-3">
+                      Priority
+                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                    </span>
+                  </h2>
+                </div>
+                <p className="mt-4 text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
+                  We treat your data with the same confidentiality as your therapy sessions.
+                </p>
+              </div>
+
+              {/* Privacy Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                {/* Data Ownership Card */}
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="w-16 h-16 bg-[#6559D4]/10 rounded-2xl flex items-center justify-center mb-4">
+                    <ShieldIcon className="w-8 h-8 text-[#6559D4]" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
+                    Data Ownership & Control
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    You remain in full control of your data and can choose to delete them anytime.
+                  </p>
+                </div>
+
+                {/* Privacy-Powered AI Card */}
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="w-16 h-16 bg-[#6559D4]/10 rounded-2xl flex items-center justify-center mb-4">
+                    <LockIcon className="w-8 h-8 text-[#6559D4]" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
+                    Private by Design
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    We utilize a SOC 2 and HIPAA-compliant database (Supabase) that encrypts at rest with AES-256. 
+                  </p>
+                </div>
+
+                {/* No AI Training Card */}
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="w-16 h-16 bg-[#6559D4]/10 rounded-2xl flex items-center justify-center mb-4">
+                    <AiModelIcon className="w-8 h-8 text-[#6559D4]" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
+                    Not Used for AI Training
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Your conversations are never used to train our AI models. Your privacy comes first.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Why Nicely & Commitment Section */}
+            <div className="w-full max-w-7xl mx-auto px-4 py-16">
+              {/* Why Nicely? Section */}
+              <div className="space-y-8">
+                <div className="text-center mb-12">
+                  <div className="relative inline-block">
+                    {/* Decorative elements */}
+                    <div className="absolute -left-12 -top-8 w-24 h-24 bg-blue-100/50 rounded-full blur-xl" />
+                    <div className="absolute right-0 bottom-0 w-20 h-20 bg-purple-100/50 rounded-full blur-lg" />
+                    <div className="absolute -right-8 top-1/2 w-16 h-16 bg-amber-100/40 rounded-full blur-lg transform -translate-y-1/2" />
+                    
+                    <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 relative">
+                      Why{" "}
+                      <span className="text-[#6559D4] relative inline-block">
+                        Nicely
+                        <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                        {/* Decorative sparkles */}
+                        <span className="absolute -right-6 -top-6 text-amber-400 text-2xl">✦</span>
+                        <span className="absolute -left-4 -bottom-4 text-[#6559D4]/30 text-xl">⋆</span>
+                      </span>
+                      ?
+                      {/* Additional decorative elements */}
+                      <div className="absolute -right-10 top-1/2 transform -translate-y-1/2">
+                        <div className="relative">
+                          <div className="w-4 h-4 bg-[#6559D4]/20 rounded-full absolute -top-6 right-0" />
+                          <div className="w-3 h-3 bg-amber-300/30 rounded-full absolute -bottom-4 -right-2" />
+                        </div>
+                      </div>
+                    </h2>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <ExpandableHighlight
+                    icon={<SparklesIconMarketing size={16} />}
+                    title="Capture key moments with ease"
+                    description="Therapy insights are processed automatically, so nothing is missed."
+                  />
+                  <ExpandableHighlight
+                    icon={<BellIcon className="w-4 h-4" />}
+                    title="Reminders That Fit Your Journey"
+                    description="Receive gentle reminders aligned with your goals to keep you supported each day."
+                  />
+                  <ExpandableHighlight
+                    icon={<ChartIcon className="w-4 h-4" />}
+                    title="Track Your Growth, Easily"
+                    description="Track your progress over time with a clear view to appreciate each step forward."
+                  />
+                  <ExpandableHighlight
+                    icon={<HeartIcon size={16} />}
+                    title="Built for You, Here for You"
+                    description="You deserve a solution that truly works. We are here building it with you to make it happen."
+                  />
                 </div>
               </div>
             </div>
@@ -442,58 +608,6 @@ export function LandingPageContent() {
                 </div>
               </div>
             </motion.div>
-
-            {/* Why Nicely & Commitment Section */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 px-4 py-16">
-              {/* Why Nicely? Section */}
-              <div className="space-y-8">
-                <h2 className="text-4xl font-bold text-gray-900">
-                  Why Nicely?
-                </h2>
-                <div className="space-y-6">
-                  <ExpandableHighlight
-                    icon={<SparklesIconMarketing size={16} />}
-                    title="Capture Key Moments Effortlessly"
-                    description="Therapy insights are processed automatically, so nothing is missed."
-                  />
-                  <ExpandableHighlight
-                    icon={<BellIcon className="w-4 h-4 text-white" />}
-                    title="Reminders That Fit Your Journey"
-                    description="Receive gentle reminders aligned with your goals to keep you supported each day."
-                  />
-                  <ExpandableHighlight
-                    icon={<ChartIcon className="w-4 h-4 text-white" />}
-                    title="Track Your Growth, Easily"
-                    description="Track your progress over time with a clear view to appreciate each step forward."
-                  />
-                </div>
-              </div>
-
-              {/* Our Commitment Section */}
-              <div className="space-y-8">
-                <h2 className="text-4xl font-bold text-gray-900">
-                  Our Commitment
-                </h2>
-                <div className="space-y-6">
-                  <ExpandableHighlight
-                    icon={<ShieldIcon className="w-4 h-4 text-white" />}
-                    title="Data Ownership & Control"
-                    description="You remain full in control to all of your data and can choose to delete them anytime."
-                  />
-                  <ExpandableHighlight
-                    icon={<LockIcon className="w-4 h-4 text-white" />}
-                    title="Privacy-Powered AI"
-                    description="We securely store data in Supabase (which is HIPAA-compliant) using a vector database, making our AI smarter and more responsive."
-                  />
-                  <ExpandableHighlight
-                    icon={<HeartIcon size={16} />}
-                    title="Built for You, Here for You"
-                    description="You deserve a solution that truly works. We are here building it with you to make it happen."
-                  />
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
@@ -643,7 +757,7 @@ function ExpandableHighlight({
             </div>
           </div>
           <div className="flex justify-between items-center w-full">
-            <h3 className="text-2xl text-gray-900 text-left">{title}</h3>
+            <h3 className="text-lg sm:text-xl lg:text-2xl text-gray-900 text-left">{title}</h3>
             <ChevronIcon
               className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
                 isExpanded ? "rotate-180" : ""
@@ -658,7 +772,7 @@ function ExpandableHighlight({
           isExpanded ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <p className="text-base text-gray-600 leading-relaxed mt-3 ml-10">
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed mt-3 ml-10">
           {description}
         </p>
       </div>
@@ -693,7 +807,7 @@ function LinkedInIcon(props: React.ComponentProps<"svg">) {
 function InstagramIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.281-.059 1.689-.073 4.948-.073zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.281.059 1.689.073 4.948.073zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.69-.07-4.949-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
     </svg>
   );
 }
@@ -813,6 +927,113 @@ function CheckIcon(props: React.ComponentProps<"svg">) {
       {...props}
     >
       <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function ShieldLockIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <path d="M8 11h8v5a4 4 0 01-8 0v-5z" />
+      <path d="M12 11v-1a2 2 0 10-2-2" />
+    </svg>
+  );
+}
+
+function ServerIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+      <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+      <line x1="6" y1="6" x2="6.01" y2="6" />
+      <line x1="6" y1="18" x2="6.01" y2="18" />
+    </svg>
+  );
+}
+
+function KeyIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+    </svg>
+  );
+}
+
+function LockShieldIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <path d="M8 11h8v5a4 4 0 01-8 0v-5z" />
+    </svg>
+  );
+}
+
+function SealIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <path d="M12 8v8" />
+      <path d="M8 12l8 0" />
+    </svg>
+  );
+}
+
+function AiModelIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <path d="M12 12h.01" />
+      <path d="M17 12h.01" />
+      <path d="M7 12h.01" />
     </svg>
   );
 }
