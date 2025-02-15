@@ -12,6 +12,7 @@ import { useRecorder } from "@/hooks/use-recorder";
 import { WaveformVisualizer } from "../waveform-visualizer";
 import { transcribeAudioBlob } from "@/components/utils/transcribe";
 import { RecordingButton } from "@/components/voice-note-recording-button";
+import { Loader2 } from "lucide-react";
 
 const MAX_RECORDING_DURATION = 30; // 30 minutes max for therapy sessions
 const SESSION_PROMPTS = {
@@ -123,6 +124,13 @@ export function VoiceNotePage() {
         return;
       }
 
+      setIsTranscribing(true);
+
+      // Show loading toast
+      toast.loading("Processing your voice note...", {
+        id: "save-journal-toast",
+      });
+
       const res = await fetch("/api/notes/sessions", {
         method: "POST",
         headers: {
@@ -137,17 +145,29 @@ export function VoiceNotePage() {
 
       const data = await res.json();
 
-      toast.success("Journal entry saved", {
-        description: "Your voice note has been processed successfully.",
+      // Clear the transcription
+      setTranscription("");
+
+      // Show success toast with view option
+      toast.success("Voice note processed successfully!", {
+        id: "save-journal-toast",
+        description: "Your insights have been organized and saved.",
         action: {
-          label: "View",
+          label: "View Summary",
           onClick: () =>
             (window.location.href = `/notes/${data.sessionSummaryId}`),
         },
+        duration: 5000,
       });
     } catch (error) {
       console.error("Error saving journal:", error);
-      toast.error("Failed to save journal entry");
+      toast.error("Failed to save voice note", {
+        id: "save-journal-toast",
+        description:
+          "Please try again or contact support if the problem persists.",
+      });
+    } finally {
+      setIsTranscribing(false);
     }
   };
 
@@ -210,9 +230,21 @@ export function VoiceNotePage() {
               />
               {transcription && (
                 <div className="flex justify-end">
-                  <Button onClick={handleSaveJournal}>
-                    <Save className="mr-2 h-4 w-4" />
-                    Save Journal Entry
+                  <Button
+                    onClick={handleSaveJournal}
+                    disabled={isTranscribing || !transcription.trim()}
+                  >
+                    {isTranscribing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="mr-2 h-4 w-4" />
+                        Save Journal Entry
+                      </>
+                    )}
                   </Button>
                 </div>
               )}
