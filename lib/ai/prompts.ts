@@ -73,7 +73,7 @@ Each entry in these sections must follow this format:
     {
       "summary": "Realized I avoid saying no because I fear being seen as unhelpful.",
       "detail": "The client uncovered a fundamental belief: that their value is tied to how much they accommodate others. This belief fuels a behavioral cycle of overextension and emotional exhaustion. Recognizing this pattern is the first step toward breaking it. The next step will be testing whether setting limits actually results in social rejection or if it’s an unfounded fear shaped by past experiences.",
-      "excerpt": "Client: 'I guess I say yes to everything because I don’t want people to think I’m not pulling my weight. But it’s exhausting.'"
+      "excerpt": "You: 'I guess I say yes to everything because I don’t want people to think I’m not pulling my weight. But it’s exhausting.'"
     }
   ]
 }
