@@ -123,6 +123,12 @@ export function VoiceNotePage() {
         return;
       }
 
+      // Show loading toast that will persist
+      toast.loading("Processing your voice journal...", {
+        id: "voice-journal-processing",
+        duration: Infinity, // Make it persist
+      });
+
       const res = await fetch("/api/notes/sessions", {
         method: "POST",
         headers: {
@@ -137,6 +143,8 @@ export function VoiceNotePage() {
 
       const data = await res.json();
 
+      // Dismiss the loading toast and show success
+      toast.dismiss("voice-journal-processing");
       toast.success("Journal entry saved", {
         description: "Your voice note has been processed successfully.",
         action: {
@@ -146,6 +154,8 @@ export function VoiceNotePage() {
         },
       });
     } catch (error) {
+      // Dismiss the loading toast and show error
+      toast.dismiss("voice-journal-processing");
       console.error("Error saving journal:", error);
       toast.error("Failed to save journal entry");
     }
