@@ -22,7 +22,7 @@ export const sessionNotesTaskPrompt = `Help the user reflect on their therapy se
 `;
 
 
-export const makeSessionSummaryPrompt = (transcriptionText: string) => {
+export const makeSessionSummaryPrompt = (transcriptionText: string, isVoiceNote: boolean) => {
   return `You are an expert therapy assistant analyzing a transcribed therapy session. Your task is to extract key elements that will help the client quickly review their session, retain important insights, and take meaningful next steps.
 
 Review the conversation and generate a structured summary following these rules:
@@ -42,7 +42,7 @@ Each entry in these sections must follow this format:
 
 - **summary**: A short, precise summary of the item.
 - **detail**: A detailed description of the item.
-- **excerpt**: A direct quote or relevant excerpt from the session transcript that supports this item. Infer from the speaker labels who is client vs. therapist and use client/therapist in excerpt.
+- **excerpt**: A direct quote or relevant excerpt from the session transcript that supports this item. Infer from the speaker labels who is client vs. therapist and use client/therapist in excerpt. Use Therapist: and You: in the excerpt.
 
 ## **3. Extraction Guidelines**
 - **Be concise and structured.** Use clear, actionable language.

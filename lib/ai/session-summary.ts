@@ -27,7 +27,7 @@ export async function extractAndStoreSummary(
       const { object: generatedSummary } = await generateObject({
         model: openai("gpt-4o"),
         schema: GeneratedSessionSummarySchema,
-        prompt: makeSessionSummaryPrompt(chunk),
+        prompt: makeSessionSummaryPrompt(chunk, false),
       });
       
 
