@@ -7,6 +7,7 @@ export const TranscriptionStatusEnum = z.enum([
   "completed",
   "extracting_summary",
   "failed",
+  "archived",
 ]);
 
 // Base schema with common fields

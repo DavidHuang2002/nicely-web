@@ -335,6 +335,22 @@ export async function updateSessionSummary(
   if (error) throw error;
 }
 
+export async function deleteSessionSummaryInDB(id: string): Promise<void> {
+  const { error } = await supabase
+    .from("session_summaries")
+    .delete()
+    .eq("id", id);
+  if (error) throw error;
+}
+
+export async function archiveTranscription(id: string): Promise<void> {
+  const { error } = await supabase
+    .from("transcriptions")
+    .update({ status: "archived" })
+    .eq("id", id);
+  if (error) throw error;
+}
+
 export async function createVoiceNote(
   data: CreateVoiceNote
 ): Promise<VoiceNote> {

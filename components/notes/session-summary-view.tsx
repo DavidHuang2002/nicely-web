@@ -7,6 +7,9 @@ import {
   ArrowLeft,
   ChevronDownIcon,
   MessageCircle,
+  RefreshCw,
+  Trash2,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -26,6 +29,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { DeleteSessionDialog } from "@/components/notes/delete-session-dialog";
 
 interface SectionProps {
   title: string;
@@ -60,7 +66,9 @@ const InsightCard = ({ summary, excerpt, detail }: InsightCardProps) => {
           <div className="flex items-start justify-between gap-4">
             <p className="font-medium text-lg">{summary}</p>
             <div className="flex gap-2">
-              <TooltipProvider>
+              <TooltipProvider
+                delayDuration={100}
+              >
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
@@ -148,15 +156,89 @@ const InsightCard = ({ summary, excerpt, detail }: InsightCardProps) => {
 };
 
 export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      const res = await fetch(`/api/notes/sessions/${summary.id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Failed to delete session");
+
+      toast.success("Session deleted successfully");
+      router.push("/notes");
+    } catch (error) {
+      toast.error("Failed to delete session");
+      console.error("Error deleting session:", error);
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+    }
+  };
+
+  const handleRegenerate = async () => {
+    try {
+      setIsRegenerating(true);
+      const res = await fetch(`/api/notes/sessions/${summary.id}/regenerate`, {
+        method: "POST",
+      });
+
+      if (!res.ok) throw new Error("Failed to regenerate summary");
+
+      const data = await res.json();
+      toast.success("Session summary regenerated");
+      router.push("/notes");
+    } catch (error) {
+      toast.error("Failed to regenerate summary");
+      console.error("Error regenerating summary:", error);
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-      {/* Back Button */}
-      <Link href="/notes">
-        <Button variant="ghost" className="text-muted-foreground">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Session Notes
-        </Button>
-      </Link>
+      {/* Header with Actions */}
+      <div className="flex items-center justify-between">
+        <Link href="/notes">
+          <Button variant="ghost" className="text-muted-foreground">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Session Notes
+          </Button>
+        </Link>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={handleRegenerate}
+            disabled={isRegenerating}
+          >
+            {isRegenerating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Regenerating...
+              </>
+            ) : (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Regenerate
+              </>
+            )}
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={() => setIsDeleteDialogOpen(true)}
+            disabled={isDeleting}
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete
+          </Button>
+        </div>
+      </div>
 
       {/* Header */}
       <div className="space-y-6 pb-6 border-b">
@@ -230,6 +312,13 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
           </p>
         </div>
       </Section>
+
+      <DeleteSessionDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleDelete}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

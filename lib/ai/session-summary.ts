@@ -5,9 +5,15 @@ import {
   type GeneratedSessionSummary,
   type SessionSummary
 } from "@/models/session-summary";
-import { createSessionSummary, createVoiceNote } from "@/lib/database/supabase";
+import { createSessionSummary, createVoiceNote, getSessionSummaryById, getVoiceNoteById } from "@/lib/database/supabase";
 import { makeSessionSummaryPrompt } from "./prompts";
 import { mergeSummaries, splitTextIntoChunks } from "./utils";
+import { deleteTranscriptionFromS3 } from "../aws/s3";
+import { 
+  deleteSessionSummaryInDB, 
+  archiveTranscription,
+  getTranscriptionById 
+} from "../database/supabase";
 
 // chunkszie in characters for summarizing from long transcripts
 const CHUNK_SIZE = 10000;
@@ -111,4 +117,84 @@ export async function processVoiceNote(
   });
 
   return summarizeFromVoiceNote(voiceNoteText, voiceNote.id, userId);
+}
+
+export async function deleteSessionSummary(sessionId: string): Promise<void> {
+  try {
+    // First get the session summary to check if it has a transcription
+    const sessionSummary = await getSessionSummaryById(sessionId);
+    if (!sessionSummary) {
+      throw new Error("Session summary not found");
+    }
+
+    // If there's a transcription, delete it and its S3 file
+    if (sessionSummary.transcription_id) {
+      const transcription = await getTranscriptionById(sessionSummary.transcription_id);
+      
+      if (transcription) {
+        // Delete the S3 file if it exists
+        if (transcription.s3_key) {
+          await deleteTranscriptionFromS3(transcription.s3_key);
+        }
+        
+        // Delete the transcription record
+        await archiveTranscription(transcription.id);
+      }
+    }
+
+    // Finally delete the session summary
+    await deleteSessionSummaryInDB(sessionId);
+  } catch (error) {
+    console.error("Error in deleteSessionSummary:", error);
+    throw error;
+  }
+}
+
+export async function regenerateSessionSummary(sessionId: string): Promise<SessionSummary> {
+  try {
+    // Get existing session summary
+    const existingSessionSummary = await getSessionSummaryById(sessionId);
+    if (!existingSessionSummary) {
+      throw new Error("Session summary not found");
+    }
+
+    let newSummary: SessionSummary;
+
+    // Handle transcription-based summary
+    if (existingSessionSummary.transcription_id) {
+      const transcription = await getTranscriptionById(existingSessionSummary.transcription_id);
+      if (!transcription?.transcription_text) {
+        throw new Error("Original transcription text not found");
+      }
+
+      newSummary = await summarizeFromTranscript(
+        transcription.transcription_text,
+        transcription.id,
+        existingSessionSummary.user_id
+      );
+    } 
+    // Handle voice note-based summary
+    else if (existingSessionSummary.voice_note_id) {
+      const voiceNote = await getVoiceNoteById(existingSessionSummary.voice_note_id);
+      if (!voiceNote?.text) {
+        throw new Error("Original voice note text not found");
+      }
+
+      newSummary = await summarizeFromVoiceNote(
+        voiceNote.text,
+        voiceNote.id,
+        existingSessionSummary.user_id
+      );
+    } else {
+      throw new Error("Session summary has no associated transcription or voice note");
+    }
+
+    // Delete the old summary
+    await deleteSessionSummaryInDB(sessionId);
+
+    return newSummary;
+  } catch (error) {
+    console.error("Error in regenerateSessionSummary:", error);
+    throw error;
+  }
 }

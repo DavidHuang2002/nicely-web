@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { generateUUID } from "@/lib/utils";
 
@@ -29,4 +29,18 @@ export async function generatePresignedUrl(
 
 export function getPublicUrl(key: string): string {
   return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+}
+
+export async function deleteFileFromS3(s3Key: string): Promise<void> {
+  const command = new DeleteObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: s3Key,
+  });
+
+  await s3Client.send(command);
+}
+
+export async function deleteTranscriptionFromS3(jobName: string): Promise<void> {
+  const key = `${jobName}.json`;
+  await deleteFileFromS3(key);
 }
