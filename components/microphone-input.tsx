@@ -12,7 +12,7 @@ import { MicrophoneIcon, SendIcon, LoaderIcon, StopIcon } from "./icons";
 import { transcribeAudioBlob } from "@/components/utils/transcribe";
 // Size threshold for direct upload vs S3 route (4.5MB)
 
-const MAX_RECORDING_DURATION = 4; // Maximum recording duration in minutes
+const MAX_RECORDING_DURATION = 10; // Maximum recording duration in minutes
 
 export function MicrophoneInput({
   chatId,
