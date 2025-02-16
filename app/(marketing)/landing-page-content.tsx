@@ -443,8 +443,8 @@ export function LandingPageContent() {
             </div>
 
             {/* Video Demo Section */}
-            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-              <div className="text-center mb-12">
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+              <div className="text-center mb-6">
                 <div className="relative inline-block">
                   {/* Decorative elements */}
                   <div className="absolute -left-8 top-1/2 w-16 h-16 bg-purple-100/30 rounded-full blur-xl transform -translate-y-1/2" />
@@ -460,9 +460,6 @@ export function LandingPageContent() {
                     <span className="absolute -right-6 -top-6 text-amber-400 text-2xl hidden sm:block">✦</span>
                   </h2>
                 </div>
-                <p className="mt-4 text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
-                  Watch how Nicely helps you capture insights, track progress, and maintain momentum between sessions
-                </p>
               </div>
 
               {/* Video Container */}
