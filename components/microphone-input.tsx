@@ -94,6 +94,12 @@ export function MicrophoneInput({
         const blob = await stopRecording();
         if (blob) {
           const transcribedText = await transcribeAudioBlob(blob, input);
+
+          toast.success("Message sent!", {
+            id: "transcription-toast",
+            duration: 500,
+          });
+
           if (transcribedText) {
             await append({
               role: "user",
@@ -102,10 +108,6 @@ export function MicrophoneInput({
           }
         }
 
-        toast.success("Message sent!", {
-          id: "transcription-toast",
-          duration: 500,
-        });
       } else if (input) {
         await append({
           role: "user",
