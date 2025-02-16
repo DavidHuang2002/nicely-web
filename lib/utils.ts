@@ -122,3 +122,10 @@ export const convertWavToMp3 = async (wavBlob: Blob): Promise<Blob> => {
   
   return new Blob([mp3Data, mp3End], { type: 'audio/mp3' });
 }; 
+
+// Add this to lib/utils.ts
+export function isWithin24Hours(date: Date): boolean {
+  const now = new Date();
+  const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+  return diffInHours <= 24;
+}

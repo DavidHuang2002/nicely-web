@@ -3,15 +3,17 @@ import { currentUser } from "@clerk/nextjs/server";
 import { deleteSessionSummary } from "@/lib/ai/session-summary";
 export async function DELETE(
   req: Request,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
+  const sessionId = (await params).sessionId;
+
   try {
     const clerkUser = await currentUser();
     if (!clerkUser) {
       return new Response("Unauthorized", { status: 401 });
     }
-
-    await deleteSessionSummary(params.sessionId);
+  
+    await deleteSessionSummary(sessionId);
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -5,15 +5,17 @@ import { regenerateSessionSummary } from "@/lib/ai/session-summary";
 
 export async function POST(
   req: Request,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
+  const sessionId = (await params).sessionId;
+
   try {
     const clerkUser = await currentUser();
     if (!clerkUser) {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    const newSummary = await regenerateSessionSummary(params.sessionId);
+    const newSummary = await regenerateSessionSummary(sessionId);
 
     return NextResponse.json({ 
       success: true,

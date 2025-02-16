@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
-import { cn, generateUUID } from "@/lib/utils";
+import { cn, generateUUID, isWithin24Hours } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -32,6 +32,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { DeleteSessionDialog } from "@/components/notes/delete-session-dialog";
+import { RegenerateSessionDialog } from "@/components/notes/regenerate-session-dialog";
 
 interface SectionProps {
   title: string;
@@ -66,9 +67,7 @@ const InsightCard = ({ summary, excerpt, detail }: InsightCardProps) => {
           <div className="flex items-start justify-between gap-4">
             <p className="font-medium text-lg">{summary}</p>
             <div className="flex gap-2">
-              <TooltipProvider
-                delayDuration={100}
-              >
+              <TooltipProvider delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
@@ -155,10 +154,76 @@ const InsightCard = ({ summary, excerpt, detail }: InsightCardProps) => {
   );
 };
 
+const ActionButtons = ({
+  summary,
+  isRegenerateDialogOpen,
+  setIsRegenerateDialogOpen,
+  handleRegenerate,
+  isRegenerating,
+  isDeleteDialogOpen,
+  setIsDeleteDialogOpen,
+  handleDelete,
+  isDeleting,
+}: {
+  summary: SessionSummary;
+  isRegenerateDialogOpen: boolean;
+  setIsRegenerateDialogOpen: (open: boolean) => void;
+  handleRegenerate: () => void;
+  isRegenerating: boolean;
+  isDeleteDialogOpen: boolean;
+  setIsDeleteDialogOpen: (open: boolean) => void;
+  handleDelete: () => void;
+  isDeleting: boolean;
+}) => (
+  <>
+    {isWithin24Hours(summary.created_at) && (
+      <>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                onClick={() => setIsRegenerateDialogOpen(true)}
+                className="w-full sm:w-auto h-9"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Regenerate
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-[200px]">
+              <p className="text-sm">
+                Available for 24 hours only - recordings are deleted afterwards
+                for your privacy
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <RegenerateSessionDialog
+          open={isRegenerateDialogOpen}
+          onOpenChange={setIsRegenerateDialogOpen}
+          onConfirm={handleRegenerate}
+          isRegenerating={isRegenerating}
+        />
+      </>
+    )}
+    <Button
+      variant="destructive"
+      onClick={() => setIsDeleteDialogOpen(true)}
+      disabled={isDeleting}
+      className="w-full sm:w-auto h-9"
+    >
+      <Trash2 className="mr-2 h-4 w-4" />
+      Delete
+    </Button>
+  </>
+);
+
 export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isRegenerateDialogOpen, setIsRegenerateDialogOpen] = useState(false);
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -203,7 +268,7 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-      {/* Header with Actions */}
+      {/* Header with Back Button Only */}
       <div className="flex items-center justify-between">
         <Link href="/notes">
           <Button variant="ghost" className="text-muted-foreground">
@@ -211,32 +276,20 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
             Back to Session Notes
           </Button>
         </Link>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={handleRegenerate}
-            disabled={isRegenerating}
-          >
-            {isRegenerating ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Regenerating...
-              </>
-            ) : (
-              <>
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Regenerate
-              </>
-            )}
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={() => setIsDeleteDialogOpen(true)}
-            disabled={isDeleting}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete
-          </Button>
+
+        {/* Show actions only on desktop */}
+        <div className="hidden sm:flex items-center gap-3">
+          <ActionButtons
+            summary={summary}
+            isRegenerateDialogOpen={isRegenerateDialogOpen}
+            setIsRegenerateDialogOpen={setIsRegenerateDialogOpen}
+            handleRegenerate={handleRegenerate}
+            isRegenerating={isRegenerating}
+            isDeleteDialogOpen={isDeleteDialogOpen}
+            setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+            handleDelete={handleDelete}
+            isDeleting={isDeleting}
+          />
         </div>
       </div>
 
@@ -312,6 +365,21 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
           </p>
         </div>
       </Section>
+
+      {/* Mobile action buttons at bottom of content */}
+      <div className="sm:hidden space-y-3">
+        <ActionButtons
+          summary={summary}
+          isRegenerateDialogOpen={isRegenerateDialogOpen}
+          setIsRegenerateDialogOpen={setIsRegenerateDialogOpen}
+          handleRegenerate={handleRegenerate}
+          isRegenerating={isRegenerating}
+          isDeleteDialogOpen={isDeleteDialogOpen}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+          handleDelete={handleDelete}
+          isDeleting={isDeleting}
+        />
+      </div>
 
       <DeleteSessionDialog
         open={isDeleteDialogOpen}
