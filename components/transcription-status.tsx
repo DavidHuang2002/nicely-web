@@ -20,7 +20,7 @@ export function TranscriptionStatus() {
     console.log("checking transcription status");
     console.log("pending transcriptions: ", pendingTranscriptions);
     console.log("transcription timestamps: ", transcriptionTimestamps);
-    
+
     // Filter out timed-out transcriptions
     const currentTime = Date.now();
     const activeTranscriptions = pendingTranscriptions.filter((id: string) => {
@@ -85,9 +85,7 @@ export function TranscriptionStatus() {
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
           </svg>
         </div>
-      Processing ${activeTranscriptions.length} session note${
-      activeTranscriptions.length > 1 ? "s" : ""
-    } 🎯
+        recording processing 🎯
       </div>
     `;
 
