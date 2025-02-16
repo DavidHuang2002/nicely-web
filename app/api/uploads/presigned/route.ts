@@ -2,7 +2,15 @@ import { currentUser } from "@clerk/nextjs/server";
 import { generatePresignedUrl } from "@/lib/aws/s3";
 import { NextResponse } from "next/server";
 
-const ALLOWED_TYPES = ["audio/mpeg", "audio/wav", "audio/x-m4a"];
+const ALLOWED_TYPES = [
+  "audio/mpeg",
+  "audio/mp3",
+  "audio/mp4",
+  "audio/x-m4a",
+  "audio/wav",
+  "audio/aac",
+  "audio/x-wav"
+];
 const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200MB
 
 export async function POST(req: Request) {

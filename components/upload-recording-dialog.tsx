@@ -7,10 +7,20 @@ import { Upload, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { estimateProcessingTime } from "@/lib/utils";
+
 interface UploadRecordingDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+const ALLOWED_AUDIO_TYPES = [
+  "audio/mpeg",
+  "audio/mp3",
+  "audio/mp4",
+  "audio/x-m4a",
+  "audio/wav",
+  "audio/aac",
+];
 
 export function UploadRecordingDialog({
   open,
@@ -42,8 +52,16 @@ export function UploadRecordingDialog({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile && selectedFile.type.startsWith("audio/")) {
-      setFile(selectedFile);
+    if (selectedFile) {
+      console.log("File type:", selectedFile.type); // Debug log
+
+      if (ALLOWED_AUDIO_TYPES.includes(selectedFile.type)) {
+        setFile(selectedFile);
+      } else {
+        toast.error(
+          `Unsupported file type: ${selectedFile.type}. Please use MP3, M4A, or WAV files.`
+        );
+      }
     }
   };
 
@@ -186,13 +204,20 @@ export function UploadRecordingDialog({
                     <input
                       type="file"
                       className="hidden"
-                      accept="audio/*"
+                      accept="audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/wav,audio/*"
                       onChange={handleFileChange}
                     />
                   </label>
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   Supported formats: MP3, WAV, M4A
+                  {/iOS|iPhone|iPad/.test(navigator.userAgent) && (
+                    <span className="block mt-1">
+                      On iOS devices, you may need to use the Files app to
+                      select audio files. Tap &quot;Browse&quot; and select from
+                      Files.
+                    </span>
+                  )}
                 </p>
               </div>
             )}
