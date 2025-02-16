@@ -197,27 +197,12 @@ export function VoiceNotePage() {
           <Card className="p-6">
             {/* Recording Controls */}
             <div className="flex justify-center mb-6">
-              <RecordingButton
+              <RecordingButton   
                 isRecording={isRecording}
                 isTranscribing={isTranscribing}
                 onStartRecording={handleStartRecording}
-              >
-                <div className="flex-1">
-                  <WaveformVisualizer
-                    isRecording={isRecording}
-                    stream={stream}
-                  />
-                </div>
-                <Button
-                  type="button"
-                  onClick={handleStopRecording}
-                  variant="ghost"
-                  className="rounded-full p-2 h-fit hover:bg-primary/90"
-                  disabled={isTranscribing}
-                >
-                  <Save className="h-5 w-5 text-primary-foreground" />
-                </Button>
-              </RecordingButton>
+                handleStopRecording={handleStopRecording}
+            />
             </div>
 
             {/* Transcription Area */}

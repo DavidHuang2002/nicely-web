@@ -3,13 +3,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
 import { MicrophoneIcon, LoaderIcon } from "./icons";
+import { Save } from "lucide-react";
 import { ReactNode } from "react";
 
 interface RecordingButtonProps {
   isRecording: boolean;
   isTranscribing: boolean;
   onStartRecording: () => void;
-  children?: ReactNode;
+  handleStopRecording: () => void;
   className?: string;
 }
 
@@ -17,7 +18,7 @@ export function RecordingButton({
   isRecording,
   isTranscribing,
   onStartRecording,
-  children,
+  handleStopRecording,
   className,
 }: RecordingButtonProps) {
   return (
@@ -51,7 +52,15 @@ export function RecordingButton({
               />
             </motion.div>
           )}
-          {children}
+          <Button
+            type="button"
+            onClick={handleStopRecording}
+            variant="ghost"
+            className="rounded-full p-2 h-fit hover:bg-primary/90"
+            disabled={isTranscribing}
+          >
+            <Save className="h-5 w-5 text-primary-foreground" />
+          </Button> 
         </motion.div>
       ) : (
         <Button

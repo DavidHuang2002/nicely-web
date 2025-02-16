@@ -91,7 +91,6 @@ export function MicrophoneInput({
         toast.loading("Transcribing your message...", {
           id: "transcription-toast",
         });
-
         const blob = await stopRecording();
         if (blob) {
           const transcribedText = await transcribeAudioBlob(blob, input);
