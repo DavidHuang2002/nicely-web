@@ -254,8 +254,54 @@ export function LandingPageContent() {
               </div>
             </motion.div>
 
+            {/* Video Demo Section */}
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 mt-4 sm:mt-5">
+              <div className="text-center mb-6">
+                <div className="relative inline-block">
+                  {/* Decorative elements */}
+                  <div className="absolute -left-8 top-1/2 w-16 h-16 bg-purple-100/30 rounded-full blur-xl transform -translate-y-1/2" />
+                  <div className="absolute right-0 top-0 w-12 h-12 bg-amber-100/40 rounded-full blur-lg" />
+                  
+                  <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 relative">
+                    See Nicely in
+                    <span className="text-[#6559D4] relative inline-block ml-3">
+                      Action
+                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                    </span>
+                    {/* Decorative star */}
+                    <span className="absolute -right-6 -top-6 text-amber-400 text-2xl hidden sm:block">✦</span>
+                  </h2>
+                </div>
+              </div>
+
+              {/* Video Container */}
+              <div className="relative max-w-4xl mx-auto">
+                {/* Decorative Elements */}
+                <div className="absolute -left-8 -top-8 w-24 h-24 bg-[#6559D4]/10 rounded-full blur-xl" />
+                <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-amber-100/30 rounded-full blur-xl" />
+                
+                {/* YouTube Video Wrapper with aspect ratio */}
+                <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl aspect-video">
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/65POjL1ZvyY"
+                    title="Nicely Demo Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+
+              {/* Caption or Additional Info */}
+              <div className="mt-6 text-center">
+                <p className="text-sm sm:text-base text-gray-600">
+                  See how Nicely helps you capture insights, track progress, and maintain momentum between sessions
+                </p>
+              </div>
+            </div>
+
             {/* Features Section */}
-            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
               {/* Title Section */}
               <div className="text-center mb-4 sm:mb-8 mt-4 sm:mt-5">
                 <div className="relative inline-block px-4 sm:px-0">
@@ -285,7 +331,7 @@ export function LandingPageContent() {
               </div>
 
               {/* Features Stack */}
-              <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
+              <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6 ">
                 {/* Session Notes */}
                 <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8 lg:p-12">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start">
@@ -439,52 +485,6 @@ export function LandingPageContent() {
                     Your conversations are never used to train our AI models. Your privacy comes first.
                   </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Video Demo Section */}
-            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-              <div className="text-center mb-6">
-                <div className="relative inline-block">
-                  {/* Decorative elements */}
-                  <div className="absolute -left-8 top-1/2 w-16 h-16 bg-purple-100/30 rounded-full blur-xl transform -translate-y-1/2" />
-                  <div className="absolute right-0 top-0 w-12 h-12 bg-amber-100/40 rounded-full blur-lg" />
-                  
-                  <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 relative">
-                    See Nicely in
-                    <span className="text-[#6559D4] relative inline-block ml-3">
-                      Action
-                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
-                    </span>
-                    {/* Decorative star */}
-                    <span className="absolute -right-6 -top-6 text-amber-400 text-2xl hidden sm:block">✦</span>
-                  </h2>
-                </div>
-              </div>
-
-              {/* Video Container */}
-              <div className="relative max-w-4xl mx-auto">
-                {/* Decorative Elements */}
-                <div className="absolute -left-8 -top-8 w-24 h-24 bg-[#6559D4]/10 rounded-full blur-xl" />
-                <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-amber-100/30 rounded-full blur-xl" />
-                
-                {/* YouTube Video Wrapper with aspect ratio */}
-                <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl aspect-video">
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src="https://www.youtube.com/embed/65POjL1ZvyY"
-                    title="Nicely Demo Video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-
-              {/* Caption or Additional Info */}
-              <div className="mt-6 text-center">
-                <p className="text-sm sm:text-base text-gray-600">
-                  See how Nicely helps you capture insights, track progress, and maintain momentum between sessions
-                </p>
               </div>
             </div>
 
