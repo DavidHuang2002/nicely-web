@@ -19,23 +19,30 @@ export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="space-y-8"
+        className="space-y-6 sm:space-y-8"
       >
         {/* Header */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Session Notes</h1>
-          <div className="flex gap-2">
-            <Button variant="outline" asChild>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:justify-between">
+          <h1 className="text-2xl sm:text-3xl font-bold">Session Notes</h1>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              asChild
+              className="sm:w-auto justify-center"
+            >
               <Link href="/notes/voice">
                 <Mic className="mr-2 h-4 w-4" />
                 Voice Journal
               </Link>
             </Button>
-            <Button onClick={() => setIsUploadDialogOpen(true)}>
+            <Button
+              onClick={() => setIsUploadDialogOpen(true)}
+              className="sm:w-auto justify-center"
+            >
               <Upload className="mr-2 h-4 w-4" />
               Upload Recording
             </Button>
