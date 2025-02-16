@@ -30,13 +30,14 @@ resource "aws_s3_bucket_cors_configuration" "audio_uploads" {
 
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["GET", "PUT", "POST"]
+    allowed_methods = ["GET", "PUT", "POST", "HEAD"]
     allowed_origins = [
       "http://localhost:3000",
       "https://nicely.vercel.app",
+      "https://07c3-2605-a601-a3fb-7000-ac52-bff-b08d-e5e6.ngrok-free.app"
     ]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 3000
+    expose_headers  = ["ETag", "Content-Type", "Content-Length"]
+    max_age_seconds = 3600
   }
 }
 
