@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Upload, X, Loader2 } from "lucide-react";
+import { Upload, X, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { estimateProcessingTime } from "@/lib/utils";
@@ -29,6 +29,7 @@ export function UploadRecordingDialog({
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -172,11 +173,17 @@ export function UploadRecordingDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className={cn(
+        "sm:max-w-[425px]",
+        showInstructions ? "sm:max-h-[80vh]" : "sm:max-h-fit"
+      )}>
         <DialogHeader>
           <DialogTitle>Upload Recording</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className={cn(
+          "grid gap-4 py-4",
+          showInstructions && "max-h-[60vh] overflow-y-auto pr-2"
+        )}>
           <div
             className={cn(
               "border-2 border-dashed rounded-lg p-6 transition-colors",
@@ -236,6 +243,47 @@ export function UploadRecordingDialog({
               "Upload Recording"
             )}
           </Button>
+          <div className="text-xs text-muted-foreground">
+            <button 
+              onClick={() => setShowInstructions(!showInstructions)}
+              className="flex items-center gap-1 text-primary hover:text-primary/80"
+            >
+              {showInstructions ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              {showInstructions ? "Hide instructions" : "See instructions for uploading from your phone"}
+            </button>
+            
+            {showInstructions && (
+              <div className="mt-2 space-y-4">
+                <div className="mt-4 aspect-video w-full rounded-lg overflow-hidden">
+                  <video 
+                    className="w-full h-full object-cover"
+                    controls
+                    autoPlay
+                    loop
+                    muted
+                    src={"/videos/tutorial-video.mp4"}
+                  >
+                    <p>Your browser doesn&apos;t support HTML5 video.</p>
+                  </video>
+                </div>
+                <p className="mt-2">
+                  1. Record your session on voice memos
+                  <br />
+                  2. Tap the three dots next to the recording title
+                  <br />
+                  3. Scroll down and select &quot;Save as a File.&quot;
+                  <br />
+                  4. Choose a location you&apos;ll remember, such as &quot;on my phone.&quot;
+                  <br />
+                  5. Open Nicely&apos;s platform again.
+                  <br />
+                  5. Use our file browser to find the folder where you saved your recording.
+                  <br />
+                  6. Select the file and upload it.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
