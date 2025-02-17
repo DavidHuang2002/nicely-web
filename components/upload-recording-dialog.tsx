@@ -263,17 +263,19 @@ export function UploadRecordingDialog({
                     muted
                     src={"/videos/tutorial-video.mp4"}
                   >
-                    <p>Your browser doesn't support HTML5 video.</p>
+                    <p>Your browser doesn&apos;t support HTML5 video.</p>
                   </video>
                 </div>
                 <p className="mt-2">
-                  1. Tap the three dots for the recording screen.
+                  1. Record your session on voice memos
                   <br />
-                  2. Scroll down and select &quot;Save as a File.&quot;
+                  2. Tap the three dots next to the recording title
                   <br />
-                  3. Choose a location you&apos;ll remember, such as &quot;on my phone.&quot;.
+                  3. Scroll down and select &quot;Save as a File.&quot;
                   <br />
-                  4. Open Nicely&apos;s platform again.
+                  4. Choose a location you&apos;ll remember, such as &quot;on my phone.&quot;
+                  <br />
+                  5. Open Nicely&apos;s platform again.
                   <br />
                   5. Use our file browser to find the folder where you saved your recording.
                   <br />
