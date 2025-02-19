@@ -151,7 +151,7 @@ export function LandingPageContent() {
                     }}
                   >
                     <span className="underline text-gray-600 hover:text-gray-800 transition-colors duration-200 text-sm sm:text-base">
-                      Learn more about how we protect your privacy and data
+                      Learn more about how we protect your data
                     </span>
                     <svg 
                       className="w-4 h-4 text-gray-400 group-hover:text-gray-600 group-hover:transform group-hover:translate-x-1 transition-all duration-200" 
@@ -216,6 +216,44 @@ export function LandingPageContent() {
               </motion.div>
             </div>
 
+            {/* Video Demo Section */}
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 mt-6 sm:mt-8">
+              <div className="text-center mb-6">
+                <div className="relative inline-block">
+                  {/* Decorative elements */}
+                  <div className="absolute -left-8 top-1/2 w-16 h-16 bg-purple-100/30 rounded-full blur-xl transform -translate-y-1/2" />
+                  <div className="absolute right-0 top-0 w-12 h-12 bg-amber-100/40 rounded-full blur-lg" />
+                  
+                  <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 relative">
+                    See Nicely in
+                    <span className="text-[#6559D4] relative inline-block ml-3">
+                      Action
+                      <div className="absolute -bottom-1 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                    </span>
+                    {/* Decorative star */}
+                    <span className="absolute -right-6 -top-6 text-amber-400 text-2xl hidden sm:block">✦</span>
+                  </h2>
+                </div>
+              </div>
+
+              {/* Video Container */}
+              <div className="relative max-w-4xl mx-auto">
+                {/* Decorative Elements */}
+                <div className="absolute -left-8 -top-8 w-24 h-24 bg-[#6559D4]/10 rounded-full blur-xl" />
+                <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-amber-100/30 rounded-full blur-xl" />
+                
+                {/* YouTube Video Wrapper with aspect ratio */}
+                <div className="relative w-full rounded-2xl overflow-hidden aspect-video">
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/65POjL1ZvyY"
+                    title="Nicely Demo Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+
             {/* Collaborators Section */}
             <motion.div
               className="w-full max-w-lg lg:max-w-4xl mx-auto"
@@ -223,7 +261,7 @@ export function LandingPageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.6 }}
             >
-              <h2 className="text-lg sm:text-xl font-medium text-center mb-8 sm:mb-10 text-gray-600 pt-12">
+              <h2 className="text-lg sm:text-xl font-medium text-center mb-6 sm:mb-7 text-gray-600 pt-7">
                 Built with therapists and collaborators at
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 items-center justify-items-center">
@@ -253,51 +291,6 @@ export function LandingPageContent() {
                 />
               </div>
             </motion.div>
-
-            {/* Video Demo Section */}
-            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 mt-4 sm:mt-5">
-              <div className="text-center mb-6">
-                <div className="relative inline-block">
-                  {/* Decorative elements */}
-                  <div className="absolute -left-8 top-1/2 w-16 h-16 bg-purple-100/30 rounded-full blur-xl transform -translate-y-1/2" />
-                  <div className="absolute right-0 top-0 w-12 h-12 bg-amber-100/40 rounded-full blur-lg" />
-                  
-                  <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 relative">
-                    See Nicely in
-                    <span className="text-[#6559D4] relative inline-block ml-3">
-                      Action
-                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
-                    </span>
-                    {/* Decorative star */}
-                    <span className="absolute -right-6 -top-6 text-amber-400 text-2xl hidden sm:block">✦</span>
-                  </h2>
-                </div>
-              </div>
-
-              {/* Video Container */}
-              <div className="relative max-w-4xl mx-auto">
-                {/* Decorative Elements */}
-                <div className="absolute -left-8 -top-8 w-24 h-24 bg-[#6559D4]/10 rounded-full blur-xl" />
-                <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-amber-100/30 rounded-full blur-xl" />
-                
-                {/* YouTube Video Wrapper with aspect ratio */}
-                <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl aspect-video">
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src="https://www.youtube.com/embed/65POjL1ZvyY"
-                    title="Nicely Demo Video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-
-              {/* Caption or Additional Info */}
-              <div className="mt-6 text-center">
-                <p className="text-sm sm:text-base text-gray-600">
-                  See how Nicely helps you capture insights, track progress, and maintain momentum between sessions
-                </p>
-              </div>
             </div>
 
             {/* Features Section */}
@@ -311,10 +304,10 @@ export function LandingPageContent() {
                   
                   <h2 className="text-4xl sm:text-4xl lg:text-5xl font-bold text-gray-900 relative">
                     How{" "}
-                    <span className="text-[#6559D4] relative inline-block px-2">
+                    <span className="text-[#6559D4] relative inline-block px-1">
                       Nicely
                       {/* Purple underline */}
-                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                      <div className="absolute -bottom-1 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
                       {/* Decorative dots */}
                     </span>
                     {" "}Works
@@ -432,11 +425,11 @@ export function LandingPageContent() {
                   <div className="absolute -left-8 top-1/2 w-16 h-16 bg-purple-100/30 rounded-full blur-xl transform -translate-y-1/2" />
                   <div className="absolute right-0 top-0 w-12 h-12 bg-amber-100/40 rounded-full blur-lg" />
                   
-                  <h2 className="text-5xl font-bold text-gray-900 relative">
+                  <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 relative">
                     Your Privacy, Our
                     <span className="text-[#6559D4] relative inline-block ml-3">
                       Priority
-                      <div className="absolute -bottom-2 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
+                      <div className="absolute -bottom-1 left-0 w-full h-1 bg-[#6559D4]/20 rounded-full" />
                     </span>
                   </h2>
                 </div>
