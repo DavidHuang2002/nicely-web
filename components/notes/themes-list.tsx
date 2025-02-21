@@ -1,9 +1,7 @@
-"use client";
-
-import { motion, AnimatePresence } from "framer-motion";
+"use client";;
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { CalendarIcon, TrendingUpIcon, RepeatIcon, Flame, ChevronDown, ChevronUp, CheckCircle2, ChevronRight, ShieldIcon } from "lucide-react";
+import { Flame, CheckCircle2, ChevronRight, ShieldIcon, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
