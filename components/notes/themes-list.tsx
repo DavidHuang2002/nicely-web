@@ -401,16 +401,14 @@ export default function ThemesList() {
       {/* Enhanced Todo Detail Dialog */}
       {openDialog && (
         <Dialog open={!!openDialog} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[600px] w-[95%] sm:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader className="flex flex-row items-center justify-between pr-8">
-              <DialogTitle className="text-xl">
-                {
-                  themes
-                    .find((theme) =>
-                      theme.todos.some((todo) => todo.id === openDialog)
-                    )
-                    ?.todos.find((todo) => todo.id === openDialog)?.title
-                }
+              <DialogTitle className="text-lg sm:text-xl">
+                {themes
+                  .find((theme) =>
+                    theme.todos.some((todo) => todo.id === openDialog)
+                  )
+                  ?.todos.find((todo) => todo.id === openDialog)?.title}
               </DialogTitle>
               <Button
                 variant="outline"
@@ -429,68 +427,59 @@ export default function ThemesList() {
                     }`
                   )}`}
                 >
-                  <MessageCircle className="h-4 w-4 mr-1" />
-                  <span className="text-sm">Discuss</span>
+                  <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                  <span className="text-xs sm:text-sm">Discuss</span>
                 </Link>
               </Button>
             </DialogHeader>
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* How To Section */}
-              <div className="space-y-2">
-                <h4 className="font-medium text-lg">
+              <div className="space-y-1.5 sm:space-y-2">
+                <h4 className="font-medium text-base sm:text-lg">
                   How to do this exercise:
                 </h4>
-                <p className="text-muted-foreground whitespace-pre-line">
-                  {
-                    themes
-                      .find((theme) =>
-                        theme.todos.some((todo) => todo.id === openDialog)
-                      )
-                      ?.todos.find((todo) => todo.id === openDialog)?.howTo
-                  }
+                <p className="text-sm sm:text-base text-muted-foreground whitespace-pre-line">
+                  {themes
+                    .find((theme) =>
+                      theme.todos.some((todo) => todo.id === openDialog)
+                    )
+                    ?.todos.find((todo) => todo.id === openDialog)?.howTo}
                 </p>
               </div>
 
               {/* Description Section */}
-              <div className="space-y-2">
-                <h4 className="font-medium text-lg">What is this exercise?</h4>
-                <p className="text-muted-foreground">
-                  {
-                    themes
-                      .find((theme) =>
-                        theme.todos.some((todo) => todo.id === openDialog)
-                      )
-                      ?.todos.find((todo) => todo.id === openDialog)
-                      ?.description
-                  }
+              <div className="space-y-1.5 sm:space-y-2">
+                <h4 className="font-medium text-base sm:text-lg">What is this exercise?</h4>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  {themes
+                    .find((theme) =>
+                      theme.todos.some((todo) => todo.id === openDialog)
+                    )
+                    ?.todos.find((todo) => todo.id === openDialog)?.description}
                 </p>
               </div>
 
               {/* Relevance Section */}
-              <div className="space-y-2">
-                <h4 className="font-medium text-lg">Why now?</h4>
-                <p className="text-muted-foreground">
-                  {
-                    themes
-                      .find((theme) =>
-                        theme.todos.some((todo) => todo.id === openDialog)
-                      )
-                      ?.todos.find((todo) => todo.id === openDialog)?.relevance
-                  }
+              <div className="space-y-1.5 sm:space-y-2">
+                <h4 className="font-medium text-base sm:text-lg">Why now?</h4>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  {themes
+                    .find((theme) =>
+                      theme.todos.some((todo) => todo.id === openDialog)
+                    )
+                    ?.todos.find((todo) => todo.id === openDialog)?.relevance}
                 </p>
               </div>
 
               {/* Benefits Section */}
-              <div className="space-y-2">
-                <h4 className="font-medium text-lg">How this will help you:</h4>
-                <p className="text-muted-foreground">
-                  {
-                    themes
-                      .find((theme) =>
-                        theme.todos.some((todo) => todo.id === openDialog)
-                      )
-                      ?.todos.find((todo) => todo.id === openDialog)?.benefits
-                  }
+              <div className="space-y-1.5 sm:space-y-2">
+                <h4 className="font-medium text-base sm:text-lg">How this will help you:</h4>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  {themes
+                    .find((theme) =>
+                      theme.todos.some((todo) => todo.id === openDialog)
+                    )
+                    ?.todos.find((todo) => todo.id === openDialog)?.benefits}
                 </p>
               </div>
             </div>
