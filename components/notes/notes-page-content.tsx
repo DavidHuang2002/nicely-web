@@ -13,33 +13,12 @@ import type { SessionSummary } from "@/models/session-summary";
 import { EXAMPLE_SESSION_SUMMARY } from "@/models/session-summary";
 
 interface NotesPageContentProps {
-  userId: string;
+  sessionSummaries: SessionSummary[];
 }
 
-export function NotesPageContent({ userId }: NotesPageContentProps) {
+export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("themes");
-  const [sessionSummaries, setSessionSummaries] = useState<SessionSummary[]>(
-    []
-  );
-
-  useEffect(() => {
-    async function fetchSessionSummaries() {
-      try {
-        const response = await fetch("/api/notes/sessions");
-        if (!response.ok) {
-          throw new Error("Failed to fetch session summaries");
-        }
-        const data = await response.json();
-        setSessionSummaries(data.length > 0 ? data : [EXAMPLE_SESSION_SUMMARY]);
-      } catch (error) {
-        console.error("Error fetching session summaries:", error);
-        setSessionSummaries([EXAMPLE_SESSION_SUMMARY]);
-      }
-    }
-
-    fetchSessionSummaries();
-  }, []);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-4 sm:py-8">

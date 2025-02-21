@@ -1,33 +1,33 @@
-"use client";
-
-import { Overview } from "@/components/overview";
 import { TermsPopup } from "@/components/terms-popup";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { NotesPageContent } from "@/components/notes/notes-page-content";
-export default function Page() {
-  const [onboardingCompleted, setOnboardingCompleted] = useState(true);
-  const router = useRouter();
+import { auth } from "@clerk/nextjs/server";
+import { getUser, getUserSessionSummaries } from "@/lib/database/supabase";
+import { redirect } from "next/navigation";
+import { EXAMPLE_SESSION_SUMMARY } from "@/models/session-summary";
 
-  useEffect(() => {
-    fetch("/api/chat/onboarding")
-      .then((res) => res.json())
-      .then((data) => {
-        setOnboardingCompleted(data.onboardingCompleted);
-      });
-  }, []);
+export default async function Page() {
+  const { userId: clerkUserId } = await auth();
 
-  const handleStartOnboarding = () => {
-    router.push("/onboarding");
-  };
+  if (!clerkUserId) {
+    return null; // or redirect to login
+  }
+
+  const user = await getUser(clerkUserId);
+
+  if (!user) {
+    redirect("/");
+  }
+
+  // Fetch session summaries directly in the server component
+  const sessionSummaries = await getUserSessionSummaries(user.id!);
+
+  // If no summaries, use example summary
+  const summariesToDisplay =
+    sessionSummaries.length > 0 ? sessionSummaries : [EXAMPLE_SESSION_SUMMARY];
 
   return (
     <>
-      {/* <Overview
-        onboardingCompleted={onboardingCompleted}
-        onStartOnboarding={handleStartOnboarding}
-      /> */}
-      <NotesPageContent sessionSummaries={[]} />
+      <NotesPageContent sessionSummaries={summariesToDisplay} />
       <TermsPopup />
     </>
   );
