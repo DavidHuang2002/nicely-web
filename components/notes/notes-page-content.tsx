@@ -49,42 +49,51 @@ export function NotesPageContent({ userId }: NotesPageContentProps) {
         className="space-y-6 sm:space-y-8"
       >
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:justify-between">
-          <h1 className="text-2xl sm:text-3xl font-bold">Session Notes</h1>
-          <div className="flex flex-col sm:flex-row gap-2">
-            {currentTab === "themes" && (
-              <Button
-                variant="outline"
-                asChild
-                className="sm:w-auto justify-center"
-              >
-                <Link href="/between-sessions">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Chat with Nicely
-                </Link>
-              </Button>
-            )}
-            {currentTab === "sessions" && (
-              <>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold">
+                Welcome to Nicely
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1 max-w-xl">
+                Therapy gives you direction, we help you walk it.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2">
+              {currentTab === "themes" && (
                 <Button
                   variant="outline"
                   asChild
                   className="sm:w-auto justify-center"
                 >
-                  <Link href="/notes/voice">
-                    <Mic className="mr-2 h-4 w-4" />
-                    Voice Journal
+                  <Link href="/between-sessions">
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Chat with Nicely
                   </Link>
                 </Button>
-                <Button
-                  onClick={() => setIsUploadDialogOpen(true)}
-                  className="sm:w-auto justify-center"
-                >
-                  <Upload className="mr-2 h-4 w-4" />
-                  Upload Recording
-                </Button>
-              </>
-            )}
+              )}
+              {currentTab === "sessions" && (
+                <>
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="sm:w-auto justify-center"
+                  >
+                    <Link href="/notes/voice">
+                      <Mic className="mr-2 h-4 w-4" />
+                      Voice Journal
+                    </Link>
+                  </Button>
+                  <Button
+                    onClick={() => setIsUploadDialogOpen(true)}
+                    className="sm:w-auto justify-center"
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Recording
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
