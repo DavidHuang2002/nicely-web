@@ -7,6 +7,11 @@ const InsightItemSchema = z.object({
   excerpt: z.string().min(1).max(1000),
 });
 
+const AiRecommendationItemSchema = z.object({
+  title: z.string().min(1).max(100),
+  description: z.string().min(1).max(1000),
+});
+
 // Schema specifically for AI extraction
 export const GeneratedSessionSummarySchema = z.object({
   title: z.string().min(1).max(100),
@@ -15,6 +20,7 @@ export const GeneratedSessionSummarySchema = z.object({
   therapist_insights: z.array(InsightItemSchema).min(1).max(5),
   client_learnings: z.array(InsightItemSchema).min(1).max(5),
   recommendations: z.array(InsightItemSchema).min(1).max(5),
+  ai_recommendations: z.array(AiRecommendationItemSchema).min(0).max(5).optional(),
 });
 
 // Base schema with common fields
@@ -93,5 +99,25 @@ export const EXAMPLE_SESSION_SUMMARY: SessionSummary = {
   ],
   
   created_at: new Date("2024-03-15T10:00:00Z"),
-  updated_at: new Date("2024-03-15T10:00:00Z")
+  updated_at: new Date("2024-03-15T10:00:00Z"),
+
+  // ------ AI generated recommendations -----
+
+  ai_recommendations: [ 
+    {
+      title: "Learning to Sit with Uncertainty",
+      description:
+        "Not knowing is uncomfortable, but forcing answers creates false ones.",
+    },
+    {
+      title: "Redefining Self-Worth",
+      description:
+        "You're not behind. You're not failing. You're just holding yourself to impossible standards.",
+    },
+    {
+      title: "Escaping the Productivity Trap",
+      description:
+        "Your value isn’t measured by how much you get done. Rest is not a reward.",
+    },
+  ],
 };

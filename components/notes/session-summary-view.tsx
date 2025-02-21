@@ -33,22 +33,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { DeleteSessionDialog } from "@/components/notes/delete-session-dialog";
 import { RegenerateSessionDialog } from "@/components/notes/regenerate-session-dialog";
-
-interface SectionProps {
-  title: string;
-  children: React.ReactNode;
-}
-
-const Section = ({ title, children }: SectionProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="space-y-4"
-  >
-    <h2 className="text-xl font-semibold text-primary">{title}</h2>
-    {children}
-  </motion.div>
-);
+import { RecommendedGoalsSection } from "@/components/notes/recommended-goals-section";
+import { Section } from "@/components/notes/section";
 
 interface InsightCardProps {
   summary: string;
@@ -311,7 +297,11 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
           {summary.one_line_summary}
         </p>
       </div>
-
+      {summary.ai_recommendations && summary.ai_recommendations.length > 0 && (
+        <RecommendedGoalsSection
+          recommendations={summary.ai_recommendations}
+        />
+      )}
       {/* Action Steps */}
       <Section title="Action Steps">
         <div className="grid grid-cols-1 gap-4">
