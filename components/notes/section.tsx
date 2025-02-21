@@ -54,9 +54,9 @@ export const Section = ({
       <AnimatePresence>
         {(!expandable || isExpanded) && (
           <motion.div
-            initial={expandable ? { height: 0, opacity: 0 } : false}
+            initial={expandable ? { height: 0, opacity: 0 } : undefined}
             animate={{ height: "auto", opacity: 1 }}
-            exit={expandable ? { height: 0, opacity: 0 } : false}
+            exit={expandable ? { height: 0, opacity: 0 } : undefined}
             transition={{ duration: 0.2 }}
           >
             {children}
