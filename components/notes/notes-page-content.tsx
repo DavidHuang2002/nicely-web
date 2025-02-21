@@ -45,7 +45,7 @@ export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
                   asChild
                   className="sm:w-auto justify-center"
                 >
-                  <Link href="/between-sessions">
+                  <Link href="/untangle">
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Chat with Nicely
                   </Link>

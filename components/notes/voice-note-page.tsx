@@ -175,7 +175,7 @@ export function VoiceNotePage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex items-center mb-8">
-        <Link href="/notes">
+        <Link href="/home">
           <Button variant="ghost" className="text-muted-foreground -ml-2">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
