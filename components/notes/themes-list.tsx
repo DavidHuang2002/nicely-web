@@ -266,7 +266,7 @@ export default function ThemesList() {
 
   return (
     <div className="relative w-full space-y-4 sm:space-y-6">
-      <div className="overflow-x-auto pb-4 sm:pb-6">
+      <div className="overflow-x-auto pb-4 sm:pb-6 no-scrollbar">
         <div className="flex gap-3 sm:gap-6 min-w-full px-2 sm:px-4 pt-1">
           {themes.map((theme) => (
             <motion.div
