@@ -21,7 +21,6 @@ import { SettingsDialog } from "./settings-dialog";
 const ROUTE_TITLES: Record<string, string> = {
   "/untangle": "Untangle Emotions",
   "/chat/self-care": "Daily Self-Care",
-  "/notes": "Session Notes",
 };
 
 export const Navbar = () => {

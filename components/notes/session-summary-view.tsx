@@ -270,7 +270,7 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
       {/* Header with Back Button Only */}
       <div className="flex items-center justify-between">
-        <Link href="/notes">
+        <Link href="/home">
           <Button variant="ghost" className="text-muted-foreground">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Session Notes
