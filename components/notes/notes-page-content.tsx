@@ -4,20 +4,42 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Mic, Upload, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UploadRecordingDialog } from "@/components/upload-recording-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SessionNotesList from "@/components/notes/session-notes-list";
 import ThemesList from "@/components/notes/themes-list";
 import type { SessionSummary } from "@/models/session-summary";
+import { EXAMPLE_SESSION_SUMMARY } from "@/models/session-summary";
 
 interface NotesPageContentProps {
-  sessionSummaries: SessionSummary[];
+  userId: string;
 }
 
-export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
+export function NotesPageContent({ userId }: NotesPageContentProps) {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("themes");
+  const [sessionSummaries, setSessionSummaries] = useState<SessionSummary[]>(
+    []
+  );
+
+  useEffect(() => {
+    async function fetchSessionSummaries() {
+      try {
+        const response = await fetch("/api/notes/sessions");
+        if (!response.ok) {
+          throw new Error("Failed to fetch session summaries");
+        }
+        const data = await response.json();
+        setSessionSummaries(data.length > 0 ? data : [EXAMPLE_SESSION_SUMMARY]);
+      } catch (error) {
+        console.error("Error fetching session summaries:", error);
+        setSessionSummaries([EXAMPLE_SESSION_SUMMARY]);
+      }
+    }
+
+    fetchSessionSummaries();
+  }, []);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-4 sm:py-8">
@@ -67,8 +89,8 @@ export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
         </div>
 
         {/* Tabs */}
-        <Tabs 
-          defaultValue="themes" 
+        <Tabs
+          defaultValue="themes"
           className="w-full"
           onValueChange={(value) => setCurrentTab(value)}
         >
