@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { UploadRecordingDialog } from "@/components/upload-recording-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SessionNotesList from "@/components/notes/session-notes-list";
-import ThemesList from "@/components/notes/themes-list";
+import GoalList from "@/components/goals/goal-list";
 import type { SessionSummary } from "@/models/session-summary";
 import { EXAMPLE_SESSION_SUMMARY } from "@/models/session-summary";
 
@@ -85,7 +85,7 @@ export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
           </TabsList>
 
           <TabsContent value="themes" className="mt-6">
-            <ThemesList />
+            <GoalList />
           </TabsContent>
 
           <TabsContent value="sessions" className="mt-6">
