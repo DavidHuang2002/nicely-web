@@ -6,7 +6,7 @@ import { useRecorder } from "@/hooks/use-recorder";
 import { RecordingButton } from "@/components/voice-note-recording-button";
 import { transcribeAudioBlob } from "@/components/utils/transcribe";
 
-const MAX_RECORDING_DURATION = 30; // 30 minutes max for therapy sessions
+const MAX_RECORDING_DURATION = 60; // 30 minutes max for therapy sessions
 
 interface VoiceRecordingInputProps {
   transcription: string;
