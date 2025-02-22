@@ -15,7 +15,7 @@ const supabase = createClient(
   process.env.SUPABASE_KEY!
 );
 
-export async function addUserIfNotExists(clerkId: string): Promise<void> {
+export async function addUserIfNotExists(clerkId: string): Promise<string> {
   try {
     // Check if user exists
     const existingUser = await getUser(clerkId);
@@ -27,9 +27,19 @@ export async function addUserIfNotExists(clerkId: string): Promise<void> {
         onboarding_completed: false,
       });
 
-      await supabase.from("users").insert([newUser]);
+      const { data: insertedUser, error } = await supabase
+        .from("users")
+        .insert([newUser])
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (!insertedUser) throw new Error("Failed to create user");
+      
+      return insertedUser.id;
     } else {
       console.log("User already exists. user ID:", existingUser.id);
+      return existingUser.id!;
     }
   } catch (error) {
     console.error("Error in addUserIfNotExists:", error);
