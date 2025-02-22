@@ -13,6 +13,7 @@ import { WaveformVisualizer } from "../waveform-visualizer";
 import { transcribeAudioBlob } from "@/components/utils/transcribe";
 import { RecordingButton } from "@/components/voice-note-recording-button";
 import { Loader2 } from "lucide-react";
+import { VoiceRecordingInput } from "@/components/voice-recording-input"
 
 const MAX_RECORDING_DURATION = 30; // 30 minutes max for therapy sessions
 const SESSION_PROMPTS = {
@@ -39,104 +40,37 @@ const SESSION_PROMPTS = {
 };
 
 export function VoiceNotePage() {
-  const [transcription, setTranscription] = useState("");
-  const [selectedPrompt, setSelectedPrompt] = useState("");
-  const [isTranscribing, setIsTranscribing] = useState(false);
-
-  const {
-    isRecording,
-    isPaused,
-    stream,
-    startRecording,
-    stopRecording,
-    pauseRecording,
-    resumeRecording,
-  } = useRecorder(MAX_RECORDING_DURATION);
-
-  const handleStartRecording = async () => {
-    try {
-      const started = await startRecording();
-      if (started) {
-        toast.info("Recording started");
-      }
-    } catch (error) {
-      console.error("Error starting recording:", error);
-      toast.error("Failed to start recording");
-    }
-  };
-
-  const handleStopRecording = async () => {
-    try {
-      setIsTranscribing(true);
-      toast.loading("Transcribing your recording...", {
-        id: "transcription-toast",
-      });
-
-      const blob = await stopRecording();
-      if (blob) {
-        const transcribedText = await transcribeAudioBlob(blob, transcription);
-        if (transcribedText) {
-          setTranscription(transcribedText);
-        }
-      }
-
-      toast.success("Recording transcribed", {
-        id: "transcription-toast",
-      });
-    } catch (error) {
-      console.error("Error stopping recording:", error);
-      toast.error("Failed to transcribe recording");
-    } finally {
-      setIsTranscribing(false);
-    }
-  };
-
-  const handlePauseRecording = async () => {
-    try {
-      setIsTranscribing(true);
-      toast.loading("Transcribing your recording...", {
-        id: "transcription-toast",
-      });
-
-      const blob = await pauseRecording();
-      if (blob) {
-        const transcribedText = await transcribeAudioBlob(blob, transcription);
-        if (transcribedText) {
-          setTranscription(transcribedText);
-        }
-      }
-
-      toast.success("Recording transcribed", {
-        id: "transcription-toast",
-      });
-    } catch (error) {
-      console.error("Error pausing recording:", error);
-      toast.error("Failed to transcribe recording");
-    } finally {
-      setIsTranscribing(false);
-    }
-  };
+  const [clientTranscription, setClientTranscription] = useState("");
+  const [therapistTranscription, setTherapistTranscription] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSaveJournal = async () => {
     try {
-      if (!transcription.trim()) {
+      if (!clientTranscription.trim() && !therapistTranscription.trim()) {
         toast.error("Please record or enter some text first");
         return;
       }
 
-      setIsTranscribing(true);
+      setIsProcessing(true);
 
-      // Show loading toast
       toast.loading("Processing your voice note...", {
         id: "save-journal-toast",
       });
+
+      // Combine transcriptions with labels
+      const combinedText = [
+        clientTranscription && `Client: ${clientTranscription}`,
+        therapistTranscription && `Therapist: ${therapistTranscription}`,
+      ]
+        .filter(Boolean)
+        .join("\n\n");
 
       const res = await fetch("/api/notes/sessions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: transcription }),
+        body: JSON.stringify({ text: combinedText }),
       });
 
       if (!res.ok) {
@@ -145,10 +79,10 @@ export function VoiceNotePage() {
 
       const data = await res.json();
 
-      // Clear the transcription
-      setTranscription("");
+      // Clear the transcriptions
+      setClientTranscription("");
+      setTherapistTranscription("");
 
-      // Show success toast with view option
       toast.success("Voice note processed successfully!", {
         id: "save-journal-toast",
         description: "Your insights have been organized and saved.",
@@ -167,7 +101,7 @@ export function VoiceNotePage() {
           "Please try again or contact support if the problem persists.",
       });
     } finally {
-      setIsTranscribing(false);
+      setIsProcessing(false);
     }
   };
 
@@ -192,49 +126,45 @@ export function VoiceNotePage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Main Content Area */}
         <div className="md:col-span-2 space-y-4">
-          <Card className="p-6">
-            {/* Recording Controls */}
-            <div className="flex justify-center mb-6">
-              <RecordingButton   
-                isRecording={isRecording}
-                isTranscribing={isTranscribing}
-                onStartRecording={handleStartRecording}
-                handleStopRecording={handleStopRecording}
-            />
-            </div>
+          <VoiceRecordingInput
+            transcription={clientTranscription}
+            onTranscriptionChange={setClientTranscription}
+            label="Your Reflections"
+            placeholder="What stood out to me from the session was..."
+          />
 
-            {/* Transcription Area */}
-            <div className="space-y-4">
-              <Textarea
-                value={transcription}
-                onChange={(e) => setTranscription(e.target.value)}
-                placeholder="What stood out to me from the session was..."
-                className="min-h-[200px]"
-              />
-              {transcription && (
-                <div className="flex justify-end">
-                  <Button
-                    onClick={handleSaveJournal}
-                    disabled={isTranscribing || !transcription.trim()}
-                  >
-                    {isTranscribing ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="mr-2 h-4 w-4" />
-                        Save Journal Entry
-                      </>
-                    )}
-                  </Button>
-                </div>
-              )}
+          <VoiceRecordingInput
+            transcription={therapistTranscription}
+            onTranscriptionChange={setTherapistTranscription}
+            label="Therapist's Comments"
+            placeholder="Key points from your therapist..."
+          />
+
+          {(clientTranscription || therapistTranscription) && (
+            <div className="flex justify-end">
+              <Button
+                onClick={handleSaveJournal}
+                disabled={
+                  isProcessing ||
+                  (!clientTranscription.trim() &&
+                    !therapistTranscription.trim())
+                }
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Journal Entry
+                  </>
+                )}
+              </Button>
             </div>
-          </Card>
+          )}
         </div>
 
         {/* Inspiration Panel - Modified Version */}
@@ -260,7 +190,6 @@ export function VoiceNotePage() {
                       size="sm"
                       className="w-full justify-start text-left text-sm h-auto py-1.5 px-2 hover:bg-accent/50"
                       onClick={() => {
-                        setSelectedPrompt(prompt);
                         // Optional: Scroll the textarea into view
                         document
                           .querySelector("textarea")
