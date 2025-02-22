@@ -7,6 +7,8 @@ import { CreateTranscriptionSchema, Transcription, TranscriptionSchema } from "@
 import { CreateSessionSummarySchema, SessionSummary, SessionSummarySchema } from "@/models/session-summary";
 import { CreateVoiceNoteSchema, VoiceNoteSchema, VoiceNote, CreateVoiceNote } from "@/models/voice-note";
 import { GeneratedChallenge } from "@/models/goals";
+import { Goal, GoalSchema } from "@/models/goals";
+import { Challenge, ChallengeSchema } from "@/models/goals";
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -406,7 +408,7 @@ export async function createChallenges(challenges: {
     goal_id: challenges.goalId,
     title: challenge.title,
     description: challenge.description,
-    how_to: challenge.howTo,
+    how_to: challenge.how_to,
     reason: challenge.reason,
     benefits: challenge.benefits,
   }));
@@ -416,4 +418,26 @@ export async function createChallenges(challenges: {
     .insert(challengesWithGoalId);
 
   if (error) throw error;
+}
+
+export async function getUserGoals(userId: string): Promise<Goal[]> {
+  const { data, error } = await supabase
+    .from("goals")
+    .select()
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data.map(goal => GoalSchema.parse(goal));
+}
+
+export async function getGoalChallenges(goalId: string): Promise<Challenge[]> {
+  const { data, error } = await supabase
+    .from("challenges")
+    .select()
+    .eq("goal_id", goalId)
+    .order("created_at", { ascending: true });
+
+  if (error) throw error;
+  return data.map(challenge => ChallengeSchema.parse(challenge));
 }

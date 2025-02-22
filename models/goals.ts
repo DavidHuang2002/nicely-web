@@ -8,7 +8,7 @@ export const AiRecommendationItemSchema = z.object({
 const ChallengeBaseSchema = z.object({
   title: z.string().min(1).max(100),
   description: z.string().min(1).max(500),
-  howTo: z.string().min(1).max(1000),
+  how_to: z.string().min(1).max(1000),
   reason: z.string().min(1).max(500),
   benefits: z.string().min(1).max(500),
 });

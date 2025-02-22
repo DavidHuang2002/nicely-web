@@ -13,7 +13,7 @@ export const initialGoals: GoalCardType[] = [
     // //       title: "Progressive Muscle Relaxation",
     // //       description:
     // //         "A systematic technique to reduce physical tension and break the anxiety cycle by tensing and relaxing different muscle groups.",
-    // //       howTo:
+    // //       how_to:
     // //         "1. Find a quiet, comfortable place to sit or lie down\n2. Start with your toes, tense them for 5 seconds\n3. Release and notice the feeling of relaxation for 10 seconds\n4. Move up through each muscle group (feet, legs, abdomen, arms, face)\n5. Practice for 10-15 minutes total",
     // //       reason:
     // //         "During our last session, you mentioned experiencing physical tension, especially in your shoulders and jaw. This technique will help you recognize and release tension before it builds up.",
@@ -26,7 +26,7 @@ export const initialGoals: GoalCardType[] = [
     // //       title: "3-3-3 Grounding Exercise",
     // //       description:
     // //         "A quick mindfulness technique to break anxiety spirals by engaging your senses and returning to the present moment.",
-    // //       howTo:
+    // //       how_to:
     // //         "1. Name 3 things you can see\n2. Name 3 things you can hear\n3. Move 3 parts of your body\n4. Take a deep breath after each step\n5. Notice how you feel more centered",
     // //       reason:
     // //         "You've described feeling overwhelmed in meetings and social situations. This quick exercise can help you regain focus without others noticing.",
@@ -39,7 +39,7 @@ export const initialGoals: GoalCardType[] = [
     // //       title: "Worry Time Scheduling",
     // //       description:
     // //         "Designate specific times for addressing worries to prevent them from consuming your entire day.",
-    // //       howTo:
+    // //       how_to:
     // //         "1. Set aside 15-20 minutes daily at a consistent time\n2. When worries arise, note them down\n3. During worry time, review and problem-solve\n4. Outside worry time, remind yourself to postpone worrying\n5. Keep a small notebook for capturing thoughts",
     // //       reason:
     // //         "We discussed how racing thoughts affect your sleep and productivity. This structured approach helps contain worry without suppressing it.",
@@ -61,7 +61,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Capture your last session through a voice note",
           description:
             "Capture your last session through a voice note and we will generate a few personalized goals for you to work on.",
-          howTo:
+          how_to:
             "1. Go to session record page\n2. Click on the capture session icon \n3. Record your thoughts and feelings about the session \n4. Select the goals and challenges we generated for you to add to your dashboard",
           reason:
             "This will help you see how you can track your goals and progress from therapy sessions.",
@@ -83,7 +83,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Self-Compassion Letter Writing",
           description:
             "Write a letter to yourself from the perspective of a caring friend, addressing a current challenge or self-criticism.",
-          howTo:
+          how_to:
             "1. Choose a specific situation causing self-criticism\n2. Write as if you're addressing a dear friend\n3. Acknowledge the pain or difficulty\n4. Offer understanding and kindness\n5. Suggest gentle ways forward",
           reason:
             "Your inner critic has been particularly loud lately, especially regarding work performance. This exercise helps develop a more balanced, compassionate inner voice.",
@@ -96,7 +96,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Daily Compassion Break",
           description:
             "Take brief moments throughout the day to practice the three components of self-compassion: mindfulness, common humanity, and self-kindness.",
-          howTo:
+          how_to:
             "1. Notice when you're struggling (mindfulness)\n2. Remember others also face similar challenges (common humanity)\n3. Offer yourself a kind phrase or gesture\n4. Take three deep breaths\n5. Continue your day with gentleness",
           reason:
             "This builds on our discussions about feeling isolated in your struggles. The practice helps you feel more connected while building self-compassion.",
@@ -118,7 +118,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Evening Wind-Down Routine",
           description:
             "Create a calming pre-sleep routine to signal your body it's time to rest.",
-          howTo:
+          how_to:
             "1. Start 1 hour before bedtime\n2. Dim lights and reduce blue light exposure\n3. Do gentle stretching or reading\n4. Practice 5 minutes of deep breathing\n5. Keep your bedroom cool and dark",
           reason:
             "Your sleep patterns have been irregular, affecting your daily energy. This structured routine will help regulate your circadian rhythm.",
@@ -131,7 +131,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Sleep Thought Journal",
           description:
             "Address nighttime worry patterns by logging thoughts before bed.",
-          howTo:
+          how_to:
             "1. Keep a journal by your bed\n2. Write down any worrying thoughts\n3. Note potential solutions or next steps\n4. Close the journal as a symbol of setting aside concerns\n5. Focus on restful breathing",
           reason:
             "Night-time anxiety has been disrupting your sleep. This technique helps clear your mind before bed.",
@@ -153,7 +153,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Boundary Check-In Practice",
           description:
             "Regular assessment of your emotional and physical boundaries in different situations.",
-          howTo:
+          how_to:
             "1. Identify situations where you feel drained\n2. Notice physical and emotional responses\n3. Write down your ideal boundaries\n4. Practice saying no when needed\n5. Validate your right to have boundaries",
           reason:
             "You've mentioned feeling overwhelmed by others' demands. This practice helps you recognize and honor your limits.",
@@ -166,7 +166,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Assertive Communication Script",
           description:
             "Develop and practice clear, assertive responses for common boundary challenges.",
-          howTo:
+          how_to:
             "1. Identify a boundary situation\n2. Write out your feelings and needs\n3. Create a clear, firm response\n4. Practice delivery in a mirror\n5. Use 'I' statements and stay calm",
           reason:
             "This builds on our discussion about difficulty saying no to extra work projects.",
@@ -188,7 +188,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Memory Journal Practice",
           description:
             "Create a safe space to explore and honor memories of your loss.",
-          howTo:
+          how_to:
             "1. Set aside quiet time each day\n2. Write about a specific memory\n3. Express associated emotions freely\n4. Include photos or mementos if helpful\n5. Close with a gratitude statement",
           reason:
             "As we've discussed your recent loss, this provides a structured way to process emotions and preserve memories.",
@@ -201,7 +201,7 @@ export const initialGoals: GoalCardType[] = [
           title: "Grief Check-In Meditation",
           description:
             "A gentle meditation practice for acknowledging and sitting with grief emotions.",
-          howTo:
+          how_to:
             "1. Find a quiet, comfortable space\n2. Focus on your breath for 2 minutes\n3. Notice any emotions present\n4. Allow feelings without judgment\n5. Close with self-compassion phrase",
           reason:
             "This helps address the waves of grief you've described experiencing throughout the day.",

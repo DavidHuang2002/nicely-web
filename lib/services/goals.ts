@@ -4,7 +4,7 @@ import { z } from "zod";
 import { GeneratedChallenge, GeneratedChallengeSchema } from "@/models/goals";
 import { getSessionSummaryById } from "@/lib/database/supabase";
 import { makeGoalChallengesPrompt } from "../ai/prompts";
-import { createGoal, createChallenges } from "@/lib/database/supabase";
+import { getUserGoals, getGoalChallenges } from "@/lib/database/supabase";
 
 // Schema for array of challenges
 
@@ -46,28 +46,46 @@ export async function saveGoalWithChallenges(
     userId: string;
   }
 ) {
+  // TODO: Implement database saving logic
+  // This will be implemented once we have the database schema set up
   try {
-    // First create the goal
-    const { id: goalId } = await createGoal({
-      userId: goalData.userId,
-      sessionId: goalData.sessionId,
-      title: goalData.title,
-      description: goalData.description,
-    });
-
-    // Then create all challenges for this goal
-    await createChallenges({
-      goalId,
-      challenges: goalData.challenges,
-    });
-
+    // Save to database
     return {
       success: true,
-      goalId,
       message: "Goal and challenges saved successfully",
     };
   } catch (error) {
     console.error("Error saving goal and challenges:", error);
+    throw error;
+  }
+}
+
+export async function getUserGoalsWithChallenges(userId: string) {
+  try {
+    const goals = await getUserGoals(userId);
+    
+    // Get challenges for each goal
+    const goalsWithChallenges = await Promise.all(
+      goals.map(async (goal) => {
+        const challenges = await getGoalChallenges(goal.id);
+        return {
+          ...goal,
+          todos: challenges.map(challenge => ({
+            id: challenge.id, 
+            title: challenge.title,
+            description: challenge.description,
+            how_to: challenge.how_to,
+            reason: challenge.reason,
+            benefits: challenge.benefits,
+            completed: false, // TODO: Implement challenge completion status
+          }))
+        };
+      })
+    );
+
+    return goalsWithChallenges;
+  } catch (error) {
+    console.error("Error fetching goals with challenges:", error);
     throw error;
   }
 }

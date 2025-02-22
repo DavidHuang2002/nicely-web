@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getUserOrThrow } from "@/lib/database/supabase";
 import { saveGoalWithChallenges } from "@/lib/services/goals";
+import { getUserGoalsWithChallenges } from "@/lib/services/goals";
 
 export async function POST(req: Request) {
   try {
@@ -34,6 +35,26 @@ export async function POST(req: Request) {
     console.error("Error saving goal:", error);
     return NextResponse.json(
       { error: "Failed to save goal" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    const clerkUser = await currentUser();
+    if (!clerkUser) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
+    const user = await getUserOrThrow(clerkUser.id);
+    const goals = await getUserGoalsWithChallenges(user.id!);
+
+    return NextResponse.json(goals);
+  } catch (error) {
+    console.error("Error fetching goals:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch goals" },
       { status: 500 }
     );
   }

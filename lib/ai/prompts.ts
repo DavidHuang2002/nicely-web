@@ -217,7 +217,7 @@ Generate challenges following these guidelines:
 2. For each challenge, provide:
    - title: A clear, engaging name for the challenge (e.g., "Progressive Muscle Relaxation", "3-3-3 Grounding Exercise")
    - description: A brief overview of what the challenge entails
-   - howTo: Step-by-step instructions (5 numbered steps, each clear and actionable)
+   - how_to: Step-by-step instructions (5 numbered steps, each clear and actionable)
    - reason: Why this challenge is particularly relevant for the client, referencing their specific situation
    - benefits: Specific therapeutic benefits of completing this challenge
 
@@ -225,7 +225,7 @@ Here's an example of a well-structured challenge:
 {
   "title": "Worry Time Scheduling",
   "description": "Designate specific times for addressing worries to prevent them from consuming your entire day.",
-  "howTo": "1. Set aside 15-20 minutes daily at a consistent time\\n2. When worries arise, note them down\\n3. During worry time, review and problem-solve\\n4. Outside worry time, remind yourself to postpone worrying\\n5. Keep a small notebook for capturing thoughts",
+  "how_to": "1. Set aside 15-20 minutes daily at a consistent time\\n2. When worries arise, note them down\\n3. During worry time, review and problem-solve\\n4. Outside worry time, remind yourself to postpone worrying\\n5. Keep a small notebook for capturing thoughts",
   "reason": "We discussed how racing thoughts affect your sleep and productivity. This structured approach helps contain worry without suppressing it.",
   "benefits": "Reduces the impact of worry on daily life, improves productivity, better sleep quality, and develops healthier worry management habits."
 }

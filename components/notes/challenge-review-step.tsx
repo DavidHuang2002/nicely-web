@@ -111,7 +111,7 @@ export function ChallengeReviewStep({
                       <div>
                         <h5 className="text-sm font-medium">How To:</h5>
                         <p className="text-sm text-muted-foreground whitespace-pre-line">
-                          {challenge.howTo}
+                          {challenge.how_to}
                         </p>
                       </div>
                       <div>

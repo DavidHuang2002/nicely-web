@@ -4,7 +4,7 @@ export interface TodoItemType {
   description: string;
   reason: string;
   benefits: string;
-  howTo: string;
+  how_to: string;
   completed: boolean;
 }
 

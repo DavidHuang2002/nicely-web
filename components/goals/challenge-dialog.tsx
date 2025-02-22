@@ -51,7 +51,7 @@ export function ChallengeDialog({
               How to do this exercise:
             </h4>
             <p className="text-sm sm:text-base text-muted-foreground whitespace-pre-line">
-              {challenge.howTo}
+              {challenge.how_to}
             </p>
           </div>
 
