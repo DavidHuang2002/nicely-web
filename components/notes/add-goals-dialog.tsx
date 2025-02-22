@@ -104,8 +104,14 @@ export function AddGoalsDialog({
 
   const handleNext = async () => {
     try {
-      // await saveCurrentGoalAndChallenges();
-      console.log("saving goal and challenges", currentGoal, selectedChallenges);
+      console.log(
+        "saving goal and challenges",
+        currentGoal,
+        selectedChallenges
+      );
+      await saveCurrentGoalAndChallenges();
+
+      toast.success("Goal saved successfully", {duration: 1000});
 
       if (isLastGoal) {
         onComplete();

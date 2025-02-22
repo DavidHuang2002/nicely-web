@@ -4,6 +4,7 @@ import { z } from "zod";
 import { GeneratedChallenge, GeneratedChallengeSchema } from "@/models/goals";
 import { getSessionSummaryById } from "@/lib/database/supabase";
 import { makeGoalChallengesPrompt } from "../ai/prompts";
+import { createGoal, createChallenges } from "@/lib/database/supabase";
 
 // Schema for array of challenges
 
@@ -45,12 +46,24 @@ export async function saveGoalWithChallenges(
     userId: string;
   }
 ) {
-  // TODO: Implement database saving logic
-  // This will be implemented once we have the database schema set up
   try {
-    // Save to database
+    // First create the goal
+    const { id: goalId } = await createGoal({
+      userId: goalData.userId,
+      sessionId: goalData.sessionId,
+      title: goalData.title,
+      description: goalData.description,
+    });
+
+    // Then create all challenges for this goal
+    await createChallenges({
+      goalId,
+      challenges: goalData.challenges,
+    });
+
     return {
       success: true,
+      goalId,
       message: "Goal and challenges saved successfully",
     };
   } catch (error) {
