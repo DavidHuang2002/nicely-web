@@ -60,7 +60,7 @@ export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
                   >
                     <Link href="/notes/voice">
                       <Mic className="mr-2 h-4 w-4" />
-                      Voice Journal
+                      Capture Session
                     </Link>
                   </Button>
                   <Button

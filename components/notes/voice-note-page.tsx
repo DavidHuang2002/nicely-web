@@ -13,7 +13,9 @@ import { WaveformVisualizer } from "../waveform-visualizer";
 import { transcribeAudioBlob } from "@/components/utils/transcribe";
 import { RecordingButton } from "@/components/voice-note-recording-button";
 import { Loader2 } from "lucide-react";
-import { VoiceRecordingInput } from "@/components/voice-recording-input"
+import { VoiceRecordingInput } from "@/components/voice-recording-input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { SessionRecapInputs } from "./session-recap-inputs";
 
 const MAX_RECORDING_DURATION = 30; // 30 minutes max for therapy sessions
 const SESSION_PROMPTS = {
@@ -40,48 +42,64 @@ const SESSION_PROMPTS = {
 };
 
 export function VoiceNotePage() {
+  const [currentTab, setCurrentTab] = useState<"recap" | "journal">("recap");
   const [clientTranscription, setClientTranscription] = useState("");
   const [therapistTranscription, setTherapistTranscription] = useState("");
+  const [journalTranscription, setJournalTranscription] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSaveJournal = async () => {
     try {
-      if (!clientTranscription.trim() && !therapistTranscription.trim()) {
+      const isRecapMode = currentTab === "recap";
+
+      if (
+        isRecapMode &&
+        !clientTranscription.trim() &&
+        !therapistTranscription.trim()
+      ) {
+        toast.error("Please record or enter some text first");
+        return;
+      }
+
+      if (!isRecapMode && !journalTranscription.trim()) {
         toast.error("Please record or enter some text first");
         return;
       }
 
       setIsProcessing(true);
-
       toast.loading("Processing your voice note...", {
         id: "save-journal-toast",
       });
 
-      // Combine transcriptions with labels
-      const combinedText = [
-        clientTranscription && `Client: ${clientTranscription}`,
-        therapistTranscription && `Therapist: ${therapistTranscription}`,
-      ]
-        .filter(Boolean)
-        .join("\n\n");
+      let combinedText;
+      if (isRecapMode) {
+        combinedText = [
+          clientTranscription && `Client: ${clientTranscription}`,
+          therapistTranscription && `Therapist: ${therapistTranscription}`,
+        ]
+          .filter(Boolean)
+          .join("\n\n");
+      } else {
+        combinedText = `Client: ${journalTranscription}`;
+      }
 
       const res = await fetch("/api/notes/sessions", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: combinedText }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to save journal entry");
-      }
+      if (!res.ok) throw new Error("Failed to save journal entry");
 
       const data = await res.json();
 
       // Clear the transcriptions
-      setClientTranscription("");
-      setTherapistTranscription("");
+      if (isRecapMode) {
+        setClientTranscription("");
+        setTherapistTranscription("");
+      } else {
+        setJournalTranscription("");
+      }
 
       toast.success("Voice note processed successfully!", {
         id: "save-journal-toast",
@@ -107,7 +125,6 @@ export function VoiceNotePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
       <div className="flex items-center mb-8">
         <Link href="/home">
           <Button variant="ghost" className="text-muted-foreground -ml-2">
@@ -115,40 +132,60 @@ export function VoiceNotePage() {
             Back
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold ml-2">Voice Journal</h1>
-      </div>
-
-      {/* Description */}
-      <div className="mb-8 max-w-2xl">
-        <p className="text-muted-foreground">
-          Make a voice note regarding your last therapy session.
-        </p>
+        <h1 className="text-2xl font-bold ml-2">Capture Session</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-4">
-          <VoiceRecordingInput
-            transcription={clientTranscription}
-            onTranscriptionChange={setClientTranscription}
-            label="Your Reflections"
-            placeholder="What stood out to me from the session was..."
-          />
+        <div className="md:col-span-2 space-y-6">
+          <Tabs
+            defaultValue="recap"
+            onValueChange={(value) =>
+              setCurrentTab(value as "recap" | "journal")
+            }
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="recap">Recap with Therapist</TabsTrigger>
+              <TabsTrigger value="journal">Personal Notes</TabsTrigger>
+            </TabsList>
 
-          <VoiceRecordingInput
-            transcription={therapistTranscription}
-            onTranscriptionChange={setTherapistTranscription}
-            label="Therapist's Comments"
-            placeholder="Key points from your therapist..."
-          />
+            <TabsContent value="recap" className="mt-6">
+              <SessionRecapInputs
+                clientTranscription={clientTranscription}
+                therapistTranscription={therapistTranscription}
+                onClientTranscriptionChange={setClientTranscription}
+                onTherapistTranscriptionChange={setTherapistTranscription}
+              />
+            </TabsContent>
 
-          {(clientTranscription || therapistTranscription) && (
+            <TabsContent value="journal" className="mt-6">
+              <div className="space-y-6">
+                <p className="text-muted-foreground">
+                  Record your thoughts and reflections about your therapy
+                  session. This personal journal helps you process insights and
+                  track your progress.
+                </p>
+                <VoiceRecordingInput
+                  transcription={journalTranscription}
+                  onTranscriptionChange={setJournalTranscription}
+                  label="Your Journal Entry"
+                  placeholder="What I'm reflecting on after my therapy session..."
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          {((currentTab === "recap" &&
+            (clientTranscription || therapistTranscription)) ||
+            (currentTab === "journal" && journalTranscription)) && (
             <div className="flex justify-end">
               <Button
                 onClick={handleSaveJournal}
                 disabled={
                   isProcessing ||
-                  (!clientTranscription.trim() &&
-                    !therapistTranscription.trim())
+                  (currentTab === "recap"
+                    ? !clientTranscription.trim() &&
+                      !therapistTranscription.trim()
+                    : !journalTranscription.trim())
                 }
               >
                 {isProcessing ? (
