@@ -299,6 +299,7 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
       </div>
       {summary.ai_recommendations && summary.ai_recommendations.length > 0 && (
         <RecommendedGoalsSection
+          sessionId={summary.id}
           recommendations={summary.ai_recommendations}
         />
       )}

@@ -52,3 +52,4 @@ export type GeneratedChallenge = z.infer<typeof GeneratedChallengeSchema>;
 export type Challenge = z.infer<typeof ChallengeSchema>;
 export type Goal = z.infer<typeof GoalSchema>;
 export type ChallengeCompletion = z.infer<typeof ChallengeCompletionSchema>; 
+export type AiRecommendationItem = z.infer<typeof AiRecommendationItemSchema>;

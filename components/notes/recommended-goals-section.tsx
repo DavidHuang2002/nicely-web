@@ -7,25 +7,33 @@ import { Card } from "@/components/ui/card";
 import { ChevronDown, Plus, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Section } from "./section";
-
-interface RecommendedGoal {
-  title: string;
-  description: string;
-}
+import { AddGoalsDialog } from "./add-goals-dialog";
+import type { AiRecommendationItem } from "@/models/goals";
 
 interface RecommendedGoalsSectionProps {
-  recommendations: RecommendedGoal[];
+  recommendations: AiRecommendationItem[];
+  sessionId: string; // We'll need this to reference the session notes
 }
 
 export function RecommendedGoalsSection({
   recommendations,
+  sessionId,
 }: RecommendedGoalsSectionProps) {
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const toggleGoal = (title: string) => {
     setSelectedGoals((prev) =>
       prev.includes(title) ? prev.filter((g) => g !== title) : [...prev, title]
     );
+  };
+
+  const handleAddGoals = () => {
+    // Get full goal objects for selected titles
+    const goalsToAdd = recommendations.filter((goal) =>
+      selectedGoals.includes(goal.title)
+    );
+    setIsDialogOpen(true);
   };
 
   const selectedCount = selectedGoals.length > 0 && (
@@ -91,13 +99,26 @@ export function RecommendedGoalsSection({
             animate={{ opacity: 1 }}
             className="flex justify-end"
           >
-            <Button>
+            <Button onClick={handleAddGoals}>
               Add {selectedGoals.length} Goal
               {selectedGoals.length !== 1 && "s"} to Dashboard
             </Button>
           </motion.div>
         )}
       </div>
+
+      <AddGoalsDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        goals={recommendations.filter((goal) =>
+          selectedGoals.includes(goal.title)
+        )}
+        sessionId={sessionId}
+        onComplete={() => {
+          setIsDialogOpen(false);
+          setSelectedGoals([]);
+        }}
+      />
     </Section>
   );
 }
