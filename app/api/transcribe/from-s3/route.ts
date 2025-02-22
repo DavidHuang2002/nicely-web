@@ -2,6 +2,8 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { deleteFileFromS3 } from "@/lib/aws/s3";
 import { transcribeFromS3 } from "@/lib/services/transcription";
 
+export const maxDuration = 120;
+
 export async function POST(req: Request) {
   try {
     const { s3Key } = await req.json();

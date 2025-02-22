@@ -1,5 +1,7 @@
 import { transcribeAudioFile } from "@/lib/services/transcription";
 
+export const maxDuration = 120;
+
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
