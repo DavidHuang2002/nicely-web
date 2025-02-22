@@ -1,23 +1,5 @@
-"use client";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import {
-  Flame,
-  CheckCircle2,
-  ChevronRight,
-  ShieldIcon,
-  MessageCircle,
-} from "lucide-react";
+"use client";;
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { PrivacyNotice } from "@/components/privacy-notice";
 import { GoalCard } from "./goal-card";
 import { ChallengeDialog } from "./challenge-dialog";
