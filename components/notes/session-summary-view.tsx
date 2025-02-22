@@ -222,7 +222,7 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
       if (!res.ok) throw new Error("Failed to delete session");
 
       toast.success("Session deleted successfully");
-      router.push("/notes");
+      router.push("/home");
     } catch (error) {
       toast.error("Failed to delete session");
       console.error("Error deleting session:", error);
@@ -243,7 +243,7 @@ export function SessionSummaryView({ summary }: { summary: SessionSummary }) {
 
       const data = await res.json();
       toast.success("Session summary regenerated");
-      router.push("/notes");
+      router.push("/home");
     } catch (error) {
       toast.error("Failed to regenerate summary");
       console.error("Error regenerating summary:", error);

@@ -20,7 +20,7 @@ export const GeneratedSessionSummarySchema = z.object({
   therapist_insights: z.array(InsightItemSchema).min(1).max(5),
   client_learnings: z.array(InsightItemSchema).min(1).max(5),
   recommendations: z.array(InsightItemSchema).min(1).max(5),
-  ai_recommendations: z.array(AiRecommendationItemSchema).min(0).max(5).optional(),
+  ai_recommendations: z.array(AiRecommendationItemSchema).min(0).max(5).optional().nullable(),
 });
 
 // Base schema with common fields

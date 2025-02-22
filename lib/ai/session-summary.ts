@@ -80,11 +80,15 @@ export async function summarizeFromVoiceNote(
 ): Promise<SessionSummary> {
   const generatedSummary = await generateSummary(voiceNoteText, true);
 
+  console.log("generatedSummary: ", generatedSummary);
+
   const summaryWithMetadata = {
     ...generatedSummary,
     ...getCommonMetaData(userId),
     voice_note_id: voiceNoteId,
   };
+
+  console.log("summaryWithMetadata: ", summaryWithMetadata);
 
   const sessionSummary = await createSessionSummary(summaryWithMetadata);
   console.log(`Successfully processed session summary for voice note ${voiceNoteId}`);

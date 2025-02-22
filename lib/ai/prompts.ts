@@ -22,6 +22,8 @@ export const sessionNotesTaskPrompt = `Help the user reflect on their therapy se
 `;
 
 
+const inferSpekaerInstruction = `Infer the speaker from the context. If the speaker is the user, use "You:". If the speaker is the therapist, use "Therapist:".`;
+
 export const makeSessionSummaryPrompt = (originalText: string, isVoiceNote: boolean) => {
   return `You are an expert therapy assistant analyzing a transcribed therapy session. Your task is to extract key elements that will help the client quickly review their session, retain important insights, and take meaningful next steps.
 
@@ -42,13 +44,18 @@ Each entry in these sections must follow this format:
 
 - **summary**: A short, precise summary of the item.
 - **detail**: A detailed description of the item.
-- **excerpt**: A direct quote or relevant excerpt from the session transcript that supports this item. Infer from the speaker labels who is client vs. therapist and use client/therapist in excerpt. Use Therapist: and You: in the excerpt.
+- **excerpt**: A direct quote or relevant excerpt from the session transcript that supports this item. ${isVoiceNote ? inferSpekaerInstruction : ""}
 
 ## **3. Extraction Guidelines**
 - **Be concise and structured.** Use clear, actionable language.
 - **Preserve context.** Each "excerpt" must directly relate to the summary.
 - **Filter noise.** Ignore small talk or off-topic discussions.
 - **Capture key themes.** Focus on **cognitive, emotional, or behavioral patterns**.
+
+## **4. AI Recommendations**
+- Identify 1-5 core struggles from this session and transform it into a daily goal the client can actively work on. The goal should be sharply focused, deeply personal, and directly address their emotional patterns and blind spots. Phrase it as a commitment to change—concise, impactful, and actionable.
+- **title**: Clear, memorable, motivating name for the goal.
+- **detail**: A direct, thought-provoking insight that challenges the client’s current mindset and offers a clear path forward. No fluff—just the truth they need to hear. This should hit like a bullet.
 
 ## **Example Output**
 {
@@ -74,6 +81,12 @@ Each entry in these sections must follow this format:
       "summary": "Realized I avoid saying no because I fear being seen as unhelpful.",
       "detail": "The client uncovered a fundamental belief: that their value is tied to how much they accommodate others. This belief fuels a behavioral cycle of overextension and emotional exhaustion. Recognizing this pattern is the first step toward breaking it. The next step will be testing whether setting limits actually results in social rejection or if it’s an unfounded fear shaped by past experiences.",
       "excerpt": "You: 'I guess I say yes to everything because I don’t want people to think I’m not pulling my weight. But it’s exhausting.'"
+    }
+  ],
+  "ai_recommendations": [
+    {
+      "title": "Breaking Free from Overthinking",
+      "detail": "You’re not actually thinking—you’re rehearsing fears with no exit strategy.",
     }
   ]
 }

@@ -23,7 +23,9 @@ export default async function Page() {
 
   // If no summaries, use example summary
   const summariesToDisplay =
-    sessionSummaries.length > 0 ? sessionSummaries : [EXAMPLE_SESSION_SUMMARY];
+    sessionSummaries.length > 0
+      ? sessionSummaries.concat(EXAMPLE_SESSION_SUMMARY)
+      : [EXAMPLE_SESSION_SUMMARY];
 
   return (
     <>
