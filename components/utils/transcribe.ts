@@ -10,22 +10,22 @@ export async function transcribeAudioBlob(
     const file = new File([mp3Blob], "recording.mp3", { type: "audio/mp3" });
 
     // If file size is under 4.5MB, use direct transcription
-    if (file.size <= 4.5 * 1024 * 1024) {
-      const formData = new FormData();
-      formData.append("audio", file);
+    // if (file.size <= 4.5 * 1024 * 1024) {
+    //   const formData = new FormData();
+    //   formData.append("audio", file);
       
-      const response = await fetch("/api/transcribe/direct", {
-        method: "POST",
-        body: formData,
-      });
+    //   const response = await fetch("/api/transcribe/direct", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
 
-      if (!response.ok) {
-        throw new Error("Direct transcription failed");
-      }
+    //   if (!response.ok) {
+    //     throw new Error("Direct transcription failed");
+    //   }
 
-      const { text } = await response.json();
-      return currentInput + (currentInput ? " " : "") + text;
-    }
+    //   const { text } = await response.json();
+    //   return currentInput + (currentInput ? " " : "") + text;
+    // }
 
     // For larger files, use S3 upload path
     // Get presigned URL
