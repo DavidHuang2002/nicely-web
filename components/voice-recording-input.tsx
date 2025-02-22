@@ -36,7 +36,7 @@ export function VoiceRecordingInput({
     try {
       const started = await startRecording();
       if (started) {
-        toast.info("Recording started");
+        toast.info("Recording started", {duration: 5000});
       }
     } catch (error) {
       console.error("Error starting recording:", error);
@@ -61,6 +61,7 @@ export function VoiceRecordingInput({
 
       toast.success("Recording transcribed", {
         id: "transcription-toast",
+        duration: 5000,
       });
     } catch (error) {
       console.error("Error stopping recording:", error);
