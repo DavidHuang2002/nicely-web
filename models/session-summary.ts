@@ -1,15 +1,10 @@
 import { z } from "zod";
-
+import { AiRecommendationItemSchema } from "./goals";
 // Schema for individual insight/learning items
 const InsightItemSchema = z.object({
   summary: z.string().min(1).max(500),
   detail: z.string(),
   excerpt: z.string().min(1).max(1000),
-});
-
-const AiRecommendationItemSchema = z.object({
-  title: z.string().min(1).max(100),
-  description: z.string().min(1).max(1000),
 });
 
 // Schema specifically for AI extraction
