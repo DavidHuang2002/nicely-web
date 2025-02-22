@@ -8,11 +8,11 @@ import type { GoalCardType } from "./types";
 
 export default function GoalList() {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
-  const [themes, setThemes] = useState<GoalCardType[]>(initialGoals);
+  const [goals, setGoals] = useState<GoalCardType[]>(initialGoals);
 
   const toggleTodoComplete = (themeId: string, todoId: string) => {
-    setThemes(
-      themes.map((theme) => {
+    setGoals(
+      goals.map((theme) => {
         if (theme.id === themeId) {
           return {
             ...theme,
@@ -37,19 +37,19 @@ export default function GoalList() {
     console.log(`Navigating to session summary for theme ${themeId}`);
   };
 
-  const selectedChallenge = themes
-    .find((theme) => theme.todos.some((todo) => todo.id === openDialog))
+  const selectedChallenge = goals
+    .find((goal) => goal.todos.some((todo) => todo.id === openDialog))
     ?.todos.find((todo) => todo.id === openDialog);
 
   return (
     <div className="relative w-full space-y-4 sm:space-y-6">
       <div className="overflow-x-auto pb-4 sm:pb-6 no-scrollbar">
         <div className="flex gap-3 sm:gap-6 min-w-full px-2 sm:px-4 pt-1">
-          {themes.map((theme) => (
+          {goals.map((goal) => (
             <GoalCard
-              key={theme.id}
-              goal={theme}
-              onTodoToggle={(todoId) => toggleTodoComplete(theme.id, todoId)}
+              key={goal.id}
+              goal={goal}
+              onTodoToggle={(todoId) => toggleTodoComplete(goal.id, todoId)}
               onTodoClick={(todoId) => setOpenDialog(todoId)}
               onDescriptionClick={handleDescriptionClick}
             />
