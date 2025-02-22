@@ -65,6 +65,7 @@ export function AddGoalsDialog({
 
         <div className="space-y-4">
           <ChallengeReviewStep
+            sessionId={sessionId}
             goal={currentGoal}
             challenges={challenges[currentGoal?.title] || []}
             onChallengesSelected={(selected) => {
@@ -80,7 +81,7 @@ export function AddGoalsDialog({
               Cancel
             </Button>
             <Button onClick={handleNext}>
-              {isLastGoal ? "Add Goals" : "Next Goal"}
+              {isLastGoal ? "Add Goal" : "Next Goal"}
             </Button>
           </div>
         </div>

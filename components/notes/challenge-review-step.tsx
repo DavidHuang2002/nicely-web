@@ -5,20 +5,21 @@ import { ChevronDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import type { AiRecommendationItem, GeneratedChallenge } from "@/models/goals";
-import { generateMockChallengesForGoal } from "@/lib/mocks/challenge-data";
+import { toast } from "sonner";
 
 interface ChallengeReviewStepProps {
   goal: AiRecommendationItem;
   challenges: GeneratedChallenge[];
   onChallengesSelected: (challenges: GeneratedChallenge[]) => void;
+  sessionId: string;
 }
 
 export function ChallengeReviewStep({
   goal,
   challenges: initialChallenges,
   onChallengesSelected,
+  sessionId,
 }: ChallengeReviewStepProps) {
-
   const [challenges, setChallenges] =
     useState<GeneratedChallenge[]>(initialChallenges);
   const [selectedChallenges, setSelectedChallenges] = useState<Set<string>>(
@@ -36,14 +37,28 @@ export function ChallengeReviewStep({
       if (challenges.length === 0) {
         setIsGenerating(true);
         try {
-          const generatedChallenges = await generateMockChallengesForGoal(
-            goal.title
-          );
-          console.log("generatedChallenges", generatedChallenges);
+          const response = await fetch("/api/goals/challenges", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title: goal.title,
+              description: goal.description,
+              sessionId,
+            }),
+          });
+
+          if (!response.ok) {
+            toast.error("Failed to generate challenges. Please try again or contact support.");
+            throw new Error("Failed to generate challenges");
+          }
+
+          const generatedChallenges = await response.json();
           setChallenges(generatedChallenges);
           // Auto-select all generated challenges by default
           setSelectedChallenges(
-            new Set(generatedChallenges.map((c) => c.title))
+            new Set(generatedChallenges.map((c: GeneratedChallenge) => c.title))
           );
           onChallengesSelected(generatedChallenges);
         } catch (error) {
@@ -55,7 +70,7 @@ export function ChallengeReviewStep({
     }
 
     generateChallenges();
-  }, [goal, challenges.length, onChallengesSelected]);
+  }, [goal, challenges.length, onChallengesSelected, sessionId]);
 
   if (isGenerating) {
     return (

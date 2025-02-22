@@ -33,7 +33,7 @@ Review the ${isVoiceNote ? "voice note from client" : "conversation"} and genera
 Extract the following **five categories** from the session transcript:
 
 - **title**: A short phrase capturing the main theme of the session.
-- **one_line_summary**: A single-sentence summary of the session’s primary focus.
+- **one_line_summary**: A single-sentence summary of the session's primary focus.
 - **full_recap**: A concise but detailed summary of key discussion points.
 - **recommendations**: Concrete actions, exercises, or unresolved topics the client should focus on.
 - **therapist_insights**: Key advice, reframes, or strategies shared by the therapist.
@@ -55,7 +55,7 @@ Each entry in these sections must follow this format:
 ## **4. AI Recommendations**
 - Identify 1-5 core struggles (the more, the better, you should aim to give options. 3 is the standard) from this session and transform it into a daily goal the client can actively work on. The goal should be sharply focused, deeply personal, and directly address their emotional patterns and blind spots. Phrase it as a commitment to change—concise, impactful, and actionable.
 - **title**: Clear, memorable, motivating name for the goal.
-- **detail**: A direct, thought-provoking insight that challenges the client’s current mindset and offers a clear path forward. No fluff—just the truth they need to hear. This should hit like a bullet.
+- **detail**: A direct, thought-provoking insight that challenges the client's current mindset and offers a clear path forward. No fluff—just the truth they need to hear. This should hit like a bullet.
 
 ## **Example Output**
 {
@@ -65,28 +65,28 @@ Each entry in these sections must follow this format:
   "recommendations": [
     {
       "summary": "Practice saying 'no' at least once this week when feeling overburdened.",
-      "detail": "The client’s habitual overcommitment stems from a deep-seated fear of social rejection and a misplaced sense of responsibility for others' expectations. This exercise will serve as a controlled confrontation with that fear. By choosing a real-life moment to decline a request, the client will gather experiential evidence that setting boundaries does not equate to rejection or incompetence. The goal is to rewire the association between saying ‘no’ and negative social consequences.",
+      "detail": "The client's habitual overcommitment stems from a deep-seated fear of social rejection and a misplaced sense of responsibility for others' expectations. This exercise will serve as a controlled confrontation with that fear. By choosing a real-life moment to decline a request, the client will gather experiential evidence that setting boundaries does not equate to rejection or incompetence. The goal is to rewire the association between saying 'no' and negative social consequences.",
       "excerpt": "Therapist: 'Next time you feel pressured to take on extra work, pause and ask yourself if it aligns with your priorities. Then, try saying no in a way that feels respectful but firm.'"
     }
   ],
   "therapist_insights": [
     {
-      "summary": "Stress isn’t just about workload, but about emotional boundaries.",
-      "detail": "The therapist identified that the client’s stress is not primarily caused by the quantity of tasks but by the emotional toll of feeling responsible for others' opinions and expectations. This insight shifts the focus from productivity management to emotional self-regulation. Without addressing this pattern, even reduced workloads will continue to feel overwhelming because the underlying emotional triggers remain intact. The real task is disentangling self-worth from external validation.",
-      "excerpt": "Therapist: 'It's not just the number of tasks—you feel drained because you're absorbing other people’s expectations as your responsibility.'"
+      "summary": "Stress isn't just about workload, but about emotional boundaries.",
+      "detail": "The therapist identified that the client's stress is not primarily caused by the quantity of tasks but by the emotional toll of feeling responsible for others' opinions and expectations. This insight shifts the focus from productivity management to emotional self-regulation. Without addressing this pattern, even reduced workloads will continue to feel overwhelming because the underlying emotional triggers remain intact. The real task is disentangling self-worth from external validation.",
+      "excerpt": "Therapist: 'It's not just the number of tasks—you feel drained because you're absorbing other people's expectations as your responsibility.'"
     }
   ],
   "client_learnings": [
     {
       "summary": "Realized I avoid saying no because I fear being seen as unhelpful.",
-      "detail": "The client uncovered a fundamental belief: that their value is tied to how much they accommodate others. This belief fuels a behavioral cycle of overextension and emotional exhaustion. Recognizing this pattern is the first step toward breaking it. The next step will be testing whether setting limits actually results in social rejection or if it’s an unfounded fear shaped by past experiences.",
-      "excerpt": "You: 'I guess I say yes to everything because I don’t want people to think I’m not pulling my weight. But it’s exhausting.'"
+      "detail": "The client uncovered a fundamental belief: that their value is tied to how much they accommodate others. This belief fuels a behavioral cycle of overextension and emotional exhaustion. Recognizing this pattern is the first step toward breaking it. The next step will be testing whether setting limits actually results in social rejection or if it's an unfounded fear shaped by past experiences.",
+      "excerpt": "You: 'I guess I say yes to everything because I don't want people to think I'm not pulling my weight. But it's exhausting.'"
     }
   ],
   "ai_recommendations": [
     {
       "title": "Breaking Free from Overthinking",
-      "detail": "You’re not actually thinking—you’re rehearsing fears with no exit strategy.",
+      "detail": "You're not actually thinking—you're rehearsing fears with no exit strategy.",
     }
   ]
 }
@@ -96,17 +96,17 @@ Here is the prior conversation:
 ${originalText}`;
 }
 
-export const onboardingFinishedMessageContent: string = `You’re all set! 🎉
+export const onboardingFinishedMessageContent: string = `You're all set! 🎉
 
-Thank you for sharing and trusting me with your thoughts. 💛 Now that I’ve gotten to know you better, I’m ready to give you personalized support tailored to your needs.
+Thank you for sharing and trusting me with your thoughts. 💛 Now that I've gotten to know you better, I'm ready to give you personalized support tailored to your needs.
 
 Let me take you to the home page, where we can:
 
-- Work through your emotions together if you’re feeling down.
+- Work through your emotions together if you're feeling down.
 - Do daily self-care inspired by your therapy insights.
 - Add notes about your latest therapy session to stay on track.
 
-Whatever you need, I’m here to help—let’s take this journey one step at a time. 😊`;
+Whatever you need, I'm here to help—let's take this journey one step at a time. 😊`;
 
 export const makeReflectionPrompt = (conversation: string) => {
   return `You are analyzing a conversation as an experienced therapist with deep insight into human behavior. Your task is to extract key elements that will help guide extremely personalized therapy and form the basis for future therapeutic insights and interventions.
@@ -120,7 +120,7 @@ Review the conversation and create a memory reflection following these rules:
    - Each item must have a "type" among: "goal", "struggle", "insight", or "next_step".  
    - the insight is for insight regarding the user's cognitive, emotional, behavioral patterns, relationships dynamics, etc.
    - the next_step for any takeaways from therapy, actions user want to take, or any unresolved topics to be discussed in future sessions.
-   - Choose the category that best represents the point’s function in therapy.
+   - Choose the category that best represents the point's function in therapy.
 
 3. **Context Tags**  
    - Provide 2-4 keywords that capture the emotional, behavioral, or thematic essence of the point.  
@@ -128,15 +128,15 @@ Review the conversation and create a memory reflection following these rules:
    - Avoid broad or generic tags like ["therapy", "session", "conversation"].
 
 4. **Concise Summary**  
-   - Write a single-sentence summary that pinpoints the essence of the user’s statement.  
+   - Write a single-sentence summary that pinpoints the essence of the user's statement.  
    - Example: "Feels anxious about an upcoming job interview due to fear of failure."
 
 5. **Original Quote**  
    - Include a short direct quote from the user that prompted you to create this entry.  
-   - This helps preserve the user’s own words and context.
+   - This helps preserve the user's own words and context.
 
 6. **Importance Field**  
-   - Assign an **importance** value (1–5) to each point based on its perceived significance to the user’s overall therapeutic progress.  
+   - Assign an **importance** value (1–5) to each point based on its perceived significance to the user's overall therapeutic progress.  
    - Use the following scale:
      - 1: Minor or situational  
      - 2: Relevant but not critical  
@@ -160,13 +160,13 @@ ${conversation}`;
 
 
 
-export const onboardingOpenner: string = `**Welcome to Nicely!** 🌟 I’m Nic, your therapy companion, here to support you between sessions.  
+export const onboardingOpenner: string = `**Welcome to Nicely!** 🌟 I'm Nic, your therapy companion, here to support you between sessions.  
 
-We’ll go through a quick setup—just a few questions to personalize your experience:  
+We'll go through a quick setup—just a few questions to personalize your experience:  
 - First, your name.  
 - Then, your therapy goals and any current challenges.  
 
-It’ll take no more than five minutes, and you’ll be all set! No rush, just share what feels right. Ready to start? 😊`;
+It'll take no more than five minutes, and you'll be all set! No rush, just share what feels right. Ready to start? 😊`;
 
 export const onboardingTaskPromopt = `Your current task is helping with onboarding. 
   Guide the user through the following steps:
@@ -190,3 +190,52 @@ export const onboardingTaskPromopt = `Your current task is helping with onboardi
 
   After the user finished the last step, tell them you are all set for onboarding but they can feel free to share anything else they want to add. If not, the user can just say "no" and you can wrap up here and call the completeOnboarding tool to finish the process.
 `;
+
+export const makeGoalChallengesPrompt = (
+  goalTitle: string, 
+  goalDescription: string, 
+  sessionContent: string
+) => {
+  return `You are an expert therapy assistant creating personalized challenges for a client's therapeutic goal. Your task is to generate 2-4 specific, actionable challenges that will help the client work towards their goal.
+
+Goal Information:
+- Title: "${goalTitle}"
+- Description: "${goalDescription}"
+
+Session Context:
+${sessionContent}
+
+Generate challenges following these guidelines:
+
+1. Each challenge should be:
+   - Concrete and actionable
+   - Measurable for progress tracking
+   - Aligned with therapeutic principles
+   - Sensitive to the client's current emotional state
+   - Structured for gradual progress
+
+2. For each challenge, provide:
+   - title: A clear, engaging name for the challenge (e.g., "Progressive Muscle Relaxation", "3-3-3 Grounding Exercise")
+   - description: A brief overview of what the challenge entails
+   - howTo: Step-by-step instructions (5 numbered steps, each clear and actionable)
+   - reason: Why this challenge is particularly relevant for the client, referencing their specific situation
+   - benefits: Specific therapeutic benefits of completing this challenge
+
+Here's an example of a well-structured challenge:
+{
+  "title": "Worry Time Scheduling",
+  "description": "Designate specific times for addressing worries to prevent them from consuming your entire day.",
+  "howTo": "1. Set aside 15-20 minutes daily at a consistent time\\n2. When worries arise, note them down\\n3. During worry time, review and problem-solve\\n4. Outside worry time, remind yourself to postpone worrying\\n5. Keep a small notebook for capturing thoughts",
+  "reason": "We discussed how racing thoughts affect your sleep and productivity. This structured approach helps contain worry without suppressing it.",
+  "benefits": "Reduces the impact of worry on daily life, improves productivity, better sleep quality, and develops healthier worry management habits."
+}
+
+3. Ensure challenges:
+   - Build upon insights from the therapy session
+   - Address underlying patterns rather than just symptoms
+   - Offer a mix of emotional, cognitive, and behavioral exercises
+   - Can be practiced regularly in daily life
+   - Progress from simpler to more complex skills
+
+Format each challenge according to the schema provided, focusing on practical implementation and therapeutic value.`;
+};
