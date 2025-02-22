@@ -53,7 +53,7 @@ Each entry in these sections must follow this format:
 - **Capture key themes.** Focus on **cognitive, emotional, or behavioral patterns**.
 
 ## **4. AI Recommendations**
-- Identify 1-5 core struggles from this session and transform it into a daily goal the client can actively work on. The goal should be sharply focused, deeply personal, and directly address their emotional patterns and blind spots. Phrase it as a commitment to change—concise, impactful, and actionable.
+- Identify 1-5 core struggles (the more, the better, you should aim to give options. 3 is the standard) from this session and transform it into a daily goal the client can actively work on. The goal should be sharply focused, deeply personal, and directly address their emotional patterns and blind spots. Phrase it as a commitment to change—concise, impactful, and actionable.
 - **title**: Clear, memorable, motivating name for the goal.
 - **detail**: A direct, thought-provoking insight that challenges the client’s current mindset and offers a clear path forward. No fluff—just the truth they need to hear. This should hit like a bullet.
 
