@@ -54,21 +54,18 @@ export function NotesPageContent({ sessionSummaries }: NotesPageContentProps) {
               {currentTab === "sessions" && (
                 <>
                   <Button
-                    variant="outline"
-                    asChild
+                    onClick={() => setIsUploadDialogOpen(true)}
                     className="sm:w-auto justify-center"
+                    variant="outline"
                   >
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Recording
+                  </Button>
+                  <Button asChild className="sm:w-auto justify-center">
                     <Link href="/notes/voice">
                       <Mic className="mr-2 h-4 w-4" />
                       Capture Session
                     </Link>
-                  </Button>
-                  <Button
-                    onClick={() => setIsUploadDialogOpen(true)}
-                    className="sm:w-auto justify-center"
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Recording
                   </Button>
                 </>
               )}
