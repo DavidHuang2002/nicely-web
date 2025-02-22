@@ -1,57 +1,79 @@
 import { GoalCardType } from "./types";
 
 export const initialGoals: GoalCardType[] = [
+    // // {
+    // //   id: "1",
+    // //   title: "Managing Anxiety and Stress",
+    // //   description:
+    // //     '"My heart races before meetings and I cannot focus, wishing for better tools to handle these moments."',
+    // //   streak: 3,
+    // //   todos: [
+    // //     {
+    // //       id: "t1",
+    // //       title: "Progressive Muscle Relaxation",
+    // //       description:
+    // //         "A systematic technique to reduce physical tension and break the anxiety cycle by tensing and relaxing different muscle groups.",
+    // //       howTo:
+    // //         "1. Find a quiet, comfortable place to sit or lie down\n2. Start with your toes, tense them for 5 seconds\n3. Release and notice the feeling of relaxation for 10 seconds\n4. Move up through each muscle group (feet, legs, abdomen, arms, face)\n5. Practice for 10-15 minutes total",
+    // //       reason:
+    // //         "During our last session, you mentioned experiencing physical tension, especially in your shoulders and jaw. This technique will help you recognize and release tension before it builds up.",
+    // //       benefits:
+    // //         "Reduces muscle tension, lowers overall stress levels, improves body awareness, and provides a practical tool for managing anxiety in the moment.",
+    // //       completed: false,
+    // //     },
+    // //     {
+    // //       id: "t2",
+    // //       title: "3-3-3 Grounding Exercise",
+    // //       description:
+    // //         "A quick mindfulness technique to break anxiety spirals by engaging your senses and returning to the present moment.",
+    // //       howTo:
+    // //         "1. Name 3 things you can see\n2. Name 3 things you can hear\n3. Move 3 parts of your body\n4. Take a deep breath after each step\n5. Notice how you feel more centered",
+    // //       reason:
+    // //         "You've described feeling overwhelmed in meetings and social situations. This quick exercise can help you regain focus without others noticing.",
+    // //       benefits:
+    // //         "Interrupts anxiety cycles, brings attention to the present moment, can be done anywhere without drawing attention, and helps regain mental clarity.",
+    // //       completed: false,
+    // //     },
+    // //     {
+    // //       id: "t3",
+    // //       title: "Worry Time Scheduling",
+    // //       description:
+    // //         "Designate specific times for addressing worries to prevent them from consuming your entire day.",
+    // //       howTo:
+    // //         "1. Set aside 15-20 minutes daily at a consistent time\n2. When worries arise, note them down\n3. During worry time, review and problem-solve\n4. Outside worry time, remind yourself to postpone worrying\n5. Keep a small notebook for capturing thoughts",
+    // //       reason:
+    // //         "We discussed how racing thoughts affect your sleep and productivity. This structured approach helps contain worry without suppressing it.",
+    // //       benefits:
+    // //         "Reduces the impact of worry on daily life, improves productivity, better sleep quality, and develops healthier worry management habits.",
+    // //       completed: false,
+    // //     },
+    // //   ],
+    // },
     {
       id: "1",
-      title: "Managing Anxiety and Stress",
+      title: "How Nicely Works",
       description:
-        '"My heart races before meetings and I cannot focus, wishing for better tools to handle these moments."',
-      streak: 3,
+        '"We have included a few examples of goals here to help you see how you can track your goals and progress from therapy sessions. "',
+      streak: 0,
       todos: [
         {
           id: "t1",
-          title: "Progressive Muscle Relaxation",
+          title: "Capture your last session through a voice note",
           description:
-            "A systematic technique to reduce physical tension and break the anxiety cycle by tensing and relaxing different muscle groups.",
+            "Capture your last session through a voice note and we will generate a few personalized goals for you to work on.",
           howTo:
-            "1. Find a quiet, comfortable place to sit or lie down\n2. Start with your toes, tense them for 5 seconds\n3. Release and notice the feeling of relaxation for 10 seconds\n4. Move up through each muscle group (feet, legs, abdomen, arms, face)\n5. Practice for 10-15 minutes total",
+            "1. Go to session record page\n2. Click on the capture session icon \n3. Record your thoughts and feelings about the session \n4. Select the goals and challenges we generated for you to add to your dashboard",
           reason:
-            "During our last session, you mentioned experiencing physical tension, especially in your shoulders and jaw. This technique will help you recognize and release tension before it builds up.",
+            "This will help you see how you can track your goals and progress from therapy sessions.",
           benefits:
-            "Reduces muscle tension, lowers overall stress levels, improves body awareness, and provides a practical tool for managing anxiety in the moment.",
-          completed: false,
-        },
-        {
-          id: "t2",
-          title: "3-3-3 Grounding Exercise",
-          description:
-            "A quick mindfulness technique to break anxiety spirals by engaging your senses and returning to the present moment.",
-          howTo:
-            "1. Name 3 things you can see\n2. Name 3 things you can hear\n3. Move 3 parts of your body\n4. Take a deep breath after each step\n5. Notice how you feel more centered",
-          reason:
-            "You've described feeling overwhelmed in meetings and social situations. This quick exercise can help you regain focus without others noticing.",
-          benefits:
-            "Interrupts anxiety cycles, brings attention to the present moment, can be done anywhere without drawing attention, and helps regain mental clarity.",
-          completed: false,
-        },
-        {
-          id: "t3",
-          title: "Worry Time Scheduling",
-          description:
-            "Designate specific times for addressing worries to prevent them from consuming your entire day.",
-          howTo:
-            "1. Set aside 15-20 minutes daily at a consistent time\n2. When worries arise, note them down\n3. During worry time, review and problem-solve\n4. Outside worry time, remind yourself to postpone worrying\n5. Keep a small notebook for capturing thoughts",
-          reason:
-            "We discussed how racing thoughts affect your sleep and productivity. This structured approach helps contain worry without suppressing it.",
-          benefits:
-            "Reduces the impact of worry on daily life, improves productivity, better sleep quality, and develops healthier worry management habits.",
+            "By identifying the goals and specific steps you can take from therapy, you can have clarity on what to work on and how to do it and keep growing between sessions.",
           completed: false,
         },
       ],
     },
     {
       id: "2",
-      title: "Building Self-Compassion",
+      title: "Example: Building Self-Compassion",
       description:
         '"When others make mistakes I understand, but with myself I am too harsh."',
       streak: 5,
