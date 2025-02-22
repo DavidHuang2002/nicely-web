@@ -2,7 +2,7 @@ export interface TodoItemType {
   id: string;
   title: string;
   description: string;
-  relevance: string;
+  reason: string;
   benefits: string;
   howTo: string;
   completed: boolean;

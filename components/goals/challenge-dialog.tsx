@@ -67,7 +67,7 @@ export function ChallengeDialog({
           <div className="space-y-1.5 sm:space-y-2">
             <h4 className="font-medium text-base sm:text-lg">Why now?</h4>
             <p className="text-sm sm:text-base text-muted-foreground">
-              {challenge.relevance}
+              {challenge.reason}
             </p>
           </div>
 
