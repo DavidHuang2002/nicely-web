@@ -10,67 +10,21 @@ import { toast } from "sonner";
 interface ChallengeReviewStepProps {
   goal: AiRecommendationItem;
   challenges: GeneratedChallenge[];
+  selectedChallenges: GeneratedChallenge[];
   onChallengesSelected: (challenges: GeneratedChallenge[]) => void;
-  sessionId: string;
+  isGenerating: boolean;
 }
 
 export function ChallengeReviewStep({
   goal,
-  challenges: initialChallenges,
+  challenges,
+  selectedChallenges,
   onChallengesSelected,
-  sessionId,
+  isGenerating,
 }: ChallengeReviewStepProps) {
-  const [challenges, setChallenges] =
-    useState<GeneratedChallenge[]>(initialChallenges);
-  const [selectedChallenges, setSelectedChallenges] = useState<Set<string>>(
-    new Set()
-  );
-  const [isGenerating, setIsGenerating] = useState(challenges.length === 0);
   const [expandedChallenge, setExpandedChallenge] = useState<string | null>(
     null
   );
-
-  console.log("challenges", challenges);
-
-  useEffect(() => {
-    async function generateChallenges() {
-      if (challenges.length === 0) {
-        setIsGenerating(true);
-        try {
-          const response = await fetch("/api/goals/challenges", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              title: goal.title,
-              description: goal.description,
-              sessionId,
-            }),
-          });
-
-          if (!response.ok) {
-            toast.error("Failed to generate challenges. Please try again or contact support.");
-            throw new Error("Failed to generate challenges");
-          }
-
-          const generatedChallenges = await response.json();
-          setChallenges(generatedChallenges);
-          // Auto-select all generated challenges by default
-          setSelectedChallenges(
-            new Set(generatedChallenges.map((c: GeneratedChallenge) => c.title))
-          );
-          onChallengesSelected(generatedChallenges);
-        } catch (error) {
-          console.error("Failed to generate challenges:", error);
-        } finally {
-          setIsGenerating(false);
-        }
-      }
-    }
-
-    generateChallenges();
-  }, [goal, challenges.length, onChallengesSelected, sessionId]);
 
   if (isGenerating) {
     return (
@@ -83,17 +37,14 @@ export function ChallengeReviewStep({
     );
   }
 
-  // if (!goal) return null;
-
   const toggleChallenge = (challenge: GeneratedChallenge) => {
-    const newSelected = new Set(selectedChallenges);
-    if (newSelected.has(challenge.title)) {
-      newSelected.delete(challenge.title);
-    } else {
-      newSelected.add(challenge.title);
-    }
-    setSelectedChallenges(newSelected);
-    onChallengesSelected(challenges.filter((c) => newSelected.has(c.title)));
+    const isSelected = selectedChallenges.some(
+      (c) => c.title === challenge.title
+    );
+    const newSelected = isSelected
+      ? selectedChallenges.filter((c) => c.title !== challenge.title)
+      : [...selectedChallenges, challenge];
+    onChallengesSelected(newSelected);
   };
 
   return (
@@ -109,14 +60,16 @@ export function ChallengeReviewStep({
             key={challenge.title}
             className={cn(
               "p-4 cursor-pointer transition-all duration-200",
-              selectedChallenges.has(challenge.title) &&
+              selectedChallenges.some((c) => c.title === challenge.title) &&
                 "border-primary bg-primary/5"
             )}
           >
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <Checkbox
-                  checked={selectedChallenges.has(challenge.title)}
+                  checked={selectedChallenges.some(
+                    (c) => c.title === challenge.title
+                  )}
                   onCheckedChange={() => toggleChallenge(challenge)}
                 />
                 <div className="flex-1">
