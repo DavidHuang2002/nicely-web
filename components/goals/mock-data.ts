@@ -106,109 +106,109 @@ export const initialGoals: GoalCardType[] = [
         },
       ],
     },
-    {
-      id: "3",
-      title: "Improving Sleep Habits",
-      description:
-        '"My body feels tired but my mind refuses to quiet down at night."',
-      streak: 2,
-      todos: [
-        {
-          id: "t6",
-          title: "Evening Wind-Down Routine",
-          description:
-            "Create a calming pre-sleep routine to signal your body it's time to rest.",
-          how_to:
-            "1. Start 1 hour before bedtime\n2. Dim lights and reduce blue light exposure\n3. Do gentle stretching or reading\n4. Practice 5 minutes of deep breathing\n5. Keep your bedroom cool and dark",
-          reason:
-            "Your sleep patterns have been irregular, affecting your daily energy. This structured routine will help regulate your circadian rhythm.",
-          benefits:
-            "Improves sleep quality, reduces time to fall asleep, increases daytime energy, and helps maintain consistent sleep schedule.",
-          completed: false,
-        },
-        {
-          id: "t7",
-          title: "Sleep Thought Journal",
-          description:
-            "Address nighttime worry patterns by logging thoughts before bed.",
-          how_to:
-            "1. Keep a journal by your bed\n2. Write down any worrying thoughts\n3. Note potential solutions or next steps\n4. Close the journal as a symbol of setting aside concerns\n5. Focus on restful breathing",
-          reason:
-            "Night-time anxiety has been disrupting your sleep. This technique helps clear your mind before bed.",
-          benefits:
-            "Reduces bedtime anxiety, prevents racing thoughts, improves sleep quality, and provides action steps for tomorrow.",
-          completed: true,
-        },
-      ],
-    },
-    {
-      id: "4",
-      title: "Building Healthy Boundaries",
-      description:
-        '"I keep saying yes to everything, even while feeling overwhelmed."',
-      streak: 4,
-      todos: [
-        {
-          id: "t8",
-          title: "Boundary Check-In Practice",
-          description:
-            "Regular assessment of your emotional and physical boundaries in different situations.",
-          how_to:
-            "1. Identify situations where you feel drained\n2. Notice physical and emotional responses\n3. Write down your ideal boundaries\n4. Practice saying no when needed\n5. Validate your right to have boundaries",
-          reason:
-            "You've mentioned feeling overwhelmed by others' demands. This practice helps you recognize and honor your limits.",
-          benefits:
-            "Increases self-respect, reduces emotional exhaustion, improves relationships, and enhances work-life balance.",
-          completed: false,
-        },
-        {
-          id: "t9",
-          title: "Assertive Communication Script",
-          description:
-            "Develop and practice clear, assertive responses for common boundary challenges.",
-          how_to:
-            "1. Identify a boundary situation\n2. Write out your feelings and needs\n3. Create a clear, firm response\n4. Practice delivery in a mirror\n5. Use 'I' statements and stay calm",
-          reason:
-            "This builds on our discussion about difficulty saying no to extra work projects.",
-          benefits:
-            "Improves confidence in setting boundaries, reduces anxiety about confrontation, maintains professional relationships.",
-          completed: false,
-        },
-      ],
-    },
-    {
-      id: "5",
-      title: "Processing Grief and Loss",
-      description:
-        '"The memories still feel fresh, as if everything happened just yesterday."',
-      streak: 7,
-      todos: [
-        {
-          id: "t10",
-          title: "Memory Journal Practice",
-          description:
-            "Create a safe space to explore and honor memories of your loss.",
-          how_to:
-            "1. Set aside quiet time each day\n2. Write about a specific memory\n3. Express associated emotions freely\n4. Include photos or mementos if helpful\n5. Close with a gratitude statement",
-          reason:
-            "As we've discussed your recent loss, this provides a structured way to process emotions and preserve memories.",
-          benefits:
-            "Facilitates healthy grieving, preserves important memories, reduces emotional suppression, promotes healing.",
-          completed: true,
-        },
-        {
-          id: "t11",
-          title: "Grief Check-In Meditation",
-          description:
-            "A gentle meditation practice for acknowledging and sitting with grief emotions.",
-          how_to:
-            "1. Find a quiet, comfortable space\n2. Focus on your breath for 2 minutes\n3. Notice any emotions present\n4. Allow feelings without judgment\n5. Close with self-compassion phrase",
-          reason:
-            "This helps address the waves of grief you've described experiencing throughout the day.",
-          benefits:
-            "Develops emotional awareness, reduces anxiety about grief, builds resilience, promotes self-compassion.",
-          completed: false,
-        },
-      ],
-    },
+    // {
+    //   id: "3",
+    //   title: "Improving Sleep Habits",
+    //   description:
+    //     '"My body feels tired but my mind refuses to quiet down at night."',
+    //   streak: 2,
+    //   todos: [
+    //     {
+    //       id: "t6",
+    //       title: "Evening Wind-Down Routine",
+    //       description:
+    //         "Create a calming pre-sleep routine to signal your body it's time to rest.",
+    //       how_to:
+    //         "1. Start 1 hour before bedtime\n2. Dim lights and reduce blue light exposure\n3. Do gentle stretching or reading\n4. Practice 5 minutes of deep breathing\n5. Keep your bedroom cool and dark",
+    //       reason:
+    //         "Your sleep patterns have been irregular, affecting your daily energy. This structured routine will help regulate your circadian rhythm.",
+    //       benefits:
+    //         "Improves sleep quality, reduces time to fall asleep, increases daytime energy, and helps maintain consistent sleep schedule.",
+    //       completed: false,
+    //     },
+    //     {
+    //       id: "t7",
+    //       title: "Sleep Thought Journal",
+    //       description:
+    //         "Address nighttime worry patterns by logging thoughts before bed.",
+    //       how_to:
+    //         "1. Keep a journal by your bed\n2. Write down any worrying thoughts\n3. Note potential solutions or next steps\n4. Close the journal as a symbol of setting aside concerns\n5. Focus on restful breathing",
+    //       reason:
+    //         "Night-time anxiety has been disrupting your sleep. This technique helps clear your mind before bed.",
+    //       benefits:
+    //         "Reduces bedtime anxiety, prevents racing thoughts, improves sleep quality, and provides action steps for tomorrow.",
+    //       completed: true,
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "4",
+    //   title: "Building Healthy Boundaries",
+    //   description:
+    //     '"I keep saying yes to everything, even while feeling overwhelmed."',
+    //   streak: 4,
+    //   todos: [
+    //     {
+    //       id: "t8",
+    //       title: "Boundary Check-In Practice",
+    //       description:
+    //         "Regular assessment of your emotional and physical boundaries in different situations.",
+    //       how_to:
+    //         "1. Identify situations where you feel drained\n2. Notice physical and emotional responses\n3. Write down your ideal boundaries\n4. Practice saying no when needed\n5. Validate your right to have boundaries",
+    //       reason:
+    //         "You've mentioned feeling overwhelmed by others' demands. This practice helps you recognize and honor your limits.",
+    //       benefits:
+    //         "Increases self-respect, reduces emotional exhaustion, improves relationships, and enhances work-life balance.",
+    //       completed: false,
+    //     },
+    //     {
+    //       id: "t9",
+    //       title: "Assertive Communication Script",
+    //       description:
+    //         "Develop and practice clear, assertive responses for common boundary challenges.",
+    //       how_to:
+    //         "1. Identify a boundary situation\n2. Write out your feelings and needs\n3. Create a clear, firm response\n4. Practice delivery in a mirror\n5. Use 'I' statements and stay calm",
+    //       reason:
+    //         "This builds on our discussion about difficulty saying no to extra work projects.",
+    //       benefits:
+    //         "Improves confidence in setting boundaries, reduces anxiety about confrontation, maintains professional relationships.",
+    //       completed: false,
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "5",
+    //   title: "Processing Grief and Loss",
+    //   description:
+    //     '"The memories still feel fresh, as if everything happened just yesterday."',
+    //   streak: 7,
+    //   todos: [
+    //     {
+    //       id: "t10",
+    //       title: "Memory Journal Practice",
+    //       description:
+    //         "Create a safe space to explore and honor memories of your loss.",
+    //       how_to:
+    //         "1. Set aside quiet time each day\n2. Write about a specific memory\n3. Express associated emotions freely\n4. Include photos or mementos if helpful\n5. Close with a gratitude statement",
+    //       reason:
+    //         "As we've discussed your recent loss, this provides a structured way to process emotions and preserve memories.",
+    //       benefits:
+    //         "Facilitates healthy grieving, preserves important memories, reduces emotional suppression, promotes healing.",
+    //       completed: true,
+    //     },
+    //     {
+    //       id: "t11",
+    //       title: "Grief Check-In Meditation",
+    //       description:
+    //         "A gentle meditation practice for acknowledging and sitting with grief emotions.",
+    //       how_to:
+    //         "1. Find a quiet, comfortable space\n2. Focus on your breath for 2 minutes\n3. Notice any emotions present\n4. Allow feelings without judgment\n5. Close with self-compassion phrase",
+    //       reason:
+    //         "This helps address the waves of grief you've described experiencing throughout the day.",
+    //       benefits:
+    //         "Develops emotional awareness, reduces anxiety about grief, builds resilience, promotes self-compassion.",
+    //       completed: false,
+    //     },
+    //   ],
+    // },
   ]
