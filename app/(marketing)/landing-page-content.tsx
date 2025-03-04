@@ -538,7 +538,7 @@ export function LandingPageContent() {
               </div>
             </div>
 
-            {/* Testimonials Section */}
+            {/* Testimonials Section - Temporarily Disabled
             <motion.div
               className="w-full max-w-7xl mx-auto px-4 py-16"
               initial={{ opacity: 0, y: 20 }}
@@ -547,7 +547,6 @@ export function LandingPageContent() {
             >
               <div className="text-center mb-12">
                 <div className="relative inline-block">
-                  {/* Decorative Elements */}
                   <div className="absolute -left-8 -top-8 w-16 h-16 bg-blue-100/50 rounded-full blur-xl" />
                   <div className="absolute -right-6 -bottom-6 w-12 h-12 bg-purple-100/50 rounded-full blur-lg" />
                   
@@ -563,9 +562,7 @@ export function LandingPageContent() {
                 </div>
               </div>
 
-              {/* Rest of testimonials section */}
               <div className="relative overflow-hidden">
-                {/* First Row - Scrolling Left */}
                 <div
                   className="flex space-x-6 mb-6"
                   style={{
@@ -602,7 +599,6 @@ export function LandingPageContent() {
                   />
                 </div>
 
-                {/* Second Row - Scrolling Right */}
                 <div
                   className="flex space-x-6"
                   style={{
@@ -640,6 +636,7 @@ export function LandingPageContent() {
                 </div>
               </div>
             </motion.div>
+*/}
           </div>
         </div>
       </div>
