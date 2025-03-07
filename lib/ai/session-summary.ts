@@ -174,7 +174,7 @@ export async function regenerateSessionSummary(sessionId: string): Promise<Sessi
       newSummary = await summarizeFromTranscript(
         transcription.transcription_text,
         transcription.id,
-        existingSessionSummary.user_id
+        existingSessionSummary.user_id,
       );
     } 
     // Handle voice note-based summary
