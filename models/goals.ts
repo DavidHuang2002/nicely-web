@@ -22,12 +22,14 @@ export const ChallengeSchema = ChallengeBaseSchema.extend({
   goal_id: z.string().uuid(),
   created_at: z.string().or(z.date()).transform((val) => new Date(val)),
   updated_at: z.string().or(z.date()).transform((val) => new Date(val)),
+  last_completion_date: z.string().or(z.date()).transform((val) => new Date(val)).nullable().optional(),
 });
 
 // Base goal schema
 const GoalBaseSchema = AiRecommendationItemSchema.extend({
   user_id: z.string().uuid(),
   streak: z.number().default(0),
+  // TODO: delete this field it is not used
   last_completion_date: z.string().or(z.date()).nullable().optional(),
   session_note_id: z.string().uuid().nullable().optional(),
 });
@@ -39,19 +41,11 @@ export const GoalSchema = GoalBaseSchema.extend({
   updated_at: z.string().or(z.date()).transform((val) => new Date(val)),
 });
 
-// Simple schema for challenge completion tracking
-export const ChallengeCompletionSchema = z.object({
-  id: z.string().uuid(),
-  challenge_id: z.string().uuid(),
-  user_id: z.string().uuid(),
-  completed_at: z.string().or(z.date()).transform((val) => new Date(val)),
-});
 
 // Type exports
 export type GeneratedChallenge = z.infer<typeof GeneratedChallengeSchema>;
 export type Challenge = z.infer<typeof ChallengeSchema>;
 export type Goal = z.infer<typeof GoalSchema>;
-export type ChallengeCompletion = z.infer<typeof ChallengeCompletionSchema>; 
 export type AiRecommendationItem = z.infer<typeof AiRecommendationItemSchema>;
 
 export const GeneratedChallengesArraySchema = z.array(GeneratedChallengeSchema);
