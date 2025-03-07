@@ -29,7 +29,8 @@ export function ChallengeDialog({
           <DialogTitle className="text-lg sm:text-xl">
             {challenge.title}
           </DialogTitle>
-          <Button
+          {/* TODO: implement discuss later */}
+          {/* <Button
             variant="outline"
             size="sm"
             className="hover:bg-primary/10"
@@ -43,7 +44,7 @@ export function ChallengeDialog({
               <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
               <span className="text-xs sm:text-sm">Discuss</span>
             </Link>
-          </Button>
+          </Button> */}
         </DialogHeader>
         <div className="space-y-4 sm:space-y-6">
           <div className="space-y-1.5 sm:space-y-2">
