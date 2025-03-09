@@ -66,9 +66,10 @@ export default function GoalList() {
             // Only add completed_at when marking as completed
             if (!todo.completed) {
               updatedTodo.completed_at = new Date().toISOString();
-              console.log(`Todo ${todo.id} marked as completed at ${updatedTodo.completed_at}`);
+              console.log(`Todo ${todo.id} marked as completed at ${todo.completed_at}`);
             } else {
-              console.log(`Todo ${todo.id} marked as incomplete, completed_at: ${todo.completed_at || 'never completed'}`);
+              updatedTodo.completed_at = "incomplete";
+              console.log(`Todo ${todo.id} marked as incomplete, completed_at: ${todo.completed_at}`);
             }
             
             return updatedTodo;
