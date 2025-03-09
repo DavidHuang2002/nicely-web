@@ -42,24 +42,59 @@ export default function GoalList() {
   }, []);
 
   const toggleTodoComplete = (themeId: string, todoId: string) => {
+    // Create a new goals array by mapping through each theme/goal
     setGoals(
       goals.map((theme) => {
-        if (theme.id === themeId) {
-          return {
-            ...theme,
-            todos: theme.todos
-              .map((todo) =>
-                todo.id === todoId
-                  ? { ...todo, completed: !todo.completed }
-                  : todo
-              )
-              .sort((a, b) => {
-                if (a.completed === b.completed) return 0;
-                return a.completed ? 1 : -1;
-              }),
-          };
+        // Check if this is the theme we want to update
+        const isTargetTheme = theme.id === themeId;
+        
+        // If this isn't the theme we're looking for, return it unchanged
+        if (!isTargetTheme) {
+          return theme;
         }
-        return theme;
+        
+        // For the matching theme, create a new array of todos
+        const updatedTodos = theme.todos.map((todo) => {
+          // If this is the todo we want to toggle, flip its completed status
+          if (todo.id === todoId) {
+            // When completing a todo, add timestamp; when uncompleting, keep existing timestamp
+            const updatedTodo = {
+              ...todo,                    // Keep all existing todo properties
+              completed: !todo.completed,  // Toggle the completed status
+            };
+            
+            // Only add completed_at when marking as completed
+            if (!todo.completed) {
+              updatedTodo.completed_at = new Date().toISOString();
+              console.log(`Todo ${todo.id} marked as completed at ${updatedTodo.completed_at}`);
+            } else {
+              console.log(`Todo ${todo.id} marked as incomplete, completed_at: ${todo.completed_at || 'never completed'}`);
+            }
+            
+            return updatedTodo;
+          }
+          
+          // For all other todos, return them unchanged
+          console.log(`Todo ${todo.id} status unchanged, completed: ${todo.completed}, completed_at: ${todo.completed_at || 'never completed'}`);
+          return todo;
+        });
+        
+        // Sort todos so incomplete items appear first
+        const sortedTodos = updatedTodos.sort((a, b) => {
+          // If both todos have the same completion status, maintain their order
+          if (a.completed === b.completed) {
+            return 0;
+          }
+          
+          // Move completed items down (return 1), incomplete items up (return -1)
+          return a.completed ? 1 : -1;
+        });
+        
+        // Return the updated theme with sorted todos
+        return {
+          ...theme,           // Keep all existing theme properties
+          todos: sortedTodos  // Replace with our updated and sorted todos
+        };
       })
     );
   };
