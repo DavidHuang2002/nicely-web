@@ -8,7 +8,7 @@ interface GoalCardProps {
   goal: GoalCardType;
   onTodoToggle: (todoId: string) => void;
   onTodoClick: (todoId: string) => void;
-  onDescriptionClick: (themeId: string) => void;
+  onDescriptionClick: (goalId: string) => void;
 }
 
 export function GoalCard({

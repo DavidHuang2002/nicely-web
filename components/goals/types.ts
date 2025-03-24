@@ -13,6 +13,7 @@ export interface GoalCardType {
   id: string;
   title: string;
   description: string;
+  session_note_id: string;
   streak: number;
   todos: TodoItemType[];
 } 
