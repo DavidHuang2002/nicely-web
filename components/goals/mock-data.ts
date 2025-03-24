@@ -55,6 +55,7 @@ export const initialGoals: GoalCardType[] = [
       description:
         '"We have included a few examples of goals here to help you see how you can track your goals and progress from therapy sessions. "',
       streak: 0,
+      session_note_id: "",
       todos: [
         {
           id: "t1",
@@ -78,6 +79,7 @@ export const initialGoals: GoalCardType[] = [
       description:
         '"When others make mistakes I understand, but with myself I am too harsh."',
       streak: 5,
+      session_note_id: "",
       todos: [
         {
           id: "t4",
