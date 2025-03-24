@@ -13,6 +13,8 @@ export default function GoalList() {
   const [goals, setGoals] = useState<GoalCardType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
+  const [lastToggleTime, setLastToggleTime] = useState<number>(0);
+  const TOGGLE_COOLDOWN = 500; // 500ms cooldown
 
   // Helper function to check if any challenges were completed within 48 hours
   const hasRecentActivity = (todos: TodoItemType[]) => {
@@ -163,6 +165,14 @@ export default function GoalList() {
         toast.error("User not authenticated");
         return;
       }
+
+      // Check if enough time has passed since last toggle
+      const now = Date.now();
+      if (now - lastToggleTime < TOGGLE_COOLDOWN) {
+        toast.error("Please wait before toggling again");
+        return;
+      }
+      setLastToggleTime(now);
 
       const newGoals = goals.map((theme) => {
         const isTargetTheme = theme.id === themeId;
