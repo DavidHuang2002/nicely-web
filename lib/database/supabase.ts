@@ -421,6 +421,7 @@ export async function createChallenges(challenges: {
     how_to: challenge.how_to,
     reason: challenge.reason,
     benefits: challenge.benefits,
+    last_completion_date: null,
   }));
 
   const { error } = await supabase
@@ -450,4 +451,56 @@ export async function getGoalChallenges(goalId: string): Promise<Challenge[]> {
 
   if (error) throw error;
   return data.map(challenge => ChallengeSchema.parse(challenge));
+}
+
+export async function modifyChallenge(
+  challengeId: string,
+  userId: string,
+  update: {
+    last_completion_date: string | null;
+  }
+): Promise<void> {
+  try {
+    // First verify that the user has access to this challenge
+    const { data: challenge, error: challengeError } = await supabase
+      .from("challenges")
+      .select("id, goal_id")
+      .eq("id", challengeId)
+      .single();
+
+    if (challengeError || !challenge) {
+      throw new Error("Challenge not found");
+    }
+
+    // Verify the goal belongs to the user
+    const { data: goal, error: goalError } = await supabase
+      .from("goals")
+      .select("id, user_id")
+      .eq("id", challenge.goal_id)
+      .single();
+
+    if (goalError || !goal) {
+      throw new Error("Goal not found");
+    }
+
+    if (goal.user_id !== userId) {
+      throw new Error("Unauthorized: User does not own this goal");
+    }
+
+    // Update the challenge with the new data
+    const { error } = await supabase
+      .from("challenges")
+      .update({
+        last_completion_date: update.last_completion_date,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", challengeId);
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    console.error("Error modifying challenge:", error);
+    throw error;
+  }
 }
