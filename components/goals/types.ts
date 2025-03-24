@@ -6,7 +6,7 @@ export interface TodoItemType {
   benefits: string;
   how_to: string;
   completed: boolean;
-  completed_at: string | null;
+  last_completion_date: string | null;
 }
 
 export interface GoalCardType {
