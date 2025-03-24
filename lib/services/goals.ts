@@ -85,6 +85,7 @@ export async function getUserGoalsWithChallenges(userId: string) {
         const challenges = await getGoalChallenges(goal.id);
         return {
           ...goal,
+          session_note_id: goal.session_note_id,
           todos: challenges.map(challenge => {
             // Calculate if challenge is completed (within 24 hours)
             const isCompletedWithin24Hours = challenge.last_completion_date 

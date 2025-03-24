@@ -7,8 +7,10 @@ import { initialGoals } from "./mock-data";
 import type { GoalCardType, TodoItemType } from "./types";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function GoalList() {
+  const router = useRouter();
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [goals, setGoals] = useState<GoalCardType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -291,8 +293,9 @@ export default function GoalList() {
     }
   };
 
-  const handleDescriptionClick = (themeId: string) => {
-    console.log(`Navigating to session summary for theme ${themeId}`);
+  const handleDescriptionClick = (themeId: string, sessionId: string) => {
+    // Navigate to session summary page
+    router.push(`/notes/${sessionId}`);
   };
 
   const selectedChallenge = goals
@@ -318,7 +321,7 @@ export default function GoalList() {
                 });
               }}
               onTodoClick={(todoId) => setOpenDialog(todoId)}
-              onDescriptionClick={handleDescriptionClick}
+              onDescriptionClick={(goalId) => handleDescriptionClick(goalId, goal.session_note_id)}
             />
           ))}
         </div>
