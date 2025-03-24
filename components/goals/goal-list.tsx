@@ -86,7 +86,7 @@ export default function GoalList() {
           }));
 
           // Check each goal for inactivity and reset streaks if needed
-          sortedData.forEach(goal => {
+          sortedData.forEach((goal: GoalCardType) => {
             if (!hasRecentActivity(goal.todos) && goal.streak > 0) {
               resetStreak(goal.id);
             }
