@@ -68,7 +68,7 @@ export const initialGoals: GoalCardType[] = [
           benefits:
             "By identifying the goals and specific steps you can take from therapy, you can have clarity on what to work on and how to do it and keep growing between sessions.",
           completed: false,
-          completed_at: "2025-03-24T12:00:00Z",
+          completed_at: null,
         },
       ],
     },
@@ -91,7 +91,7 @@ export const initialGoals: GoalCardType[] = [
           benefits:
             "Reduces harsh self-judgment, develops emotional resilience, improves self-worth, and creates healthier self-talk patterns.",
           completed: false,
-          completed_at: "2025-03-24T12:00:00Z",
+          completed_at: null,
         },
         {
           id: "t5",
@@ -105,7 +105,7 @@ export const initialGoals: GoalCardType[] = [
           benefits:
             "Increases emotional resilience, reduces feelings of isolation, improves stress management, and builds a more positive relationship with yourself.",
           completed: true,
-          completed_at: "2025-03-24T12:00:00Z",
+          completed_at: null,
         },
       ],
     },
