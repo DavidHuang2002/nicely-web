@@ -504,3 +504,123 @@ export async function modifyChallenge(
     throw error;
   }
 }
+
+export async function updateChallengeStreak(
+  goalId: string,
+  userId: string,
+  increment: boolean
+): Promise<void> {
+  try {
+    // First verify that the goal exists and belongs to the user
+    const { data: goal, error: goalError } = await supabase
+      .from("goals")
+      .select("id, user_id, streak")
+      .eq("id", goalId)
+      .single();
+
+    if (goalError || !goal) {
+      throw new Error("Goal not found");
+    }
+
+    if (goal.user_id !== userId) {
+      throw new Error("Unauthorized: User does not own this goal");
+    }
+
+    // Get all challenges for this goal with their completion dates
+    const { data: challenges, error: challengesError } = await supabase
+      .from("challenges")
+      .select("last_completion_date")
+      .eq("goal_id", goalId);
+
+    if (challengesError) {
+      throw challengesError;
+    }
+
+    const now = new Date();
+
+    // Count how many challenges are completed within the last 24 hours
+    const completedChallengesIn24Hours = challenges.filter(challenge => {
+      if (!challenge.last_completion_date) return false;
+      const completionDate = new Date(challenge.last_completion_date);
+      const hoursSinceCompletion = (now.getTime() - completionDate.getTime()) / (1000 * 60 * 60);
+      return hoursSinceCompletion <= 24;
+    }).length;
+
+    // If we're incrementing (completing a challenge)
+    if (increment) {
+      // If this is the first completion in 24 hours, increment the streak
+      if (completedChallengesIn24Hours === 0) {
+        const { error } = await supabase
+          .from("goals")
+          .update({
+            streak: goal.streak + 1,
+            updated_at: now.toISOString(),
+          })
+          .eq("id", goalId);
+
+        if (error) {
+          throw error;
+        }
+      }
+      // If there are already completions within 24 hours, do nothing
+    } else {
+      // If we're decrementing (uncompleting a challenge)
+      // Only decrement if this was the last completed challenge in the 24-hour period
+      if (completedChallengesIn24Hours <= 1) {
+        const { error } = await supabase
+          .from("goals")
+          .update({
+            streak: Math.max(0, goal.streak - 1), // Ensure streak doesn't go below 0
+            updated_at: now.toISOString(),
+          })
+          .eq("id", goalId);
+
+        if (error) {
+          throw error;
+        }
+      }
+      // If there are other completed challenges within 24 hours, do nothing
+    }
+  } catch (error) {
+    console.error("Error updating goal streak:", error);
+    throw error;
+  }
+}
+
+export async function resetGoalStreak(
+  goalId: string,
+  userId: string
+): Promise<void> {
+  try {
+    // First verify that the goal exists and belongs to the user
+    const { data: goal, error: goalError } = await supabase
+      .from("goals")
+      .select("id, user_id")
+      .eq("id", goalId)
+      .single();
+
+    if (goalError || !goal) {
+      throw new Error("Goal not found");
+    }
+
+    if (goal.user_id !== userId) {
+      throw new Error("Unauthorized: User does not own this goal");
+    }
+
+    // Reset the streak to 0
+    const { error } = await supabase
+      .from("goals")
+      .update({
+        streak: 0,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", goalId);
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    console.error("Error resetting goal streak:", error);
+    throw error;
+  }
+}

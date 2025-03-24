@@ -4,7 +4,7 @@ import { PrivacyNotice } from "@/components/privacy-notice";
 import { GoalCard } from "./goal-card";
 import { ChallengeDialog } from "./challenge-dialog";
 import { initialGoals } from "./mock-data";
-import type { GoalCardType } from "./types";
+import type { GoalCardType, TodoItemType } from "./types";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 
@@ -13,6 +13,44 @@ export default function GoalList() {
   const [goals, setGoals] = useState<GoalCardType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
+
+  // Helper function to check if any challenges were completed within 48 hours
+  const hasRecentActivity = (todos: TodoItemType[]) => {
+    const now = new Date();
+    return todos.some(todo => {
+      if (!todo.last_completion_date) return false;
+      const completionDate = new Date(todo.last_completion_date);
+      const hoursSinceCompletion = (now.getTime() - completionDate.getTime()) / (1000 * 60 * 60);
+      return hoursSinceCompletion <= 48;
+    });
+  };
+
+  // Function to reset streak via API
+  const resetStreak = async (goalId: string) => {
+    try {
+      const response = await fetch('/api/goals/streak/reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ goalId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to reset streak');
+      }
+
+      // Update local state
+      setGoals(prevGoals => 
+        prevGoals.map(goal => 
+          goal.id === goalId ? { ...goal, streak: 0 } : goal
+        )
+      );
+    } catch (error) {
+      console.error("Error resetting streak:", error);
+      // Don't show toast here as it's a background operation
+    }
+  };
 
   useEffect(() => {
     async function fetchGoals() {
@@ -46,6 +84,13 @@ export default function GoalList() {
               return 0;
             })
           }));
+
+          // Check each goal for inactivity and reset streaks if needed
+          sortedData.forEach((goal: GoalCardType) => {
+            if (!hasRecentActivity(goal.todos) && goal.streak > 0) {
+              resetStreak(goal.id);
+            }
+          });
 
           setGoals(sortedData);
         }
@@ -101,6 +146,17 @@ export default function GoalList() {
     return response.json();
   };
 
+  // Helper function to check if any challenges are completed within 24 hours
+  const hasCompletedChallengesIn24Hours = (todos: TodoItemType[]) => {
+    const now = new Date();
+    return todos.some(todo => {
+      if (!todo.last_completion_date) return false;
+      const completionDate = new Date(todo.last_completion_date);
+      const hoursSinceCompletion = (now.getTime() - completionDate.getTime()) / (1000 * 60 * 60);
+      return hoursSinceCompletion <= 24;
+    });
+  };
+
   const toggleTodoComplete = async (themeId: string, todoId: string) => {
     try {
       if (!user?.id) {
@@ -117,13 +173,11 @@ export default function GoalList() {
         
         const updatedTodos = theme.todos.map((todo) => {
           if (todo.id === todoId) {
-            // Check if the todo is completed and within last 24 hours
             if (todo.last_completion_date) {
               const completionDate = new Date(todo.last_completion_date);
               const now = new Date();
               const hoursSinceCompletion = (now.getTime() - completionDate.getTime()) / (1000 * 60 * 60);
 
-              // Only allow clearing if completed within last 24 hours
               if (hoursSinceCompletion <= 24) {
                 const updatedTodo = {
                   ...todo,
@@ -131,20 +185,34 @@ export default function GoalList() {
                   last_completion_date: null
                 };
 
-                // Fire off the database clear
-                clearChallengeCompletion(todoId).catch(error => {
-                  console.error("Failed to clear challenge completion:", error);
-                  toast.error("Failed to clear completion status");
+                // Optimistically update streak if this was the last completed challenge
+                const otherTodos = theme.todos.filter(t => t.id !== todoId);
+                const hadOtherCompletions = hasCompletedChallengesIn24Hours(otherTodos);
+                const newStreak = !hadOtherCompletions ? Math.max(0, theme.streak - 1) : theme.streak;
+
+                // Update both completion status and decrement streak
+                Promise.all([
+                  clearChallengeCompletion(todoId),
+                  fetch('/api/goals/challenges/streak', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      goalId: themeId,
+                      increment: false
+                    }),
+                  })
+                ]).catch(error => {
+                  console.error("Failed to update challenge:", error);
+                  toast.error("Failed to update challenge status");
+                  // Could add streak recovery logic here if needed
                 });
                 
                 return updatedTodo;
               } else {
-                // If more than 24 hours, don't allow clearing
                 toast.error("Cannot clear completion after 24 hours");
                 return todo;
               }
             } else {
-              // If not completed, set new completion date
               const now = new Date().toISOString();
               const updatedTodo = {
                 ...todo,
@@ -152,13 +220,25 @@ export default function GoalList() {
                 last_completion_date: now
               };
 
-              // Fire off the database update
-              updateChallengeInDatabase(
-                todoId,
-                updatedTodo.last_completion_date
-              ).catch(error => {
-                console.error("Failed to update challenge in database:", error);
-                toast.error("Failed to save completion status");
+              // Optimistically update streak if this is the first completion in 24 hours
+              const hadPriorCompletions = hasCompletedChallengesIn24Hours(theme.todos);
+              const newStreak = !hadPriorCompletions ? theme.streak + 1 : theme.streak;
+
+              // Update both completion status and increment streak
+              Promise.all([
+                updateChallengeInDatabase(todoId, updatedTodo.last_completion_date),
+                fetch('/api/goals/challenges/streak', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    goalId: themeId,
+                    increment: true
+                  }),
+                })
+              ]).catch(error => {
+                console.error("Failed to update challenge:", error);
+                toast.error("Failed to update challenge status");
+                // Could add streak recovery logic here if needed
               });
               
               return updatedTodo;
@@ -180,9 +260,16 @@ export default function GoalList() {
           }
           return 0;
         });
+
+        // Calculate new streak based on the action
+        const hasCompletionsAfterUpdate = hasCompletedChallengesIn24Hours(sortedTodos);
+        const newStreak = hasCompletionsAfterUpdate ? 
+          (hasCompletedChallengesIn24Hours(theme.todos) ? theme.streak : theme.streak + 1) :
+          Math.max(0, theme.streak - 1);
         
         return {
           ...theme,
+          streak: newStreak,
           todos: sortedTodos
         };
       });
