@@ -4,7 +4,7 @@ import { PrivacyNotice } from "@/components/privacy-notice";
 import { GoalCard } from "./goal-card";
 import { ChallengeDialog } from "./challenge-dialog";
 import { initialGoals } from "./mock-data";
-import type { GoalCardType } from "./types";
+import type { GoalCardType, TodoItemType } from "./types";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 
@@ -13,6 +13,44 @@ export default function GoalList() {
   const [goals, setGoals] = useState<GoalCardType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
+
+  // Helper function to check if any challenges were completed within 48 hours
+  const hasRecentActivity = (todos: TodoItemType[]) => {
+    const now = new Date();
+    return todos.some(todo => {
+      if (!todo.last_completion_date) return false;
+      const completionDate = new Date(todo.last_completion_date);
+      const hoursSinceCompletion = (now.getTime() - completionDate.getTime()) / (1000 * 60 * 60);
+      return hoursSinceCompletion <= 48;
+    });
+  };
+
+  // Function to reset streak via API
+  const resetStreak = async (goalId: string) => {
+    try {
+      const response = await fetch('/api/goals/streak/reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ goalId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to reset streak');
+      }
+
+      // Update local state
+      setGoals(prevGoals => 
+        prevGoals.map(goal => 
+          goal.id === goalId ? { ...goal, streak: 0 } : goal
+        )
+      );
+    } catch (error) {
+      console.error("Error resetting streak:", error);
+      // Don't show toast here as it's a background operation
+    }
+  };
 
   useEffect(() => {
     async function fetchGoals() {
@@ -46,6 +84,13 @@ export default function GoalList() {
               return 0;
             })
           }));
+
+          // Check each goal for inactivity and reset streaks if needed
+          sortedData.forEach(goal => {
+            if (!hasRecentActivity(goal.todos) && goal.streak > 0) {
+              resetStreak(goal.id);
+            }
+          });
 
           setGoals(sortedData);
         }

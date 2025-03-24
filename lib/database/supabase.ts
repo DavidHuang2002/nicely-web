@@ -586,3 +586,41 @@ export async function updateChallengeStreak(
     throw error;
   }
 }
+
+export async function resetGoalStreak(
+  goalId: string,
+  userId: string
+): Promise<void> {
+  try {
+    // First verify that the goal exists and belongs to the user
+    const { data: goal, error: goalError } = await supabase
+      .from("goals")
+      .select("id, user_id")
+      .eq("id", goalId)
+      .single();
+
+    if (goalError || !goal) {
+      throw new Error("Goal not found");
+    }
+
+    if (goal.user_id !== userId) {
+      throw new Error("Unauthorized: User does not own this goal");
+    }
+
+    // Reset the streak to 0
+    const { error } = await supabase
+      .from("goals")
+      .update({
+        streak: 0,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", goalId);
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    console.error("Error resetting goal streak:", error);
+    throw error;
+  }
+}
