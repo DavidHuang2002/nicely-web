@@ -31,7 +31,7 @@ export default function GoalList() {
           setGoals(initialGoals);
         } else {
           // Sort the todos in each goal before setting state
-          const sortedData = data.map(goal => ({
+          const sortedData = data.map((goal: GoalCardType) => ({
             ...goal,
             todos: goal.todos.sort((a, b) => {
               // Sort by completion status first
