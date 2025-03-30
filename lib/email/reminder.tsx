@@ -12,3 +12,17 @@ export async function sendReminderEmail(email: string, firstName: string) {
     react: template,
   });
 }
+
+
+export async function runEmailReminderJob() {
+  const users = [
+    {
+      email: "test@test.com",
+      firstName: "Test",
+    },
+  ];
+
+  for (const user of users) {
+    await sendReminderEmail(user.email, user.firstName);
+  }
+}
