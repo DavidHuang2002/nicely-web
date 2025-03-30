@@ -41,5 +41,3 @@ next-env.d.ts
 /.venv
 /.last_venv
 /old-doc
-
-.trigger
