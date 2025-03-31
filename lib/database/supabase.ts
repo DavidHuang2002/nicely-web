@@ -9,6 +9,7 @@ import { CreateVoiceNoteSchema, VoiceNoteSchema, VoiceNote, CreateVoiceNote } fr
 import { GeneratedChallenge } from "@/models/goals";
 import { Goal, GoalSchema } from "@/models/goals";
 import { Challenge, ChallengeSchema } from "@/models/goals";
+import { CreateReminderSettings, ReminderSettings, ReminderSettingsSchema } from "@/models/reminder-settings";
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -450,4 +451,42 @@ export async function getGoalChallenges(goalId: string): Promise<Challenge[]> {
 
   if (error) throw error;
   return data.map(challenge => ChallengeSchema.parse(challenge));
+}
+
+export async function getReminderSettings(userId: string): Promise<ReminderSettings | null> {
+  const { data, error } = await supabase
+    .from("reminder_settings")
+    .select("*")
+    .eq("user_id", userId)
+    .single();
+
+  // If no data found, return null (don't treat as error)
+  if (error?.code === 'PGRST116') { // This is Postgrest's "not found" code
+    return null;
+  }
+
+  // For other types of errors, we should still throw
+  if (error) {
+    console.error("Error fetching reminder settings:", error);
+    throw error;
+  }
+
+  return data ? ReminderSettingsSchema.parse(data) : null;
+}
+
+export async function upsertReminderSettings(
+  settings: CreateReminderSettings
+): Promise<ReminderSettings> {
+  const { data, error } = await supabase
+    .from("reminder_settings")
+    .upsert(settings)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error upserting reminder settings:", error);
+    throw error;
+  }
+
+  return ReminderSettingsSchema.parse(data);
 }
