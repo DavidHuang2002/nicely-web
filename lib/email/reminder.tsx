@@ -3,7 +3,6 @@ import { sendEmail } from "./resend";
 import { JournalReminderTemplate } from "./templates/test";
 import { GenericEmailTemplate } from "./templates/genericReminder";
 
-
 export async function sendReminderEmail(email: string, firstName: string) {
   const template = <GenericEmailTemplate firstName={firstName} />;
   return sendEmail({
@@ -12,7 +11,6 @@ export async function sendReminderEmail(email: string, firstName: string) {
     react: template,
   });
 }
-
 
 export async function runEmailReminderJob() {
   const users = [
