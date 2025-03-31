@@ -38,7 +38,7 @@ function TimePickerSelect({ value, onChange }: TimePickerSelectProps) {
   const hours12 = Array.from({ length: 12 }, (_, i) => i + 1);
 
   // Generate minutes (00, 15, 30, 45)
-  const minuteOptions = [0, 15, 30, 45];
+  const minuteOptions = [0, 30];
 
   const handleTimeChange = (
     type: "hour" | "minute" | "period",
