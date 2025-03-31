@@ -113,7 +113,8 @@ function TimePickerSelect({ value, onChange }: TimePickerSelectProps) {
   );
 }
 
-export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+// Reusable Settings Content Component
+export function SettingsContent({ onComplete }: { onComplete?: () => void }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [dailyReminder, setDailyReminder] = useState(false);
   const [reminderTime, setReminderTime] = useState("09:00");
@@ -125,12 +126,12 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
 
-  // Fetch existing settings when dialog opens
+  // Fetch settings on component mount
   useEffect(() => {
-    if (open && user) {
+    if (user) {
       fetchSettings();
     }
-  }, [open, user]);
+  }, [user]);
 
   const fetchSettings = async () => {
     try {
@@ -188,7 +189,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           : "Reminders are now disabled",
       });
 
-      onOpenChange(false);
+      if (onComplete) {
+        onComplete();
+      }
     } catch (error) {
       console.error("Error saving reminder settings:", error);
       toast.error("Failed to save reminder settings", {
@@ -206,131 +209,140 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     { value: "Asia/Shanghai", label: "China Time (Shanghai)" },
   ];
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
-        </DialogHeader>
+    <>
+      <Tabs defaultValue="privacy" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="privacy" className="flex gap-2 items-center">
+            <ShieldIcon className="h-4 w-4" />
+            Privacy
+          </TabsTrigger>
+          <TabsTrigger
+            value="notifications"
+            className="flex gap-2 items-center"
+          >
+            <BellIcon className="h-4 w-4" />
+            Notifications
+          </TabsTrigger>
+        </TabsList>
 
-        {isLoading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-          </div>
-        ) : (
-          <Tabs defaultValue="privacy" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="privacy" className="flex gap-2 items-center">
-                <ShieldIcon className="h-4 w-4" />
-                Privacy
-              </TabsTrigger>
-              <TabsTrigger
-                value="notifications"
-                className="flex gap-2 items-center"
-              >
-                <BellIcon className="h-4 w-4" />
-                Notifications
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="privacy" className="space-y-4">
-              <div className="space-y-4 pt-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Label>Data Collection</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Allow anonymous usage data to improve our service
-                    </p>
-                  </div>
-                  <Switch />
-                </div>
-
-                <div className="pt-6 space-y-6">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      We never share or sell your information beyond our
-                      app&apos;s purpose. Conversations remain confidential,
-                      just like therapy, and are never used to train our models.
-                    </p>
-                  </div>
-
-                  <div>
-                    <Button
-                      variant="destructive"
-                      className="w-full"
-                      onClick={() => setDeleteDialogOpen(true)}
-                    >
-                      Delete My Data
-                    </Button>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      This will permanently delete all your data from our
-                      servers
-                    </p>
-                  </div>
-                </div>
+        <TabsContent value="privacy" className="space-y-4">
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label>Data Collection</Label>
+                <p className="text-sm text-muted-foreground">
+                  Allow anonymous usage data to improve our service
+                </p>
               </div>
-            </TabsContent>
+              <Switch />
+            </div>
 
-            <TabsContent value="notifications" className="space-y-4">
-              <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Label>Send Daily Reminder</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Receive daily notifications for your activities
-                    </p>
-                  </div>
-                  <Switch
-                    checked={dailyReminder}
-                    onCheckedChange={setDailyReminder}
-                  />
-                </div>
+            <div className="pt-6 space-y-6">
+              <div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  We never share or sell your information beyond our app&apos;s
+                  purpose. Conversations remain confidential, just like therapy,
+                  and are never used to train our models.
+                </p>
+              </div>
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="timezone">
-                      Time Zone<span className="text-red-500">*</span>
-                    </Label>
-                    <select
-                      id="timezone"
-                      className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                      value={selectedTimezone}
-                      onChange={(e) => setSelectedTimezone(e.target.value)}
-                      required
-                    >
-                      {TIMEZONES.map((tz) => (
-                        <option key={tz.value} value={tz.value}>
-                          {tz.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+              <div>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => setDeleteDialogOpen(true)}
+                >
+                  Delete My Data
+                </Button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  This will permanently delete all your data from our servers
+                </p>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="reminderTime">
-                      Reminder Time<span className="text-red-500">*</span>
-                    </Label>
-                    <TimePickerSelect
-                      value={reminderTime}
-                      onChange={setReminderTime}
-                    />
-                  </div>
+        <TabsContent value="notifications" className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label>Send Daily Reminder</Label>
+                <p className="text-sm text-muted-foreground">
+                  Receive daily notifications for your activities
+                </p>
+              </div>
+              <Switch
+                checked={dailyReminder}
+                onCheckedChange={setDailyReminder}
+              />
+            </div>
 
-                  <Button type="submit" className="w-full mt-6">
-                    Save Reminder Settings
-                  </Button>
-                </div>
-              </form>
-            </TabsContent>
-          </Tabs>
-        )}
-      </DialogContent>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="timezone">
+                  Time Zone<span className="text-red-500">*</span>
+                </Label>
+                <select
+                  id="timezone"
+                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  value={selectedTimezone}
+                  onChange={(e) => setSelectedTimezone(e.target.value)}
+                  required
+                >
+                  {TIMEZONES.map((tz) => (
+                    <option key={tz.value} value={tz.value}>
+                      {tz.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reminderTime">
+                  Reminder Time<span className="text-red-500">*</span>
+                </Label>
+                <TimePickerSelect
+                  value={reminderTime}
+                  onChange={setReminderTime}
+                />
+              </div>
+
+              <Button type="submit" className="w-full mt-6">
+                Save Reminder Settings
+              </Button>
+            </div>
+          </form>
+        </TabsContent>
+      </Tabs>
 
       <DeleteAccountDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         userEmail={user?.emailAddresses[0]?.emailAddress || ""}
       />
+    </>
+  );
+}
+
+// Original Dialog component, now using the shared SettingsContent
+export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Settings</DialogTitle>
+        </DialogHeader>
+        <SettingsContent onComplete={() => onOpenChange(false)} />
+      </DialogContent>
     </Dialog>
   );
 }

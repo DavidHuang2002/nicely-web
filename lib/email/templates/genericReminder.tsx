@@ -8,16 +8,18 @@ interface EmailTemplateProps {
   firstName: string;
 }
 
-export const GenericEmailTemplate: React.FC<
-  Readonly<EmailTemplateProps>
-> = ({ firstName }) => (
+export const GenericEmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
+  firstName,
+}) => (
   <div>
     <p>Greetings {firstName},</p>
     <p>
-      Don't forget to take some time to focus on yourself today! Log in to Nicely to keep working on your goals!
+      Don't forget to take some time to focus on yourself today! Log in to
+      Nicely to keep working on your goals!
     </p>
     <p>
-      Click<a href={NICELY_APP_URL}> here</a> to continue your personal growth journey.
+      Click<a href={NICELY_APP_URL}> here</a> to continue your personal growth
+      journey.
     </p>
     <p
       style={{
@@ -27,8 +29,9 @@ export const GenericEmailTemplate: React.FC<
         marginBottom: "20px",
       }}
     >
-      If you want to turn off these reminders, you can do so in your profile
-      page. For any questions or feedback, feel free to reach out to{" "}
+      If you want to turn off these reminders,{" "}
+      <a href={`${NICELY_APP_URL}/unsubscribe`}>click here to unsubscribe</a>.
+      For any questions or feedback, feel free to reach out to{" "}
       <a href="mailto:tom_huang@nicely.tech">tom_huang@nicely.tech</a>
     </p>
     <p>Best,</p>
