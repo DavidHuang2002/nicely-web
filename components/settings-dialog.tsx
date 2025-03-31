@@ -149,7 +149,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
         setSelectedTimezone(settings.timezone);
       } else {
         // No settings yet, use defaults
-        setDailyReminder(false);
+        setDailyReminder(true);
         setReminderTime("09:00");
         setSelectedTimezone(
           Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Chicago"
