@@ -77,6 +77,7 @@ export async function saveGoalWithChallenges(
 export async function getUserGoalsWithChallenges(userId: string) {
   try {
     const goals = await getUserGoals(userId);
+    const now = new Date();
     
     // Get challenges for each goal
     const goalsWithChallenges = await Promise.all(
@@ -84,15 +85,24 @@ export async function getUserGoalsWithChallenges(userId: string) {
         const challenges = await getGoalChallenges(goal.id);
         return {
           ...goal,
-          todos: challenges.map(challenge => ({
-            id: challenge.id, 
-            title: challenge.title,
-            description: challenge.description,
-            how_to: challenge.how_to,
-            reason: challenge.reason,
-            benefits: challenge.benefits,
-            completed: false, // TODO: Implement challenge completion status
-          }))
+          session_note_id: goal.session_note_id,
+          todos: challenges.map(challenge => {
+            // Calculate if challenge is completed (within 24 hours)
+            const isCompletedWithin24Hours = challenge.last_completion_date 
+              ? (now.getTime() - new Date(challenge.last_completion_date).getTime()) / (1000 * 60 * 60) <= 24
+              : false;
+
+            return {
+              id: challenge.id, 
+              title: challenge.title,
+              description: challenge.description,
+              how_to: challenge.how_to,
+              reason: challenge.reason,
+              benefits: challenge.benefits,
+              last_completion_date: challenge.last_completion_date,  // Include this field
+              completed: isCompletedWithin24Hours  // Calculate based on last_completion_date
+            };
+          })
         };
       })
     );

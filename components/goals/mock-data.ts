@@ -55,6 +55,7 @@ export const initialGoals: GoalCardType[] = [
       description:
         '"We have included a few examples of goals here to help you see how you can track your goals and progress from therapy sessions. "',
       streak: 0,
+      session_note_id: "",
       todos: [
         {
           id: "t1",
@@ -68,7 +69,7 @@ export const initialGoals: GoalCardType[] = [
           benefits:
             "By identifying the goals and specific steps you can take from therapy, you can have clarity on what to work on and how to do it and keep growing between sessions.",
           completed: false,
-          completed_at: null,
+          last_completion_date: null,
         },
       ],
     },
@@ -78,6 +79,7 @@ export const initialGoals: GoalCardType[] = [
       description:
         '"When others make mistakes I understand, but with myself I am too harsh."',
       streak: 5,
+      session_note_id: "",
       todos: [
         {
           id: "t4",
@@ -91,7 +93,7 @@ export const initialGoals: GoalCardType[] = [
           benefits:
             "Reduces harsh self-judgment, develops emotional resilience, improves self-worth, and creates healthier self-talk patterns.",
           completed: false,
-          completed_at: null,
+          last_completion_date: null,
         },
         {
           id: "t5",
@@ -105,7 +107,7 @@ export const initialGoals: GoalCardType[] = [
           benefits:
             "Increases emotional resilience, reduces feelings of isolation, improves stress management, and builds a more positive relationship with yourself.",
           completed: true,
-          completed_at: null,
+          last_completion_date: null,
         },
       ],
     },
