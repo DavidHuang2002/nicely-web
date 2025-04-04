@@ -9,6 +9,7 @@ import { CreateVoiceNoteSchema, VoiceNoteSchema, VoiceNote, CreateVoiceNote } fr
 import { GeneratedChallenge } from "@/models/goals";
 import { Goal, GoalSchema } from "@/models/goals";
 import { Challenge, ChallengeSchema } from "@/models/goals";
+import { CreateReminderSettings, ReminderSettings, ReminderSettingsSchema } from "@/models/reminder-settings";
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -73,6 +74,14 @@ export async function getUserById(userId: string): Promise<User | null> {
     .eq("id", userId)
     .single()) as { data: User | null };
   return user;
+}
+
+export async function getUsersById(userIds: string[]): Promise<User[]> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .in("id", userIds);
+  return data || [];
 }
 
 export async function updateUser(
@@ -453,7 +462,116 @@ export async function getGoalChallenges(goalId: string): Promise<Challenge[]> {
   return data.map(challenge => ChallengeSchema.parse(challenge));
 }
 
-export async function modifyChallenge(
+export async function getReminderSettings(userId: string): Promise<ReminderSettings | null> {
+  const { data, error } = await supabase
+    .from("reminder_settings")
+    .select("*")
+    .eq("user_id", userId)
+    .single();
+
+  // If no data found, return null (don't treat as error)
+  if (error?.code === 'PGRST116') { // This is Postgrest's "not found" code
+    return null;
+  }
+
+  // For other types of errors, we should still throw
+  if (error) {
+    console.error("Error fetching reminder settings:", error);
+    throw error;
+  }
+
+  return data ? ReminderSettingsSchema.parse(data) : null;
+}
+
+export async function upsertReminderSettings(
+  settings: CreateReminderSettings
+): Promise<ReminderSettings> {
+  const { data, error } = await supabase
+    .from("reminder_settings")
+    .upsert(settings)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error upserting reminder settings:", error);
+    throw error;
+  }
+
+  return ReminderSettingsSchema.parse(data);
+}
+
+/**
+ * Gets reminder settings that match the current time within a specified window
+ * 
+ * @param referenceTime The reference time to check against
+ * @param timeWindowMinutes Time window in minutes before/after the reference time
+ * @returns Array of reminder settings with matching times (includes user_id)
+ */
+export async function getActiveReminderSettingsByTime(
+  referenceTime: Date, 
+  timeWindowMinutes: number
+): Promise<ReminderSettings[]> {
+  try {
+    // Format hours/minutes for easier comparison
+    const currentHour = referenceTime.getUTCHours();
+    const currentMinute = referenceTime.getUTCMinutes();
+    
+    // Query all enabled reminder settings
+    const { data, error } = await supabase
+      .from("reminder_settings")
+      .select("*")
+      .eq("enabled", true);
+    
+    if (error) {
+      console.error("Error fetching reminder settings:", error);
+      throw error;
+    }
+    
+    if (!data || data.length === 0) {
+      return [];
+    }
+    
+    // Parse the data through our schema
+    const reminderSettings = data.map(item => ReminderSettingsSchema.parse(item));
+    
+    // Filter settings whose time matches our window, accounting for timezone
+    return reminderSettings.filter(settings => {
+      try {
+        // Parse the time from the settings
+        const [settingsHour, settingsMinute] = settings.time.split(':').map(Number);
+        
+        // Create date objects for comparison (in UTC)
+        const settingsTimeInUTC = new Date();
+        settingsTimeInUTC.setUTCHours(settingsHour, settingsMinute, 0, 0);
+        
+        // Adjust for the user's timezone
+        // This is a simplification - proper timezone math would be more complex
+        const timezoneDiffMinutes = getTimezoneOffsetInMinutes(settings.timezone);
+        
+        // Calculate the effective reminder time in UTC
+        const adjustedTime = new Date(settingsTimeInUTC);
+        adjustedTime.setUTCMinutes(adjustedTime.getUTCMinutes() - timezoneDiffMinutes);
+        
+        // Calculate time difference in minutes
+        const timeDiffMinutes = Math.abs(
+          (adjustedTime.getUTCHours() * 60 + adjustedTime.getUTCMinutes()) - 
+          (currentHour * 60 + currentMinute)
+        );
+        
+        // Check if the time is within our window
+        return timeDiffMinutes <= timeWindowMinutes;
+      } catch (e) {
+        console.error(`Error processing reminder time for user ${settings.user_id}:`, e);
+        return false;
+      }
+    });
+  } catch (error) {
+    console.error("Error in getActiveReminderSettingsByTime:", error);
+    throw error;
+  }
+}
+
+  export async function modifyChallenge(
   challengeId: string,
   userId: string,
   update: {
@@ -502,6 +620,30 @@ export async function modifyChallenge(
   } catch (error) {
     console.error("Error modifying challenge:", error);
     throw error;
+  }
+}
+
+/**
+ * Helper function to get timezone offset in minutes
+ * 
+ * @param timezone IANA timezone string
+ * @returns Offset in minutes
+ */
+function getTimezoneOffsetInMinutes(timezone: string): number {
+  try {
+    // Current time in UTC and in the target timezone
+    const now = new Date();
+    
+    // Get timezone offset for the specified timezone
+    // This is a simplification - for production use a proper timezone library
+    const timeInTargetTz = new Date(now.toLocaleString('en-US', { timeZone: timezone }));
+    const timeInUTC = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+    
+    // Return difference in minutes
+    return (timeInTargetTz.getTime() - timeInUTC.getTime()) / (1000 * 60);
+  } catch (e) {
+    console.error(`Error calculating timezone offset for ${timezone}:`, e);
+    return 0; // Default to no offset in case of error
   }
 }
 
