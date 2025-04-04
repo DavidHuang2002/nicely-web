@@ -567,7 +567,11 @@ export async function getActiveReminderSettingsByTime(
     });
   } catch (error) {
     console.error("Error in getActiveReminderSettingsByTime:", error);
-export async function modifyChallenge(
+    throw error;
+  }
+}
+
+  export async function modifyChallenge(
   challengeId: string,
   userId: string,
   update: {
@@ -642,6 +646,7 @@ function getTimezoneOffsetInMinutes(timezone: string): number {
     return 0; // Default to no offset in case of error
   }
 }
+
 export async function updateChallengeStreak(
   goalId: string,
   userId: string,
