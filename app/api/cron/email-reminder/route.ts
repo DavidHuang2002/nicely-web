@@ -24,13 +24,14 @@ export async function GET(request: Request) {
     console.log('Starting email reminder cron job...');
 
     const windowSize = 15;
-    await runEmailReminderJob(windowSize);
+    const results = await runEmailReminderJob(windowSize);
     console.log(`Email reminder cron job completed successfully with window size ${windowSize} minutes`);
 
     return NextResponse.json({
       success: true,
       message: 'Email reminder job completed successfully',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      results
     });
 
   } catch (error) {
