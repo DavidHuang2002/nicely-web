@@ -6,7 +6,7 @@ import { runEmailReminderJob } from "@/lib/email/reminder";
 // https://vercel.com/docs/cron-jobs/manage-cron-jobs
 
 // Cron job runs every 30 minutes
-export const maxDuration = 60; // 5-minute timeout
+export const maxDuration = 300; // 5-minute timeout
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
