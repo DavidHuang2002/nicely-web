@@ -22,8 +22,10 @@ export async function GET(request: Request) {
     }
 
     console.log('Starting email reminder cron job...');
-    await runEmailReminderJob();
-    console.log('Email reminder cron job completed successfully');
+
+    const windowSize = 15;
+    await runEmailReminderJob(windowSize);
+    console.log(`Email reminder cron job completed successfully with window size ${windowSize} minutes`);
 
     return NextResponse.json({
       success: true,
