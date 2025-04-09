@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
     console.log('Starting email reminder cron job...');
 
-    const windowSize = 100;
+    const windowSize = 15;
     const results = await runEmailReminderJob(windowSize);
     console.log(`Email reminder cron job completed successfully with window size ${windowSize} minutes`);
 
