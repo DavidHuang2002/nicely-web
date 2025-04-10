@@ -6,7 +6,7 @@ import { formatTranscriptionText, getTranscriptionStatus } from "@/lib/aws/trans
 import { summarizeFromTranscript } from "@/lib/ai/session-summary";
 
 // set max duration to 300 seconds
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function GET(
   req: Request,

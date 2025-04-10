@@ -2,7 +2,7 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { deleteFileFromS3 } from "@/lib/aws/s3";
 import { transcribeFromS3 } from "@/lib/services/transcription";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(req: Request) {
   try {
