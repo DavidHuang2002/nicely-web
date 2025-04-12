@@ -30,9 +30,9 @@ export const GenericEmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
       }}
     >
       If you want to turn off these reminders,{" "}
-      <a href={`${NICELY_APP_URL}/unsubscribe`}>click here to unsubscribe</a>.
+      <a href={`${NICELY_APP_URL}`}>click here to unsubscribe</a>.
       For any questions or feedback, feel free to reach out to{" "}
-      <a href="mailto:tom_huang@nicely.tech">tom_huang@nicely.tech</a>
+      <a href="mailto:tom_huang@nicely.tech">tom_hu@nicely.tech</a>
     </p>
     <p>Best,</p>
     <p>Nicely Team</p>
