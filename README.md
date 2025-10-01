@@ -8,7 +8,11 @@ https://nicely.vercel.app/
 (used to be https://nicely.tech/)
 
 
-[Note: this project has been discontinued, so part of its functionality might no longer work correctly. You can see what it was here: https://www.youtube.com/watch?v=65POjL1ZvyY)
+Note: this project has been discontinued, so part of its functionality might no longer work correctly. You can see what it was here: 
+https://www.youtube.com/watch?v=65POjL1ZvyY
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/65POjL1ZvyY/0.jpg)](https://www.youtube.com/watch?v=65POjL1ZvyY)
+
 
 
 
